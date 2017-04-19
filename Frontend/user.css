@@ -1,0 +1,197 @@
+body {
+	font-family: "Helvetica Neue";
+	height: 100%;
+}
+
+html {
+	height: 100%;
+}
+hr {
+	border-width: 5px;
+	margin-top: 15px;
+	border-color: white;
+	margin-bottom: 15px;
+	width: 100%;
+}
+
+
+.card {
+	border-style: solid;
+	border-width: 5px;
+}
+
+.statuscard{
+	margin-top: 10px;
+	margin-left: 10px;
+	border-radius: 8px;
+	background-color: #aabfde;
+	width: 150px; 
+	height: 50px;
+	text-align: center;
+}
+
+
+
+#statuscardelement {
+	position: relative;
+    top: 25%; 
+    font-size: 20px;
+    font-weight: 700;
+    color: white;
+}
+.deckcard {
+	border-radius: 8px;
+	border-color: lightgrey;
+	width: 200px;
+	height: 300px;
+	background-color: grey;
+}
+.card-hover {
+	border-color: #898989;
+}
+
+.row {
+	width: 100%;
+}
+
+.row, .wrapper, .board, .statusbar {
+	height: 100%;
+}
+
+.statuselement {
+	text-align: center;
+	font-size: 30px;
+	font-weight: 800;
+
+}
+
+#formWrapper {
+	display: block;
+	color: black;
+	text-align: center;
+	padding-bottom: 20px;
+	width: 100%;
+	margin-top: 10px;
+}
+
+input[type=text] {
+    border: black;
+    border-radius: 6px;
+    background-color: white;
+    color: white;
+    width: 225px;
+    height: 30px;
+    font-size: 14px;
+    margin: auto;
+    padding: 3px 15px;
+    display: inline-block;
+
+}
+
+input[type=text]:focus {
+    background-color: lightblue;
+}
+
+input[type=submit] {
+	display: inline-block;
+    background-color: #8da7ca;
+    border-radius: 6px;
+    border-color: #8da7ca;
+    color: white;
+    font-size: 15px;
+    padding: 5px 15px;
+    text-decoration: none;
+    margin: auto;
+    height: 33px;
+}
+
+.chatList {
+	display: block;
+	color: black;
+	padding-bottom: 10px;
+	width: 100%;
+	margin: auto;   
+	text-align: left;
+	list-style-type: none;
+	font-size: 15px;
+	padding-top: 5px;
+}
+
+.chatList > li {
+	margin: 5px 0;
+}
+
+.feedList {
+	display: block;
+	color: black;
+	padding-top: 15px;
+	padding-bottom: 10px;
+	width: 100%;
+	margin: auto;   
+	text-align: left;
+	list-style-type: none;
+	font-size: 20px;
+}
+
+.feed {
+	margin-left: 15%;
+}
+
+.chatList > li {
+	margin: 5px 0;
+}
+
+.chatbox {
+	background-color: white;
+	border-radius: 8px;
+	margin-bottom: 10px;
+	width: 90%;
+	margin: auto;
+	height: 50%;
+	margin-top: 10px;
+
+}
+
+#stopwatch {
+	font-size: 80px;
+	color: black;
+}
+
+#userinfovalue {
+	margin-top: 5px;
+	font-size: 25px;
+	color: #fb8383;
+}
+
+.deckcard {
+	display: inline-block;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
+
+.deckcard:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.overlap{
+margin-left: -100px;
+}
+
+.drawn {
+margin-left: 40px;
+}
+
+.drawncards {
+	 text-align: center;
+	 margin-bottom: 50px;
+
+}
+
+.prompt {
+	text-align: center;
+	font-size: 60px;
+}
+img {
+	width: 100%;
+	height: 100%;
+}
