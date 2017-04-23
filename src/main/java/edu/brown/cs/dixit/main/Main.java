@@ -38,23 +38,23 @@ public class Main {
     Spark.exception(Exception.class, new ExceptionPrinter());
     FreeMarkerEngine freeMarker = createEngine();
     Spark.webSocket("/scores", WebSockets.class);
-    Spark.get("/play",new PlayHandler(), freeMarker);   
+    //Spark.get("/play",new PlayHandler(), freeMarker);   
   }
   // TODO: create a PlayHandler
+  /*
   private static class PlayHandler implements TemplateViewRoute {
         @Override
         public ModelAndView handle(Request req, Response res) {
-            Board board = new Board();
             try { 
               saveNewBoard(board);
             } catch (SQLException e) {
               System.out.println("SQL Error");
             }
-            legal = board.play();
             Map<String, Object> variables = ImmutableMap.of("title", "Hello" , "board", board, "guesses", new ArrayList<String>());
             return new ModelAndView(variables, "play.ftl");
         }
   }
+  */
   private static FreeMarkerEngine createEngine() {
     Configuration config = new Configuration();
     File templates = new File("src/main/resources/spark/template/freemarker");
