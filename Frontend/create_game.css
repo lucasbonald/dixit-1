@@ -3,33 +3,48 @@
   font-size: 60px;
 }
 
-.form-title {
-  margin-bottom: 30px;
-  font-size: 28px;
-}
-
-.col-xs-4 {
+.init-form {
   border: 2px solid #f1f1ef;
   border-radius: 10px;
   margin:10px;
+}
+
+.form-element {
+  padding-left:50px;
+  padding-right:50px;
+}
+
+.form-title {
+  margin-top: 40px;
+  margin-bottom: 30px;
+  margin-left: 43px;
+  font-size: 28px;
+  font-weight:bold;
+}
+
+.form-title-text {
+  margin-left:10px;
+  font-size: 28px;
+  font-weight:bold;
+}
+
+.table {
+  margin-left: 30px;
+  margin-right:1000px;
+  width: 90%;
 }
 
 .row {
   padding:10px;
 }
 
-.form-text {
-  margin-top: 30px;
-  text-align: left;
-  padding-left: 0;
-  padding-right: 10px;
-}
 
 .form-button {
   margin-top: 30px;
 }
 
 .btn {
+  margin-top: -10px;
   padding-left: 20px;
   padding-right: 20px;
 }
@@ -62,7 +77,4 @@ p {
   float: left;
 }
 
-.btn-default {
-  display: inline;
-  float: left;
-}
+
