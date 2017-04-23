@@ -27,6 +27,8 @@ public class Referee {
     result = new HashMap<Integer, Integer>();
   }
   
+  // need new constructor;
+  
   public void receiveStory(String prompt, int playerId, int cardId) {
     setPrompt(prompt);
     setStoryTeller(playerId);
@@ -41,7 +43,10 @@ public class Referee {
      pickRecord.put(id, pick);
   }
   
-  public void tallyScores() {
+  public Map<Integer, Integer> tallyScores() {
+    //reset result
+    result = new HashMap<Integer, Integer>();
+    
     int count_answer = 0;
     //Points for other players
     for (Integer key: pickRecord.keySet()) {    
@@ -75,7 +80,14 @@ public class Referee {
       result.put(storyTeller, 3);
     }
     
+    //reset 
+    chosen = new HashMap<Integer, Integer>();
+    pickRecord = new HashMap<Integer, Integer>();
+    
+    //messages can be added later in the backend?
     //need to check if the game ended
+    
+    return result;
   }
  
   public int getWinnerPoint() {
