@@ -6,13 +6,17 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
-
 import freemarker.template.Configuration;
+
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
+import joptsimple.OptionSpec;
 import spark.ExceptionHandler;
 import spark.ModelAndView;
 import spark.QueryParamsMap;
@@ -23,38 +27,57 @@ import spark.Spark;
 import spark.TemplateViewRoute;
 import spark.template.freemarker.FreeMarkerEngine;
 
+import edu.brown.cs.dixit.setting.*;
+
 public class Main {
 
   private static final int PORT_NUM = 4567;
-  private static final Gson GSON = new Gson();
-  
-  
+  //private static final Gson GSON = new Gson();
+
   public static void main(String[] args) {
-    runSparkServer();
+    new Main(args).run();
+  }
+  
+  private String[] args;
+  private Deck deck; //need db to save deck for each game
+  private Map<Integer, Player> playerMap; //keep track of players 
+  private String currPrompt;
+  
+  private Main(String[] args) {
+    this.args = args;
+    this.deck = new Deck();
+    this.playerMap = new HashMap<Integer, Player>();
+    this.currPrompt = "";
+  }
+  
+  private void run() {
+    OptionParser parser = new OptionParser();
+    parser.accepts("gui");
+    OptionSet options = parser.parse(args);
+    if (options.has("gui")) { 
+      //deck initialized
+      deck.initializeDeck("../img/img");
+      Spark.port(PORT_NUM);
+      runSparkServer();
+    }
   }
   
   private static void runSparkServer() {
     Spark.externalStaticFileLocation("src/main/resources/static");
     Spark.exception(Exception.class, new ExceptionPrinter());
     FreeMarkerEngine freeMarker = createEngine();
-    Spark.webSocket("/scores", WebSockets.class);
-    //Spark.get("/play",new PlayHandler(), freeMarker);   
+    //Spark.webSocket("/scores", WebSockets.class);
+    Spark.get("/",new LogInHandler(), freeMarker);   
   }
-  // TODO: create a PlayHandler
-  /*
-  private static class PlayHandler implements TemplateViewRoute {
+  
+  private static class LogInHandler implements TemplateViewRoute {
         @Override
         public ModelAndView handle(Request req, Response res) {
-            try { 
-              saveNewBoard(board);
-            } catch (SQLException e) {
-              System.out.println("SQL Error");
-            }
-            Map<String, Object> variables = ImmutableMap.of("title", "Hello" , "board", board, "guesses", new ArrayList<String>());
-            return new ModelAndView(variables, "play.ftl");
+            Map<String, Object> variables = ImmutableMap.of("title", "Dixit Online");
+            return new ModelAndView(variables, "create_game.ftl");
         }
   }
-  */
+
   private static FreeMarkerEngine createEngine() {
     Configuration config = new Configuration();
     File templates = new File("src/main/resources/spark/template/freemarker");

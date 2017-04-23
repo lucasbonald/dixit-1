@@ -1,19 +1,7 @@
-<!DOCTYPE html>
-<html>
-  
-  <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="create_game.css">
-    <script type="text/javascript" src="startGame.js"></script>
-  </head>
+<#assign content>
 
-  <body>
-    
-    <div class="container-fluid">
-      <h1 class="title">Dixit Online</h1>
-        
+<div class="container-fluid">
+	<h1 class="title">Dixit Online</h1>
         <div class="row">
           <div class="col-xs-1"></div>
           <div class="col-xs-10">
@@ -115,38 +103,6 @@
         </div>  
       </div>
       <div class="col-xs-1"></div>
-      
-      
-<!--
-          <div class="col-xs-4">
-            <div class="form join-game">
-              <h2 class="form-title">Join game</h2>
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>Lobby name</th>
-                    <th>Players</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>dixit_game_1</td>
-                    <td>2/4</td> 
-                  </tr>
-                  <tr>
-                    <td>dixit_game_2</td>
-                    <td>4/5</td>
-                  </tr>
-                </tbody>
-              </table>
-              <button id="join-button" class="btn btn-default">Join</button>
-            </div>
-          </div>
-          <div class="col-xs-2"></div>
--->
-        
-      </div>
-    </div>
-  </body>
-  
-</html>
+
+</#assign>
+<#include "main.ftl">

@@ -7,7 +7,6 @@ const MESSAGE_TYPE = {
   GS_SUBMIT: 5,
   VOTING: 6,
 
-
 };
 
 
@@ -27,9 +26,9 @@ const setup_update = () => {
 	 conn.onmessage = msg => {
 	    const data = JSON.parse(msg.data);
 	    switch (data.type) {
-	      	default:
-	        	console.log('Unknown message type!', data.type);
-	        	break;
+        default:
+          console.log('Unknown message type!', data.type);
+          break;
 	        
 	        // connect: get the connected user's ID and use as list of users currently connected
 		    case MESSAGE_TYPE.JOIN:
