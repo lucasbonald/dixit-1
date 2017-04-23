@@ -1,32 +1,32 @@
 body {
 	font-family: "Helvetica Neue";
-	height: 100%;
 }
 
 html {
-	height: 300%;
 }
 hr {
 	border-width: 5px;
-	margin-top: 15px;
+	margin-top: 4%;
 	border-color: white;
-	margin-bottom: 15px;
+	margin-bottom: 4%;
 	width: 100%;
 }
-
-
+	
 .card {
 	border-style: solid;
 	border-width: 5px;
 }
 
 .statuscard{
-	margin-top: 10px;
-	margin-left: 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 1%;
+	margin-left: 1%;
 	border-radius: 8px;
 	background-color: #aabfde;
-	width: 150px; 
-	height: 50px;
+	width: 20%; 
+	height: 5%;
 	text-align: center;
 }
 
@@ -34,16 +34,15 @@ hr {
 
 #statuscardelement {
 	position: relative;
-    top: 25%; 
-    font-size: 20px;
+    font-size: 1.5vw;
     font-weight: 700;
     color: white;
 }
+
 .deckcard {
+	flex-shrink: 1;
 	border-radius: 8px;
 	border-color: lightgrey;
-	width: 200px;
-	height: 300px;
 	background-color: grey;
 }
 .card-hover {
@@ -54,24 +53,21 @@ hr {
 	width: 100%;
 }
 
-.row, .wrapper, .board, .statusbar {
-	height: 100%;
-}
+
 
 .statuselement {
 	text-align: center;
-	font-size: 30px;
+	font-size: 2.3vw;
 	font-weight: 800;
 
 }
+
 
 #formWrapper {
 	display: block;
 	color: black;
 	text-align: center;
-	padding-bottom: 20px;
 	width: 100%;
-	margin-top: 10px;
 }
 
 input[type=text] {
@@ -79,11 +75,11 @@ input[type=text] {
     border-radius: 6px;
     background-color: white;
     color: white;
-    width: 225px;
-    height: 30px;
-    font-size: 14px;
+    width: 66%;
+    height: 33%;
+    font-size: 1.2vw;
     margin: auto;
-    padding: 3px 15px;
+    padding: 1% 2%;
     display: inline-block;
 
 }
@@ -98,99 +94,114 @@ input[type=submit] {
     border-radius: 6px;
     border-color: #8da7ca;
     color: white;
-    font-size: 15px;
-    padding: 5px 15px;
+    font-size: 1.2vw;
+    padding: 1% 2%;
     text-decoration: none;
     margin: auto;
-    height: 33px;
+    height: 33%;
 }
 
 .chatList {
 	display: block;
 	color: black;
-	padding-bottom: 10px;
 	width: 100%;
 	margin: auto;   
 	text-align: left;
 	list-style-type: none;
-	font-size: 15px;
+	font-size: 1.1vw;
+	padding-left: 10%;
 }
 
 .chatList > li {
-	margin: 5px 0;
+	margin-left: 10% 0;
 }
 
 .feedList {
 	display: block;
 	color: black;
-	padding-top: px;
-	padding-bottom: 10px;
+	padding-left: 25%;
 	width: 100%;
-	margin: auto;   
 	text-align: left;
 	list-style-type: none;
-	font-size: 20px;
+	font-size: 1.5vw;
+
 }
 
 .feed {
-	margin-left: 15%;
+	align-items: center;
 }
 
 .chatList > li {
-	margin: 5px 0;
+	margin: 2% 0;
 }
 
 .chatbox {
 	background-color: white;
 	border-radius: 8px;
-	margin-bottom: 10px;
 	width: 90%;
 	margin: auto;
 	height: 50%;
-	margin-top: 10px;
+	margin-top: 3%;
 
 }
 
 #stopwatch {
-	font-size: 80px;
+	font-size: 6vw;
+
 	color: black;
 }
 
 #userinfovalue {
-	margin-top: 5px;
-	font-size: 25px;
+	margin-top: 1.5%;
+	font-size: 2.2vw;
+
 	color: #fb8383;
 }
 
 .deckcard {
-	display: inline-block;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
+    width: 25%;
+	height: 25%;
 }
 
 .deckcard:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
+
 .overlap{
-margin-left: -100px;
+	margin-left: 2%;
 }
 
 .drawn {
-margin-left: 40px;
+margin-left: 4%;
 }
 
 .drawncards {
-	 text-align: center;
-	 margin-bottom: 50px;
+	margin-top: 3%;
+	 display: flex;
+	 justify-content: center | space-between;
+}
 
+.deck {
+	display: flex;
+	justify-content: center | space-between;
+	align-items: center;
+	margin-top: 5%;
 }
 
 .prompt {
+	margin-top:2%;
 	text-align: center;
-	font-size: 60px;
+    font-size: 4.2vw;
 }
+
 img {
 	width: 100%;
+	height: 100%;
+}
+
+html, body, .wrapper, .row, .screen, .board, .statusbar {
 	height: 100%;
 }

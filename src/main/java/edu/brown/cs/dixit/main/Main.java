@@ -40,14 +40,14 @@ public class Main {
   
   private String[] args;
   private Deck deck; //need db to save deck for each game
-  private Map<Integer, Player> playerMap; //keep track of players 
-  private String currPrompt;
+  private Map<Integer, Player> playerMap; //keep track of players
+  private Referee referee;
   
   private Main(String[] args) {
     this.args = args;
     this.deck = new Deck();
     this.playerMap = new HashMap<Integer, Player>();
-    this.currPrompt = "";
+    this.referee = new Referee();
   }
   
   private void run() {
@@ -73,8 +73,8 @@ public class Main {
   private static class LogInHandler implements TemplateViewRoute {
         @Override
         public ModelAndView handle(Request req, Response res) {
-            Map<String, Object> variables = ImmutableMap.of("title", "Dixit Online");
-            return new ModelAndView(variables, "create_game.ftl");
+            Map<String, Object> variables = ImmutableMap.of("title", "Dixit Online", "imageLink", "../img/img1.png");
+            return new ModelAndView(variables, "play.ftl");
         }
   }
 
