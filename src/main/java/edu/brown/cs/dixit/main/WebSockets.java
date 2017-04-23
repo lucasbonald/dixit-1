@@ -59,7 +59,8 @@ public class WebSockets {
 	  }
 	  
 	  System.out.println(session.toString());
-	  
+	  System.out.println(session.getLocalAddress().toString());
+	  System.out.println(session.getRemoteAddress().toString());
 		// TODO Send the CONNECT message
 		session.getRemote().sendString(connectMessage.toString());
     nextId++;
