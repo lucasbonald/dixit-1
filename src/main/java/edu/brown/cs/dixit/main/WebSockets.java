@@ -71,7 +71,7 @@ public class WebSockets {
   @OnWebSocketClose
   public void closed(Session session, int statusCode, String reason) {
     // TODO Remove the session from the queue
-	  gt.removePlayer(session);
+	  //gt.removePlayer(session);
 	  
 //	  if(sessions.size()==0){
 //		  ipaddress = null;
@@ -92,7 +92,7 @@ public class WebSockets {
   			DixitGame newGame = new DixitGame(payload.get("game_id").getAsInt(), payload.get("num_players").getAsInt());
   			gt.addGame(session, newGame, payload.get("user_id").getAsInt());
   			newGame.getDeck().initializeDeck("../img/img");
-  			newGame.addPlayer(payload.get("user_id"), payload.get("user_name"), newGame.getDeck());
+  			//newGame.addPlayer(payload.get("user_id"), payload.get("user_name"), newGame.getDeck());
   			
   			// Java function for making GET request to user's page
   			

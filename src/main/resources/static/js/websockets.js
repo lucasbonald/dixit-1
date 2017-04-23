@@ -15,6 +15,7 @@ let myId = -1;
 
 //set up socket connection and define types
 const setup_update = () => {
+	console.log("setup update called")
 	conn = new WebSocket("ws://localhost:4567/play");
 
 	conn.onerror = err => {
@@ -55,6 +56,8 @@ function new_game(connectMessage) {
 }
 
 function submitPrompt(inputPrompt, inputAnswer) {
+	console.log("prompt in websockeetsjs called");
+	console.log("conn is  " + conn);
 	const promptMessage = {
 		type: MESSAGE_TYPE.ST_SUBMIT,
 		payload: {
