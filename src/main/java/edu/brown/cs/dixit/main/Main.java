@@ -73,7 +73,7 @@ public class Main {
   private static class LogInHandler implements TemplateViewRoute {
         @Override
         public ModelAndView handle(Request req, Response res) {
-            Map<String, Object> variables = ImmutableMap.of("title", "Dixit Online", "imageLink", "../img/img1.png");
+            Map<String, Object> variables = ImmutableMap.of("title", "Dixit Online", "imageLink", "../img/img1.png", "board", "whatever");
             return new ModelAndView(variables, "play.ftl");
         }
   }
