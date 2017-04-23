@@ -1,0 +1,68 @@
+.title {
+  text-align: center;
+  font-size: 60px;
+}
+
+.form-title {
+  margin-bottom: 30px;
+  font-size: 28px;
+}
+
+.col-xs-4 {
+  border: 2px solid #f1f1ef;
+  border-radius: 10px;
+  margin:10px;
+}
+
+.row {
+  padding:10px;
+}
+
+.form-text {
+  margin-top: 30px;
+  text-align: left;
+  padding-left: 0;
+  padding-right: 10px;
+}
+
+.form-button {
+  margin-top: 30px;
+}
+
+.btn {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.btn.btn-default.active {
+  background-color: #7AB6DD;
+}
+
+#create-button {
+  margin:30px;
+  background-color: #DD7A7A;
+}
+
+#join-button {
+  margin:30px;
+  background-color: #DD7A7A;
+}
+
+td {
+  text-align: left;
+}
+
+.selected-row {
+  background-color: #7AB6DD;
+}
+
+p {
+  font-weight: bold;
+  display: inline;
+  float: left;
+}
+
+.btn-default {
+  display: inline;
+  float: left;
+}

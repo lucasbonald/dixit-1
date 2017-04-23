@@ -1,54 +1,61 @@
 const MESSAGE_TYPE = {
   CONNECT: 0,
-  SCORE: 1,
-  UPDATE: 2
+  CREATE: 1,
+  JOIN: 2,
+  ALL_JOIN: 3,
+  ST_SUBMIT: 4,
+  GS_SUBMIT: 5,
+  VOTING: 6,
+
 };
 
+
 let conn;
-let myId = -1;
+let userId = -1;
 
-// Setup the WebSocket connection for live updating of scores.
-const setup_live_scores = () => {
-  // TODO Create the WebSocket connection and assign it to `conn`
-  conn = new WebSocket("ws://localhost:4567/scores");
 
-  conn.onerror = err => {
-    console.log('Connection error:', err);
+//set up socket connection and define types
+const setup_update = () => {
+	conn = new WebSocket("whatever address we use");
+
+	conn.onerror = err => {
+    	console.log('Connection error:', err);
   };
 
-  conn.onmessage = msg => {
-    const data = JSON.parse(msg.data);
-    switch (data.type) {
-      default:
-        console.log('Unknown message type!', data.type);
-        break;
-      case MESSAGE_TYPE.CONNECT:
-        // TODO Assign myId
-          myId = data.payload.id;
-          if(data.payload.num==0){
-            console.log("not same");
-          }else{
-            console.log("same");
-            alert("no multiple tabs!");
-          }
+
+	 conn.onmessage = msg => {
+	    const data = JSON.parse(msg.data);
+	    switch (data.type) {
+        default:
+          console.log('Unknown message type!', data.type);
           break;
-      case MESSAGE_TYPE.UPDATE:
-        // TODO Update the relevant row or add a new row to the scores table
-        if(myId == 0){
-            $("#yourElementId").load("1.html");
-        }else{
-            $("#yourElementId").load("1.html");
-        }
-    }
-  };
-}
-
-// Should be called when a user makes a new guess.
-// `guesses` should be the array of guesses the user has made so far.
-const new_guess = guesses => {
-  // TODO Send a SCORE message to the server using `conn`
-  let scoremsg = {"type":MESSAGE_TYPE.SCORE, "payload":{"id" : myId, "board": $("#bdstring").val(), "text":guesses.join(",")}}
-  console.log($("#bdstring").val())
-  conn.send(JSON.stringify(scoremsg));
-  console.log(JSON.stringify(scoremsg));
+	        
+	        // connect: get the connected user's ID and use as list of users currently connected
+		    case MESSAGE_TYPE.JOIN:
+		    	let gameId = data.payload.gameId;
+		    	let userId = data.payload.userId;
+		        break;
+	        // create: when create button is pressed, send room info
+		    case MESSAGE_TYPE.CREATE:
+		    	let roomId = data.payload.roomId;
+		   		let lobbyName = data.payload.lobbyName;
+		    	let numPlayers = data.payload.numPlayers;
+		    	let victoryPts = data.payload.victoryPts;
+		    	let card = data.payload.card;
+		    	let story = data.payload.story;
+		    	break;
+	    	case MESSAGE_TYPE.ALL_JOIN
+	    		let roomId = data.payload.roomId;
+	    		// let's start
+	    		break;
+	    	case MESSAGE_TYPE.ST_SUBMIT:
+	    		let prompt = data.payload.prompt;
+	    		let answer = data.payload.answer;
+	    		break;
+	    	case MESSAGE_TYPE.GS_SUBMIT:
+	    		let prompt = data.payload.prompt;
+	    		let answer = data.payload.answer;
+	    		break;
+	    }
+	  };
 }
