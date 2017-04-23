@@ -114,6 +114,8 @@ public class WebSockets {
   			}
   			break;
   		case ST_SUBMIT:
+  			String prompt = payload.get("prompt").getAsString();
+  			System.out.println(prompt);
   			break;
   		case GS_SUBMIT:
   			break;

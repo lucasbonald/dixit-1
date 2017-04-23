@@ -9,11 +9,10 @@
 				  </div>
 			</div>
 			<div class = "prompt" >
-			<i>"Riding a huge bird to the moon"</i>
+			<i></i>
 			</div>
 			
 			${board}
-			
 			
 			<div class = "deck" style = "text-align: center">
 				<div class="card deckcard">

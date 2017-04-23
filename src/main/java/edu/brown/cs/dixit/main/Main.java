@@ -8,6 +8,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
@@ -68,6 +71,7 @@ public class Main {
     FreeMarkerEngine freeMarker = createEngine();
     //Spark.webSocket("/scores", WebSockets.class);
     Spark.get("/",new LogInHandler(), freeMarker);   
+    Spark.get("/storytelling",new StoryHandler(), freeMarker);   
   }
   
   private static class LogInHandler implements TemplateViewRoute {
@@ -77,6 +81,16 @@ public class Main {
             return new ModelAndView(variables, "play.ftl");
         }
   }
+  
+  private static class StoryHandler implements TemplateViewRoute {
+      @Override
+      public ModelAndView handle(Request req, Response res) {
+          Map<String, Object> variables = ImmutableMap.of("title", "Dixit Online", "imageLink", "../img/img1.png", "board", "whatever");
+          return new ModelAndView(variables, "storytelling.ftl");
+      }
+}
+
+  
 
   private static FreeMarkerEngine createEngine() {
     Configuration config = new Configuration();

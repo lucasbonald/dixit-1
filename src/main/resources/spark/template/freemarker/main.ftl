@@ -8,9 +8,10 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/user.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-    <script type="text/javascript" src="js/play.js"></script>
-    <script type="text/javascript src="js/startGame.js></script>
     <script type="text/javascript src="js/websockets.js></script>
+    <script type="text/javascript" src="js/play.js"></script>
+    <script type="text/javascript" src="js/storytelling.js"></script>
+    <script type="text/javascript src="js/startGame.js></script>
   </head>
   <body>
      ${content}
