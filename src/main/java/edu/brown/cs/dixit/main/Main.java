@@ -6,15 +6,17 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
+import freemarker.template.Configuration;
+
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
-import freemarker.template.Configuration;
 import spark.ExceptionHandler;
 import spark.ModelAndView;
 import spark.QueryParamsMap;
@@ -30,19 +32,20 @@ import edu.brown.cs.dixit.setting.*;
 public class Main {
 
   private static final int PORT_NUM = 4567;
-  private static final Gson GSON = new Gson();
+  //private static final Gson GSON = new Gson();
 
-  
   public static void main(String[] args) {
     new Main(args).run();
   }
   
   private String[] args;
   private Deck deck; //need db to save deck for each game
+  private Map<Integer, Player> playerMap; //keep track of players
   
   private Main(String[] args) {
     this.args = args;
-    this.deck = null;
+    this.deck = new Deck();
+    this.playerMap = new HashMap<Integer, Player>();
   }
   
   private void run() {
@@ -52,6 +55,7 @@ public class Main {
     if (options.has("gui")) { 
       //deck initialized
       deck.initializeDeck("../img/img");
+      Spark.port(PORT_NUM);
       runSparkServer();
     }
   }
@@ -64,12 +68,11 @@ public class Main {
     Spark.get("/",new LogInHandler(), freeMarker);   
   }
   
-  // TODO: create a PlayHandler
   private static class LogInHandler implements TemplateViewRoute {
         @Override
         public ModelAndView handle(Request req, Response res) {
-            Map<String, Object> variables = ImmutableMap.of("title", "Hello");
-            return new ModelAndView(variables, "login.ftl");
+            Map<String, Object> variables = ImmutableMap.of("title", "Dixit Online");
+            return new ModelAndView(variables, "create_game.ftl");
         }
   }
 
