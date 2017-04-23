@@ -85,6 +85,7 @@ public class Referee {
     pickRecord = new HashMap<Integer, Integer>();
     
     //messages can be added later in the backend?
+    //need to keep track of scores
     //need to check if the game ended
     
     return result;

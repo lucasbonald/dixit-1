@@ -17,7 +17,7 @@ public class Deck {
   public void initializeDeck(String imgLink) {
     // need to call the imgLink for every card
     for (int i = 0; i < SIZE; i++) {
-      String eachLink = imgLink + String.valueOf(i);
+      String eachLink = imgLink + String.valueOf(i) + ".png";
       Card temp = new Card(i, eachLink);
       deck.add(temp);
     }
