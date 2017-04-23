@@ -10,6 +10,7 @@ public class Referee {
   private int storyTeller;
   private int numPlayers;
   private int victoryPoint;
+  private String currPrompt;
   private Map<Integer, Integer> chosen; 
   private Map<Integer, Integer> pickRecord; 
   private Map<Integer, Integer> result;
@@ -18,6 +19,7 @@ public class Referee {
     winnerPoint = -1;
     answer = -1;
     storyTeller = -1;
+    currPrompt = "";
     numPlayers = Setting.NUM_DEFAULT_PLAYERS;
     victoryPoint = Setting.NUM_DEFAULT_VICTORY_POINT;
     chosen = new HashMap<Integer, Integer>();
@@ -25,20 +27,57 @@ public class Referee {
     result = new HashMap<Integer, Integer>();
   }
   
-  public void receiveSubmissions(int id, int pick) {
+  public void receiveStory(String prompt, int playerId, int cardId) {
+    setPrompt(prompt);
+    setStoryTeller(playerId);
+    setAnswer(cardId);
+  }
+  
+  public void receiveCards(int id, int cardId) {
+    chosen.put(id, cardId);
+  }
+  
+  public void receiveVotes(int id, int pick) {
      pickRecord.put(id, pick);
   }
   
-  // need information of whose card it is
   public void tallyScores() {
+    int count_answer = 0;
+    //Points for other players
     for (Integer key: pickRecord.keySet()) {    
-      if (pickRecord.get(key) == getAnswer()) {
-        result.put(key, 3);
+      int pickedCard = pickRecord.get(key);
+      if (pickedCard == getAnswer()) {
+        
+        if (result.containsKey(pickedCard)) {
+          result.put(pickedCard, result.get(pickedCard) + 3);
+        } else {
+          result.put(pickedCard, 3);
+        }
+        
+        count_answer += 1;
+        
       } else {
+        if (result.containsKey(pickedCard)) {
+          result.put(pickedCard, result.get(pickedCard) + 1);
+        } else {
+          result.put(pickedCard, 1);
+        }
       }
     }
+    
+    //Point for Story-teller
+    if ((count_answer == 0) || (count_answer == pickRecord.size())) {
+      result.put(storyTeller, 0);
+      for (Integer key: pickRecord.keySet()) {
+        result.put(key, 2);
+      }
+    } else {
+      result.put(storyTeller, 3);
+    }
+    
+    //need to check if the game ended
   }
-  
+ 
   public int getWinnerPoint() {
     return winnerPoint;
   }
@@ -47,8 +86,16 @@ public class Referee {
     return answer;
   }
 
+  public void setAnswer(int cardId) {
+    this.answer = cardId;
+  }
+  
   public int getStoryTeller() {
     return storyTeller;
+  }
+  
+  public void setStoryTeller(int id) {
+    this.storyTeller = id;
   }
 
   public int getNumPlayers() {
@@ -57,6 +104,14 @@ public class Referee {
   
   public int getVictoryPoint() {
     return victoryPoint;
+  }
+  
+  public String getPrompt() {
+    return currPrompt;
+  }
+  
+  public void setPrompt(String prompt) {
+    this.currPrompt = prompt;
   }
   
 }
