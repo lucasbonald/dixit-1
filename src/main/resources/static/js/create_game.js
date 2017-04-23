@@ -1,7 +1,7 @@
 let prevSelected;
 let currSelected;
 let gameCount = 1;
-
+let newGameId = 1;
 
 $(document).ready(function(){
   
@@ -13,19 +13,29 @@ $(document).ready(function(){
       } else {
         
         let gameInit = {
-          id: gameCount,
-          name: $(".lobby-name").val(),
-          num_players: Number($(".num-players").val()),
-          victory_pts: $(".victory-points").val(),
-          cards: $(".configure-cards.active").text().trim(),
-          story_types: {
-            text: $("#story-text").attr("class").includes("active"),
-            audio: $("#story-audio").attr("class").includes("active"),
-            video: $("#story-video").attr("class").includes("active")
+          type: MESSAGE_TYPE.CREATE,
+          payload: {
+            game_id: newGameId,
+            name: $(".lobby-name").val(),
+            num_players: Number($(".num-players").val()),
+            victory_pts: $(".victory-points").val(),
+            cards: $(".configure-cards.active").text().trim(),
+            story_types: {
+              text: $("#story-text").attr("class").includes("active"),
+              audio: $("#story-audio").attr("class").includes("active"),
+              video: $("#story-video").attr("class").includes("active")  
+            }
           }
         }
         
         console.log(gameInit);
+        
+        // send new game information to backend
+        new_game(gameInit);
+        newGameId++;
+        
+        // display new available game to allow joining
+        $('table.table-hover tbody').append("<tr><td id=\"" + gameInit.game_id + "\">" + gameInit.name + "</td><td id=\"" + gameInit.game_id + "\">1/4</td></tr");
         
       }
       
@@ -46,6 +56,7 @@ $(document).ready(function(){
         $(".join-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Please select an available lobby.</p>")
       } else {
         console.log(currSelected.attr('id'));
+        join_game(currSelected.attr('id'));
       }
       
       

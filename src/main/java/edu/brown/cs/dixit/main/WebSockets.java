@@ -4,12 +4,17 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+
+import edu.brown.cs.dixit.gameManagement.DixitGame;
+import edu.brown.cs.dixit.gameManagement.GameTracker;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
@@ -20,14 +25,15 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 @WebSocket
 public class WebSockets {
   private static final Gson GSON = new Gson();
-  private static final Queue<Session> sessions = new ConcurrentLinkedQueue<>();
-  private static int nextId = 0;
+  public static final GameTracker gt = new GameTracker();
+  private static int nextId = 1;
+
   private InetSocketAddress ipaddress;
   private static enum MESSAGE_TYPE {
     CONNECT,
     CREATE,
     JOIN,
-    ALL_JOIN,
+    ALL_JOINED,
     ST_SUBMIT,
     GS_SUBMIT,
     VOTING
@@ -35,37 +41,92 @@ public class WebSockets {
 
   @OnWebSocketConnect
   public void connected(Session session) throws IOException {
-    // TODO Add the session to the queued
-	  JsonObject json = new JsonObject();
+    // TODO Add the session to the queue
+	  JsonObject connectMessage = new JsonObject();
+	  connectMessage.addProperty("type", MESSAGE_TYPE.CONNECT.ordinal());
 	  JsonObject payload = new JsonObject();
-	  if(ipaddress == null){
+	  payload.addProperty("user_id", nextId);
+	  connectMessage.add("payload", payload);
+	  
+	  ipaddress = session.getLocalAddress();	  
+	  if (ipaddress == null){
 		  ipaddress = session.getLocalAddress();
 		  payload.addProperty("num", 0);
-	  }else if(session.getLocalAddress().equals(ipaddress)){
+	  } else if (session.getLocalAddress().equals(ipaddress)){
 		  payload.addProperty("num", 1);
-	  }else{
+	  } else {
 		  payload.addProperty("num", 0);
 	  }
-	  payload.addProperty("id", nextId);
-	  json.addProperty("type", MESSAGE_TYPE.CONNECT.ordinal());
-	  json.add("payload", payload);
-	// TODO Send the CONNECT message
-	session.getRemote().sendString(json.toString());
+	  
+	  
+		// TODO Send the CONNECT message
+		session.getRemote().sendString(connectMessage.toString());
     nextId++;
+    
+    
+    
   }
 
   @OnWebSocketClose
   public void closed(Session session, int statusCode, String reason) {
     // TODO Remove the session from the queue
-	  sessions.remove(session);
-	  if(sessions.size()==0){
-		  ipaddress = null;
-	  }
+	  gt.removePlayer(session);
+	  
+//	  if(sessions.size()==0){
+//		  ipaddress = null;
+//	  }
   }
 
   @OnWebSocketMessage
   public void message(Session session, String message) throws IOException {
-	 int score = 0;
+  	JsonObject received = GSON.fromJson(message, JsonObject.class);
+  	JsonObject payload = received.getAsJsonObject("payload");
+  	MESSAGE_TYPE messageType = MESSAGE_TYPE.values()[received.get("type").getAsInt()];
+  	
+  	switch (messageType) {
+  		default:
+  			System.out.println("Unknown message type!");
+  			break;
+  		case CREATE:
+  			DixitGame newGame = new DixitGame(payload.get("game_id").getAsInt(), payload.get("num_players").getAsInt());
+  			gt.addGame(session, newGame, payload.get("user_id").getAsInt());
+  			
+  			// internalize game information
+  			// Java function for making GET request to user's page
+  			// GET request to user's interface page
+  			
+  			break;
+  		case JOIN:
+  			
+  			// distribute cards that have not yet been distributed to new player
+  			// GET request to user's interface page
+  			
+  			int gameId = payload.get("game_id").getAsInt();
+  			gt.addPlayer(session, gameId);
+  			
+  			// inform all players that all players have joined
+  			if (gt.getNumPlayers(gameId) == gt.getCapacity(gameId)) {
+  				JsonObject allJoinedMessage = new JsonObject();
+  				allJoinedMessage.addProperty("type", MESSAGE_TYPE.ALL_JOINED.ordinal());
+  				for (Session player : gt.getPlayers(gameId)) {
+  					player.getRemote().sendString(allJoinedMessage.toString());
+  				}
+  			}
+  			break;
+  		case ST_SUBMIT:
+  			break;
+  		case GS_SUBMIT:
+  			break;
+  		case VOTING:
+  			break;
+  	}
+  		
+  	
+  	
+	 
+	 
+	 
+	 
 	 /*
 	
     	}
@@ -76,14 +137,7 @@ public class WebSockets {
     // TODO Compute the player's score
     
     // TODO Send an UPDATE message to all users
-    JsonObject json = new JsonObject();
-    JsonObject payload = new JsonObject();
-	payload.addProperty("id", id);
-	payload.addProperty("score", score);
-	json.addProperty("type", MESSAGE_TYPE.UPDATE.ordinal());
-	json.add("payload", payload);
-    for(Session single : sessions){
-    	single.getRemote().sendString(json.toString());
+[          
     }*/
   }
 }
