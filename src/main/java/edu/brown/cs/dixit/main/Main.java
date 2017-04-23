@@ -66,16 +66,16 @@ public class Main {
     Spark.externalStaticFileLocation("src/main/resources/static");
     Spark.exception(Exception.class, new ExceptionPrinter());
     FreeMarkerEngine freeMarker = createEngine();
-    //Spark.webSocket("/scores", WebSockets.class);
-    Spark.get("/",new LogInHandler(), freeMarker);   
+    Spark.webSocket("/play", WebSockets.class);
+    Spark.get("/", new LogInHandler(), freeMarker);   
   }
   
   private static class LogInHandler implements TemplateViewRoute {
-        @Override
-        public ModelAndView handle(Request req, Response res) {
-            Map<String, Object> variables = ImmutableMap.of("title", "Dixit Online", "imageLink", "../img/img1.png");
-            return new ModelAndView(variables, "play.ftl");
-        }
+      @Override
+      public ModelAndView handle(Request req, Response res) {
+          Map<String, Object> variables = ImmutableMap.of("title", "Dixit Online", "imageLink", "../img/img1.png");
+          return new ModelAndView(variables, "create_game.ftl");
+      }
   }
 
   private static FreeMarkerEngine createEngine() {

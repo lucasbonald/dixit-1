@@ -15,7 +15,7 @@ let myId = -1;
 
 //set up socket connection and define types
 const setup_update = () => {
-	conn = new WebSocket("ws://localhost:4567/");
+	conn = new WebSocket("ws://localhost:4567/play");
 
 	conn.onerror = err => {
     	console.log('Connection error:', err);
@@ -32,34 +32,33 @@ const setup_update = () => {
       // connect: get the connected user's ID and use as list of users currently connected
       case MESSAGE_TYPE.CONNECT:
         myId = payload.user_id;
+        console.log(myId);
         break;
-      
-      // create: when create button is pressed, send room info
       case MESSAGE_TYPE.ALL_JOINED:
-        let roomId = data.payload.roomId;
-        // let's start
+        // dialog box for each player's screen to see if their ready
         break;
       case MESSAGE_TYPE.ST_SUBMIT:
-        let prompt = data.payload.prompt;
-        let answer = data.payload.answer;
+//        let prompt = data.payload.prompt;
+//        let answer = data.payload.answer;
         break;
       case MESSAGE_TYPE.GS_SUBMIT:
-        let prompt = data.payload.prompt;
-        let answer = data.payload.answer;
+//        let prompt = data.payload.prompt;
+//        let answer = data.payload.answer;
         break;
     }
   };
 }
 
 function new_game(connectMessage) {
-  connectMessagessage.user_id = myId;
+  connectMessage.user_id = myId;
+  console.log(connectMessage);
   conn.send(JSON.stringify(connectMessage));
 }
 
 function join_game(gameId) {
   const joinMessage = {
     user_id: myId,
-    game_id = gameId;
+    game_id: gameId
   }
   conn.send(JSON.stringify(joinMessage));
   
