@@ -1,5 +1,10 @@
 <#assign board>		
-		
+			<script>
+				$(document).ready(function() {
+				  setup_update();
+				});
+			</script>
+					
  			<div id = "storyFormWrapper">
 		      <form method="POST" action="/whatever" id="promptForm">
 		          <input type="text" name="prompt"   id="promptField" placeholder = "Please enter your interesting story here" value = "">
