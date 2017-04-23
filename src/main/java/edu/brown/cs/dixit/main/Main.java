@@ -37,7 +37,7 @@ public class Main {
     Spark.externalStaticFileLocation("src/main/resources/static");
     Spark.exception(Exception.class, new ExceptionPrinter());
     FreeMarkerEngine freeMarker = createEngine();
-    Spark.webSocket("/scores", ScoringWebSocket.class);
+    Spark.webSocket("/scores", WebSockets.class);
     Spark.get("/play",new PlayHandler(), freeMarker);   
   }
   // TODO: create a PlayHandler
