@@ -14,10 +14,10 @@ public class GamePlayer implements Player {
   private Deck globalDeck;
   
   //Player needs to switch around his/her roles
-  public GamePlayer(int id, String name, int startingPoint, Deck deck) {
+  public GamePlayer(int id, String name, Deck deck) {
     playerId = id;
     playerName = name;
-    point = startingPoint;
+    point = 0;
     isGuesser = true;
     playerDeck = new ArrayList<>();
     globalDeck = deck;

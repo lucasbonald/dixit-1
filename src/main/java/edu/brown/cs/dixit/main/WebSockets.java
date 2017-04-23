@@ -91,6 +91,8 @@ public class WebSockets {
   		case CREATE:
   			DixitGame newGame = new DixitGame(payload.get("game_id").getAsInt(), payload.get("num_players").getAsInt());
   			gt.addGame(session, newGame, payload.get("user_id").getAsInt());
+  			newGame.getDeck().initializeDeck("../img/img");
+  			newGame.addPlayer(payload.get("user_id"), payload.get("user_name"), newGame.getDeck());
   			
   			// Java function for making GET request to user's page
   			
@@ -101,7 +103,7 @@ public class WebSockets {
   			// GET request to user's interface page
   			
   			int gameId = payload.get("game_id").getAsInt();
-  			gt.addPlayer(session, gameId);
+  			//gt.addPlayer(session, gameId);
   			
   			// inform all players that all players have joined
   			if (gt.getNumPlayers(gameId) == gt.getCapacity(gameId)) {
