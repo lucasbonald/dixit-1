@@ -40,12 +40,14 @@ public class Main {
   
   private String[] args;
   private Deck deck; //need db to save deck for each game
-  private Map<Integer, Player> playerMap; //keep track of players
+  private Map<Integer, Player> playerMap; //keep track of players 
+  private String currPrompt;
   
   private Main(String[] args) {
     this.args = args;
     this.deck = new Deck();
     this.playerMap = new HashMap<Integer, Player>();
+    this.currPrompt = "";
   }
   
   private void run() {
