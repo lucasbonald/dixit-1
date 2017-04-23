@@ -34,11 +34,11 @@ const setup_live_scores = () => {
           break;
       case MESSAGE_TYPE.UPDATE:
         // TODO Update the relevant row or add a new row to the scores table
-        const $scoketid = $("#userid");
-        const $socketscore = $("#socscore");
-        $scoketid.html(data.payload.id);
-        $socketscore.html(data.payload.score);
-        break;
+        if(myId == 0){
+            $("#yourElementId").load("1.html");
+        }else{
+            $("#yourElementId").load("1.html");
+        }
     }
   };
 }
