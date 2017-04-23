@@ -35,7 +35,7 @@ hr {
 #statuscardelement {
 	position: relative;
     font-size: 1.5vw;
-    font-weight: 700;
+    font-weight: 900;
     color: white;
 }
 
@@ -70,6 +70,13 @@ hr {
 	width: 100%;
 }
 
+#storyFormWrapper {
+	display: block;
+	color: black;
+	text-align: center;
+	width: 100%;
+}
+
 input[type=text] {
     border: black;
     border-radius: 6px;
@@ -81,6 +88,13 @@ input[type=text] {
     margin: auto;
     padding: 1% 2%;
     display: inline-block;
+
+}
+
+#storyFormSubmit {
+	font-size: 1.2vw;
+	font-weight: 900;
+	padding: 0.7% 1.5%;
 
 }
 
@@ -175,20 +189,44 @@ input[type=submit] {
 }
 
 .drawn {
-margin-left: 4%;
+	margin-left: 2%;
+	margin-right: 2%;
 }
 
 .drawncards {
 	margin-top: 3%;
 	 display: flex;
 	 justify-content: center | space-between;
+	 margin-left:2%;
+	 margin-bottom:5%;
+}
+
+.pickedcard {
+	margin-top: 3%;
+	display: flex;
+	justify-content: center;
+	justify-content: space-between;
+	text-align: center;
+	margin: auto;
+	width: 80%;
+	margin-bottom:3%;
+}
+
+.picked {
+	margin: auto;
+	margin-top: 3%;
+}
+
+.guessed {
+	margin: auto;
+	margin-top: 5%;
 }
 
 .deck {
 	display: flex;
 	justify-content: center | space-between;
 	align-items: center;
-	margin-top: 5%;
+	margin-left: 2%;
 }
 
 .prompt {
