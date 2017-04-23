@@ -7,6 +7,8 @@ $(document).ready(function(){
   
     $("#create-button").click(function() {
       
+      console.log("clicked");
+      
       $(".create-error-message").empty();
       if($(".lobby-name").val() == "") {
         $(".create-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Please provide a lobby name.</p>")
@@ -27,8 +29,6 @@ $(document).ready(function(){
             }
           }
         }
-        
-        console.log(gameInit);
         
         // send new game information to backend
         new_game(gameInit);
@@ -53,13 +53,13 @@ $(document).ready(function(){
     $("#join-button").click(function() {
       $(".join-error-message").empty();
       if(currSelected == undefined) {
-        $(".join-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Please select an available lobby.</p>")
+        $(".join-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Please select an available lobby.</p>");
+        
       } else {
         console.log(currSelected.attr('id'));
         join_game(currSelected.attr('id'));
       }
-      
-      
+ 
     });
   
 });

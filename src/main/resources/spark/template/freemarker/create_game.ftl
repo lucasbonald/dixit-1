@@ -1,5 +1,11 @@
 <#assign content>
 
+<script>
+	$(document).ready(function() {
+	  setup_update();
+	});
+</script>
+
 <div class="container-fluid">
 	<h1 class="title">Dixit Online</h1>
         <div class="row">

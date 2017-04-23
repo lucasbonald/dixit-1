@@ -58,6 +58,7 @@ public class WebSockets {
 		  payload.addProperty("num", 0);
 	  }
 	  
+	  System.out.println(session.toString());
 	  
 		// TODO Send the CONNECT message
 		session.getRemote().sendString(connectMessage.toString());
@@ -91,9 +92,7 @@ public class WebSockets {
   			DixitGame newGame = new DixitGame(payload.get("game_id").getAsInt(), payload.get("num_players").getAsInt());
   			gt.addGame(session, newGame, payload.get("user_id").getAsInt());
   			
-  			// internalize game information
   			// Java function for making GET request to user's page
-  			// GET request to user's interface page
   			
   			break;
   		case JOIN:
