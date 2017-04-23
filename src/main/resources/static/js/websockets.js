@@ -44,7 +44,7 @@ const setup_update = () => {
 		    	let card = data.payload.card;
 		    	let story = data.payload.story;
 		    	break;
-	    	case MESSAGE_TYPE.ALL_JOIN
+	    	case MESSAGE_TYPE.ALL_JOIN:
 	    		let roomId = data.payload.roomId;
 	    		// let's start
 	    		break;
