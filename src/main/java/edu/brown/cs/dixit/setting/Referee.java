@@ -12,6 +12,5 @@ public class Referee {
     answer = 0;
     storyTeller = null;
     numPlayers = Setting.NUM_DEFAULT_PLAYERS;
-  }
- 
+  }  
 }
