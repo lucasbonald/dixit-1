@@ -48,11 +48,21 @@ const setup_update = () => {
     }
   };
 }
-
 function new_game(connectMessage) {
   connectMessage.user_id = myId;
   console.log(connectMessage);
   conn.send(JSON.stringify(connectMessage));
+}
+
+function submitPrompt(inputPrompt, inputAnswer) {
+	const promptMessage = {
+		type: MESSAGE_TYPE.ST_SUBMIT,
+		payload: {
+			prompt: inputPrompt,
+			answer: inputAnswer
+		}
+	}
+	conn.send(JSON.stringify(promptMessage));
 }
 
 function join_game(gameId) {

@@ -101,7 +101,7 @@ public class WebSockets {
   		case JOIN:
   			
   			// distribute cards that have not yet been distributed to new player
-  			// GET request to user's interface page
+  			// GET request to user's interface pages
   			
   			int gameId = payload.get("game_id").getAsInt();
   			//gt.addPlayer(session, gameId);
@@ -116,6 +116,8 @@ public class WebSockets {
   			}
   			break;
   		case ST_SUBMIT:
+  			String prompt = payload.get("prompt").getAsString();
+  			System.out.println(prompt);
   			break;
   		case GS_SUBMIT:
   			break;

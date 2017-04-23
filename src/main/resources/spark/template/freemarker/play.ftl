@@ -9,7 +9,7 @@
 				  </div>
 			</div>
 			<div class = "prompt" >
-			<i>"Riding a huge bird to the moon"</i>
+			<i></i>
 			</div>
 			
 			${board}
