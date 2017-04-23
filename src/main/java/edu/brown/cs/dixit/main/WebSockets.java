@@ -25,7 +25,12 @@ public class WebSockets {
   private InetSocketAddress ipaddress;
   private static enum MESSAGE_TYPE {
     CONNECT,
-    UPDATE
+    CREATE,
+    JOIN,
+    ALL_JOIN,
+    ST_SUBMIT,
+    GS_SUBMIT,
+    VOTING
   }
 
   @OnWebSocketConnect
@@ -33,7 +38,7 @@ public class WebSockets {
     // TODO Add the session to the queued
 	  JsonObject json = new JsonObject();
 	  JsonObject payload = new JsonObject();
-	  if(ipaddress==null){
+	  if(ipaddress == null){
 		  ipaddress = session.getLocalAddress();
 		  payload.addProperty("num", 0);
 	  }else if(session.getLocalAddress().equals(ipaddress)){
