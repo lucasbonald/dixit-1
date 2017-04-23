@@ -9,19 +9,19 @@ import org.eclipse.jetty.websocket.api.Session;
 
 public class GameTracker {
 
-  private static final Map<Integer, MultiplayerGame> gameInfo = new ConcurrentHashMap<>();
+  private static final Map<Integer, DixitGame> gameInfo = new ConcurrentHashMap<>();
   private static final Map<Integer, Queue<Session>> games = new ConcurrentHashMap<>();
   private static final Map<Session, Integer> playerIds = new ConcurrentHashMap<>();
 	
   
-  public void addGame(Session session, MultiplayerGame game, int playerId) {
+  public void addGame(Session session, DixitGame game, int playerId) {
   	Queue<Session> newPlayers = new ConcurrentLinkedQueue<>();
 		newPlayers.add(session);
 		gameInfo.put(game.getId(), game);
 		games.put(game.getId(), newPlayers);
 		playerIds.put(session, playerId);
   }
-  
+  /*
   public void addPlayer(Session session, int gameId) {
 		Queue<Session> players = games.get(gameId); 
 		players.add(session);
@@ -30,8 +30,8 @@ public class GameTracker {
   public void removePlayer(Session session) {
   	games.get(playerIds.get(session)).remove(session);
   }
-  
-  public MultiplayerGame getGame(int gameId) {
+  */
+  public DixitGame getGame(int gameId) {
   	return gameInfo.get(gameId);
   }
   

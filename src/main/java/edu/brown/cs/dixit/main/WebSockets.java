@@ -58,6 +58,7 @@ public class WebSockets {
 		  payload.addProperty("num", 0);
 	  }
 	  
+	  System.out.println(session.toString());
 	  
 		// TODO Send the CONNECT message
 		session.getRemote().sendString(connectMessage.toString());
@@ -90,19 +91,19 @@ public class WebSockets {
   		case CREATE:
   			DixitGame newGame = new DixitGame(payload.get("game_id").getAsInt(), payload.get("num_players").getAsInt());
   			gt.addGame(session, newGame, payload.get("user_id").getAsInt());
+  			newGame.getDeck().initializeDeck("../img/img");
+  			newGame.addPlayer(payload.get("user_id"), payload.get("user_name"), newGame.getDeck());
   			
-  			// internalize game information
   			// Java function for making GET request to user's page
-  			// GET request to user's interface page
   			
   			break;
   		case JOIN:
   			
   			// distribute cards that have not yet been distributed to new player
-  			// GET request to user's interface page
+  			// GET request to user's interface pages
   			
   			int gameId = payload.get("game_id").getAsInt();
-  			gt.addPlayer(session, gameId);
+  			//gt.addPlayer(session, gameId);
   			
   			// inform all players that all players have joined
   			if (gt.getNumPlayers(gameId) == gt.getCapacity(gameId)) {
