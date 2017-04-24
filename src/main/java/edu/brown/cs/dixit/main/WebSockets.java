@@ -55,7 +55,7 @@ public class WebSockets {
 	  } else if (session.getLocalAddress().equals(ipaddress)){
 		  payload.addProperty("num", 1);
 	  } else {
-		  payload.addProperty("num", 0);
+		  payload.addProperty("num", 0);	
 	  }
 	  
 	  System.out.println(session.toString());
@@ -120,23 +120,5 @@ public class WebSockets {
   			break;
   	}
   		
-  	
-  	
-	 
-	 
-	 
-	 
-	 /*
-	
-    	}
-    }
-    
-    System.out.printf("score %d \n", score);
-    int id = received.get("payload").getAsJsonObject().get("id").getAsInt();
-    // TODO Compute the player's score
-    
-    // TODO Send an UPDATE message to all users
-[          
-    }*/
   }
 }

@@ -5,6 +5,11 @@ let newGameId = 1;
 
 $(document).ready(function(){
   
+    $("#login").submit(event => {
+      
+    });
+  
+  
     $("#create-button").click(function() {
       
       console.log("clicked");
