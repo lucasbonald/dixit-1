@@ -73,6 +73,12 @@ public class Main {
     Spark.webSocket("/play", WebSockets.class);
     Spark.get("/", new LogInHandler(), freeMarker);   
     Spark.get("/storytelling",new StoryHandler(), freeMarker);   
+    Spark.get("/voting",new VoteHandler(), freeMarker);   
+    Spark.get("/guessing",new GuessHandler(), freeMarker);   
+    Spark.get("/end",new EndHandler(), freeMarker);   
+
+
+
   }
   
   private static class LogInHandler implements TemplateViewRoute {
@@ -91,7 +97,29 @@ public class Main {
       }
 }
 
-  
+  private static class VoteHandler implements TemplateViewRoute {
+      @Override
+      public ModelAndView handle(Request req, Response res) {
+          Map<String, Object> variables = ImmutableMap.of("title", "Dixit Online", "imageLink", "../img/img1.png", "board", "whatever");
+          return new ModelAndView(variables, "voting.ftl");
+      }
+}
+
+  private static class GuessHandler implements TemplateViewRoute {
+      @Override
+      public ModelAndView handle(Request req, Response res) {
+          Map<String, Object> variables = ImmutableMap.of("title", "Dixit Online", "imageLink", "../img/img1.png", "board", "whatever");
+          return new ModelAndView(variables, "guessing.ftl");
+      }
+}
+
+  private static class EndHandler implements TemplateViewRoute {
+      @Override
+      public ModelAndView handle(Request req, Response res) {
+          Map<String, Object> variables = ImmutableMap.of("title", "Dixit Online", "imageLink", "../img/img1.png", "board", "whatever");
+          return new ModelAndView(variables, "end.ftl");
+      }
+}
 
   private static FreeMarkerEngine createEngine() {
     Configuration config = new Configuration();
