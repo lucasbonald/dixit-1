@@ -62,7 +62,6 @@ hr {
 
 }
 
-
 #formWrapper {
 	display: block;
 	color: black;
@@ -217,9 +216,64 @@ input[type=submit] {
 	margin-top: 3%;
 }
 
+.message {
+	margin: auto;
+	text-align: center;
+}
+.endmessage {
+	font-size: 10vw;
+	font-weight: 900;
+	color: black;
+}
+
+.winnermessage {
+	font-size: 5vw;
+	font-weight: 600;
+	color: grey;
+}
+.statsmessage {
+	font-size: 3vw;
+	font-style: italic;
+	color: darkgrey;
+}
+
 .guessed {
 	margin: auto;
 	margin-top: 5%;
+}
+
+#endstatus {
+	width: 16%;
+}
+
+#buttonwrapper {
+	display: flex;
+	justify-content: center;
+
+}
+.endform {
+	flex-shrink: 1;
+	height: 50%;
+	margin-left: 3%;
+	margin-right: 3%;
+	margin-top: 4%;
+
+}
+
+
+
+#againButton, #exitButton {
+	font-size: 3vw;
+	border-width: 0;
+	padding: 1% 13%;
+}
+
+#againButton {
+	background-color: #609260;
+}
+
+#exitButton {
+	background-color: #e06666;
 }
 
 .deck {
@@ -233,6 +287,13 @@ input[type=submit] {
 	margin-top:2%;
 	text-align: center;
     font-size: 4.2vw;
+}
+
+.thumbswrapper {
+	font-size: 8vw;
+	text-align: center;
+	margin-bottom: -3%;
+	color: #2b2b86;
 }
 
 img {

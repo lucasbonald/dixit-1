@@ -140,14 +140,32 @@ public class WebSockets {
   			if (gt.getNumPlayers(gameId) == gt.getCapacity(gameId)) {
   				JsonObject allJoinedMessage = new JsonObject();
   				allJoinedMessage.addProperty("type", MESSAGE_TYPE.ALL_JOINED.ordinal());
+  				
   				for (Session player : gt.getPlayers(gameId)) {
   					player.getRemote().sendString(allJoinedMessage.toString());
   				}
   			}
   			break;
   		case ST_SUBMIT:
+  			//get the variables
   			String prompt = payload.get("prompt").getAsString();
+  			int answer = payload.get("answer").getAsInt();
   			System.out.println(prompt);
+  			
+  			
+			JsonObject stMessage = new JsonObject();
+			stMessage.addProperty("type", MESSAGE_TYPE.ST_SUBMIT.ordinal());
+			
+			JsonObject returnPayload = new JsonObject();
+			returnPayload.addProperty("prompt", prompt);
+			returnPayload.addProperty("answer", answer);
+			stMessage.add("payload", returnPayload);
+			  
+  			// build object
+  			//send the prompt and answer cardid to all players
+//			for (Session player : gt.getPlayers(gameId)) {
+//				player.getRemote().sendString(stMessage.toString());
+//			}
   			break;
   		case GS_SUBMIT:
   			break;
