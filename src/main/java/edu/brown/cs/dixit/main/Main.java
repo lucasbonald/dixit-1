@@ -8,6 +8,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
@@ -66,17 +69,29 @@ public class Main {
     Spark.externalStaticFileLocation("src/main/resources/static");
     Spark.exception(Exception.class, new ExceptionPrinter());
     FreeMarkerEngine freeMarker = createEngine();
+
     Spark.webSocket("/play", WebSockets.class);
     Spark.get("/", new LogInHandler(), freeMarker);   
+    Spark.get("/storytelling",new StoryHandler(), freeMarker);   
   }
   
   private static class LogInHandler implements TemplateViewRoute {
       @Override
       public ModelAndView handle(Request req, Response res) {
-          Map<String, Object> variables = ImmutableMap.of("title", "Dixit Online", "imageLink", "../img/img1.png");
+          Map<String, Object> variables = ImmutableMap.of("title", "Dixit Online", "imageLink", "../img/img1.png", "board", "");
           return new ModelAndView(variables, "create_game.ftl");
-      }
+      } 
   }
+  
+  private static class StoryHandler implements TemplateViewRoute {
+      @Override
+      public ModelAndView handle(Request req, Response res) {
+          Map<String, Object> variables = ImmutableMap.of("title", "Dixit Online", "imageLink", "../img/img1.png", "board", "whatever");
+          return new ModelAndView(variables, "storytelling.ftl");
+      }
+}
+
+  
 
   private static FreeMarkerEngine createEngine() {
     Configuration config = new Configuration();
