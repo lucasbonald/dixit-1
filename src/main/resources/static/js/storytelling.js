@@ -1,4 +1,4 @@
-let currState = "Storytelling";
+currState = "Storytelling";
 
 $(document).ready(function(){
   

@@ -15,6 +15,8 @@ import com.google.gson.JsonObject;
 
 import edu.brown.cs.dixit.gameManagement.DixitGame;
 import edu.brown.cs.dixit.gameManagement.GameTracker;
+import edu.brown.cs.dixit.setting.Card;
+import edu.brown.cs.dixit.setting.GamePlayer;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
@@ -25,7 +27,8 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 @WebSocket
 public class WebSockets {
   private static final Gson GSON = new Gson();
-  public static final GameTracker gt = new GameTracker();
+  private static final GameTracker gt = new GameTracker();
+  private static final Queue<Session> allSessions = new ConcurrentLinkedQueue<>();
   private static int nextId = 1;
 
   private InetSocketAddress ipaddress;
@@ -33,6 +36,7 @@ public class WebSockets {
     CONNECT,
     CREATE,
     JOIN,
+    GAME_JOINED,
     ALL_JOINED,
     ST_SUBMIT,
     GS_SUBMIT,
@@ -42,6 +46,8 @@ public class WebSockets {
   @OnWebSocketConnect
   public void connected(Session session) throws IOException {
     // TODO Add the session to the queue
+  	System.out.println(session);
+  	allSessions.add(session);
 	  JsonObject connectMessage = new JsonObject();
 	  connectMessage.addProperty("type", MESSAGE_TYPE.CONNECT.ordinal());
 	  JsonObject payload = new JsonObject();
@@ -90,21 +96,45 @@ public class WebSockets {
   			System.out.println("Unknown message type!");
   			break;
   		case CREATE:
-  			DixitGame newGame = new DixitGame(payload.get("game_id").getAsInt(), payload.get("num_players").getAsInt());
+  			int newGameId = payload.get("game_id").getAsInt();
+  			DixitGame newGame = new DixitGame(newGameId, payload.get("num_players").getAsInt());
   			gt.addGame(session, newGame, payload.get("user_id").getAsInt());
   			newGame.getDeck().initializeDeck("../img/img");
-  			//newGame.addPlayer(payload.get("user_id"), payload.get("user_name"), newGame.getDeck());
+  			newGame.addPlayer(payload.get("user_id").getAsInt(), payload.get("user_name").getAsString(), newGame.getDeck());
   			
-  			// Java function for making GET request to user's page
+  			JsonObject newGameMessage = new JsonObject();
+  			newGameMessage.addProperty("type", MESSAGE_TYPE.GAME_JOINED.ordinal());
+  			JsonObject newGamePayload = new JsonObject();
+  			newGamePayload.addProperty("game_id", newGameId);
+  			newGamePayload.addProperty("lobby_name", payload.get("lobby_name").getAsString());
+  			newGamePayload.addProperty("num_players", newGame.getNumPlayers());
+  			newGamePayload.addProperty("capacity", newGame.getCapacity());
+  			newGameMessage.add("payload", newGamePayload);
+  			
+  			for (Session indivSession : allSessions) {
+  				indivSession.getRemote().sendString(newGameMessage.toString());
+  			}
   			
   			break;
+  			
   		case JOIN:
+  			int gameId = payload.get("game_id").getAsInt();
+  			DixitGame join = gt.getGame(gameId);
+  			if (join.getCapacity() != join.getNumPlayers()) {
+  				join.addPlayer(payload.get("user_id").getAsInt(), payload.get("user_name").getAsString(), join.getDeck());
+    			if (join.getCapacity() == join.getNumPlayers()) {
+    				for (GamePlayer player : join.getPlayers()) {
+    					List<Card> firstHand = player.getFirstHand();
+    				}
+    			}
+  			}
+  		
+  			
+  			
   			
   			// distribute cards that have not yet been distributed to new player
   			// GET request to user's interface pages
   			
-  			int gameId = payload.get("game_id").getAsInt();
-  			//gt.addPlayer(session, gameId);
   			
   			// inform all players that all players have joined
   			if (gt.getNumPlayers(gameId) == gt.getCapacity(gameId)) {

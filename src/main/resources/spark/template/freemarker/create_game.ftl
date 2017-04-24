@@ -8,6 +8,7 @@
 
 <div class="container-fluid">
 	<h1 class="title">Dixit Online</h1>
+	<input type="text" id="username" placeholder="Enter a new username"></input>
         <div class="row">
           <div class="col-xs-1"></div>
           <div class="col-xs-10">
@@ -85,14 +86,6 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td id="001">dixit_game_1</td>
-                    <td id="001">2/4</td> 
-                  </tr>
-                  <tr>
-                    <td id="002">dixit_game_2</td>
-                    <td id="002">4/5</td>
-                  </tr>
                 </tbody>
               </table>
               <div class="row">

@@ -7,6 +7,9 @@ $(document).ready(function(){
   
     $("#login").submit(event => {
       
+      event.preventDefault();
+      
+      
     });
   
   
@@ -15,15 +18,16 @@ $(document).ready(function(){
       console.log("clicked");
       
       $(".create-error-message").empty();
-      if($(".lobby-name").val() == "") {
-        $(".create-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Please provide a lobby name.</p>")
+      if($(".lobby-name").val() == "" || $("#username").val() == "") {
+        $(".create-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Please fill in all details before proceeding.</p>")
       } else {
         
         let gameInit = {
           type: MESSAGE_TYPE.CREATE,
           payload: {
             game_id: newGameId,
-            name: $(".lobby-name").val(),
+            user_name: $("#username").val(),
+            lobby_name: $(".lobby-name").val(),
             num_players: Number($(".num-players").val()),
             victory_pts: $(".victory-points").val(),
             cards: $(".configure-cards.active").text().trim(),
@@ -38,10 +42,6 @@ $(document).ready(function(){
         // send new game information to backend
         new_game(gameInit);
         newGameId++;
-        
-        // display new available game to allow joining
-        $('table.table-hover tbody').append("<tr><td id=\"" + gameInit.game_id + "\">" + gameInit.name + "</td><td id=\"" + gameInit.game_id + "\">1/4</td></tr");
-        
       }
       
     });
@@ -57,7 +57,7 @@ $(document).ready(function(){
   
     $("#join-button").click(function() {
       $(".join-error-message").empty();
-      if(currSelected == undefined) {
+      if(currSelected == undefined || $("#username").val() == "") {
         $(".join-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Please select an available lobby.</p>");
         
       } else {

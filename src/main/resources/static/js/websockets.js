@@ -2,10 +2,11 @@ const MESSAGE_TYPE = {
   CONNECT: 0,
   CREATE: 1,
   JOIN: 2,
-  ALL_JOINED: 3,
-  ST_SUBMIT: 4,
-  GS_SUBMIT: 5,
-  VOTING: 6,
+  GAME_JOINED: 3,
+  ALL_JOINED: 4,
+  ST_SUBMIT: 5,
+  GS_SUBMIT: 6,
+  VOTING: 7
 
 };
 
@@ -16,7 +17,7 @@ let myId = -1;
 //set up socket connection and define types
 const setup_update = () => {
 	conn = new WebSocket("ws://localhost:4567/play");
-
+  console.log(conn);
 	conn.onerror = err => {
     	console.log('Connection error:', err);
   };
@@ -32,8 +33,22 @@ const setup_update = () => {
       // connect: get the connected user's ID and use as list of users currently connected
       case MESSAGE_TYPE.CONNECT:
         myId = payload.user_id;
-        console.log(myId);
+        console.log("session Id?: " + myId)
+//        console.log(myId);
+//        console.log('conn '+ conn);
+//        console.log('cookie '+ conn.cookie);
+//        console.log('document ' + document.cookie);
+//        document.id = myId;
+//        console.log()
+        console.log(document.id);
         break;
+      case MESSAGE_TYPE.GAME_JOINED:
+        if(payload.num_players == 1) {
+          $("table.table-hover tbody").append("<tr><td id=\"" + payload.game_id + "\">" + payload.lobby_name + "</td><td class=\"num_players\" id=\"" + payload.game_id + "\">" + payload.num_players + "/" + payload.capacity + "</td></tr>");
+        } else if (payload.num_players > 1) {
+          $("table.table-hover tbody").find($(".num_players")).text(payload.num_players + "/" + payload.capacity);
+        }
+        
       case MESSAGE_TYPE.ALL_JOINED:
         // dialog box for each player's screen to see if their ready
         break;
@@ -49,9 +64,11 @@ const setup_update = () => {
   };
 }
 function new_game(connectMessage) {
-  connectMessage.user_id = myId;
+  connectMessage.payload.user_id = myId;
   console.log(connectMessage);
   conn.send(JSON.stringify(connectMessage));
+  document.id = myId;
+  console.log(document.id);
 }
 
 function submitPrompt(inputPrompt, inputAnswer) {

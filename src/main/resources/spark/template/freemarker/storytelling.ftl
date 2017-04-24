@@ -1,6 +1,13 @@
+
+
 <#assign board>		
- 			<div id = "storyFormWrapper">
-		      <form method="POST" action="/storytelling" id="promptForm">
+  <script>
+	$(document).ready(function() {
+	  setup_update();
+	});
+</script>
+  <div id = "storyFormWrapper">
+		      <form action="/storytelling" id="promptForm">
 		          <input type="text" name="prompt"   id="promptField" placeholder = "Please enter your interesting story here" value = "">
 		          <input type="hidden" name="nickname" id="nicknameField" value="">
 		          <input type="hidden" name="time" id="timeField" value="">
