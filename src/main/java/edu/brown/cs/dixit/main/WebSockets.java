@@ -175,4 +175,18 @@ public class WebSockets {
   	}
   		
   }
+  
+  /*private GamePlayer createNewUser(Session s) {
+
+	    List<HttpCookie> cookies = s.getUpgradeRequest().getCookies();
+	    Random rand = new Random();
+	    int num = rand.nextInt(10);
+	    System.out.printf("%d id", num);
+	    String id = rand.toString();
+	    cookies.add(new HttpCookie("test", id));
+	    GamePlayer p = new GamePlayer(0, "", null);
+	    //User u = new User(s);
+	    uuidToUser.put(id, p);
+	    setCookie(s, p, cookies);
+		return p;*/
 }
