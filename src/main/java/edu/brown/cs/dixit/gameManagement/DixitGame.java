@@ -5,13 +5,15 @@ import java.util.List;
 
 import edu.brown.cs.dixit.setting.Deck;
 import edu.brown.cs.dixit.setting.GamePlayer;
+import edu.brown.cs.dixit.setting.Referee;
 
 public class DixitGame {
 
 	private final int id;
 	private final int capacity;
 	private final Deck deck;
-	private final List<GamePlayer> players;
+	private List<GamePlayer> players;
+	private Referee referee;
 	
 	//wrapper for all the information 
 	//needs to contain the players & deck & referee & turn
@@ -21,6 +23,7 @@ public class DixitGame {
 		capacity = cap;
 		deck = new Deck();
 		players = new ArrayList<>();
+		referee = new Referee();
 	}
 	
 	public int getId() {

@@ -118,6 +118,7 @@ public class WebSockets {
   			break;
   			
   		case JOIN:
+  		    System.out.println("joined!");
   			int gameId = payload.get("game_id").getAsInt();
   			DixitGame join = gt.getGame(gameId);
   			if (join.getCapacity() != join.getNumPlayers()) {
