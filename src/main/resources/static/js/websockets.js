@@ -29,19 +29,24 @@ const setup_update = () => {
     switch (data.type) {
       default:
         console.log('Unknown message type!', data.type);
+        console.log(data)
+    
         break;
-        
+      case "set_uid":
+        console.log("set uid");
+        setuserid(data.payload);
+        //setgameid(data.payload);
       // connect: get the connected user's ID and use as list of users currently connected
       case MESSAGE_TYPE.CONNECT:
-        myId = payload.user_id;
-        console.log("session Id?: " + myId)
+        //myId = payload.user_id;
+        //console.log("session Id?: " + myId)
 //        console.log(myId);
 //        console.log('conn '+ conn);
 //        console.log('cookie '+ conn.cookie);
 //        console.log('document ' + document.cookie);
 //        document.id = myId;
 //        console.log()
-        console.log(document.id);
+        //console.log(document.id);
         break;
       case MESSAGE_TYPE.GAME_JOINED:
         if(payload.num_players == 1) {
@@ -65,11 +70,7 @@ const setup_update = () => {
   };
 }
 function new_game(connectMessage) {
-  connectMessage.payload.user_id = myId;
-  console.log(connectMessage);
   conn.send(JSON.stringify(connectMessage));
-  document.id = myId;
-  console.log(document.id);
 }
 
 function submitPrompt(inputPrompt, inputAnswer) {
@@ -85,6 +86,24 @@ function submitPrompt(inputPrompt, inputAnswer) {
 	conn.send(JSON.stringify(promptMessage));
 }
 
+function setuserid(data){
+  console.log(data);
+  for(let i=0;i<data.cookies.length; i++){
+    if(data.cookies[i].name == "userid"){
+      const cook = data.cookies[i];
+      setCookie(cook.name, cook.value);
+    }
+    if(data.cookies[i].name == "gameid"){
+      const cook = data.cookies[i];
+      setCookie(cook.name, cook.value);
+    }
+  }
+}
+
+function setCookie(cookiename, cookievalue){
+  const newcookie = cookiename + "="+cookievalue;
+  document.cookie = newcookie;
+}
 function join_game(gameId) {
   const joinMessage = {
     user_id: myId,
