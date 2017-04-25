@@ -42,4 +42,8 @@ public class GameTracker {
   public Session getSession(String playerId) {
     return playerSession.get(playerId);
   }
+  
+  public Map<String, Session> getSession() {
+    return playerSession;
+  }
 }
