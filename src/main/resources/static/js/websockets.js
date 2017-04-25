@@ -122,6 +122,7 @@ function setCookie(cookiename, cookievalue){
   const newcookie = cookiename + "="+cookievalue;
   document.cookie = newcookie;
 }
+
 function join_game(gameId) {
   const joinMessage = {
     user_id: myId,
