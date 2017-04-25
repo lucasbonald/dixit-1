@@ -30,17 +30,9 @@ public class GameTracker {
 		newPlayers.add(session);
 		gameInfo.put(game.getId(), game);
 		games.put(game.getId(), newPlayers);
-	}
-  /*
-  public void addPlayer(Session session, int gameId) {
-		Queue<Session> players = games.get(gameId); 
-		players.add(session);
+		playerIds.put(session, playerId);
   }
   
-  public void removePlayer(Session session) {
-  	games.get(playerIds.get(session)).remove(session);
-  }
-  */
   public DixitGame getGame(int gameId) {
   	return gameInfo.get(gameId);
   }

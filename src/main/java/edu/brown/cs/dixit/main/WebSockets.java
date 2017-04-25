@@ -81,6 +81,8 @@ public class WebSockets {
   			//game created
   			int newGameId = gt.createID();
   			DixitGame newGame = new DixitGame(newGameId, payload.get("num_players").getAsInt());
+  			//need to initialize the game with all information like victory points
+  			//gt.addGame(session, newGame, payload.get("user_id").getAsInt());
   			gt.addGame(session, newGame);
   			newGame.getDeck().initializeDeck("../img/img");
   			
@@ -107,14 +109,17 @@ public class WebSockets {
   			int gameId = payload.get("game_id").getAsInt();
   			String user = payload.get("user_name").getAsString();
   			DixitGame join = gt.getGame(gameId);
-  			
+  			if (join.getCapacity() != join.getNumPlayers()) {
+  				join.addPlayer(payload.get("user_id").getAsInt(), payload.get("user_name").getAsString(), join.getDeck());
+    			if (join.getCapacity() == join.getNumPlayers()) {
+    				for (GamePlayer player : join.getPlayers()) {
+    					List<Card> firstHand = player.getFirstHand();
+    				}
+    			}
+  			}
   			createNewUser(session, join, user);
   			
-  			
-  		
-  			
-  			
-  			
+ 
   			// distribute cards that have not yet been distributed to new player
   			// GET request to user's interface pages
   			
