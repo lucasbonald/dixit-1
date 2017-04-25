@@ -12,7 +12,6 @@
     <script type="text/javascript" src="js/play.js"></script>
     <script type="text/javascript" src="js/storytelling.js"></script>
     <script type="text/javascript" src="js/create_game.js"></script>
-   
   </head>
   <body>
      ${content}
