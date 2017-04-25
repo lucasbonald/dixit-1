@@ -32,7 +32,6 @@ public class WebSockets {
   private static final Gson GSON = new Gson();
   private static final GameTracker gt = new GameTracker();
   private static final Queue<Session> allSessions = new ConcurrentLinkedQueue<>();
-  private static int nextId = 1;
 
   private InetSocketAddress ipaddress;
   private static enum MESSAGE_TYPE {
@@ -53,18 +52,17 @@ public class WebSockets {
   	System.out.println("no. of sessions " + allSessions.size());
   	
   	//this should check current status -- cookies    
-    
-    
+  	//check current cookies?
+
   }
 
   @OnWebSocketClose
   public void closed(Session session, int statusCode, String reason) {
     // TODO Remove the session from the queue
-	  //gt.removePlayer(session);
-	  
-//	  if(sessions.size()==0){
-//		  ipaddress = null;
-//	  }
+	//gt.removePlayer(session);  
+    //	  if(sessions.size()==0){
+    //		  ipaddress = null;
+    //	  }
   }
 
   @OnWebSocketMessage
@@ -84,7 +82,7 @@ public class WebSockets {
   			DixitGame newGame = new DixitGame(newGameId, payload.get("num_players").getAsInt());
   			//need to initialize the game with all information like victory points
   			//gt.addGame(session, newGame, payload.get("user_id").getAsInt());
-  			gt.addGame(session, newGame);
+  			gt.addGame(newGame);
   			newGame.getDeck().initializeDeck("../img/img");
   			
   			//now user should be created
@@ -149,9 +147,22 @@ public class WebSockets {
   
   private Player createNewUser(Session s, DixitGame game, String user_name) {
 	  	List<HttpCookie> cookies = s.getUpgradeRequest().getCookies();
+	  	boolean hasuserid=false;
+	  	if(cookies!=null){
+	  		for(HttpCookie singcook : cookies){
+		  		if(singcook.getName()=="userid"){
+		  			System.out.println("already has user id");
+		  			hasuserid=true;
+		  		}
+		  	}
+		}
+	  	if(!hasuserid){
+	  		cookies = new ArrayList<HttpCookie>();
+	  		String id = randomId();
+	  		cookies.add(new HttpCookie(Network.USER_IDENTIFER, id));
+		    cookies.add(new HttpCookie(Network.GAME_IDENTIFIER, Integer.toString(game.getId())));
+		}
 	  	String id = randomId();
-	    cookies.add(new HttpCookie(Network.USER_IDENTIFER, id));
-	    cookies.add(new HttpCookie(Network.GAME_IDENTIFIER, Integer.toString(game.getId())));
 	    if (game.getCapacity() > game.getNumPlayers()) {
 				Player newplayer = game.addPlayer(id, user_name);
 				System.out.println(game.getNumPlayers());
@@ -161,7 +172,8 @@ public class WebSockets {
 				}
 				JsonObject allJoinedMessage = new JsonObject();
 	  			allJoinedMessage.addProperty("type", MESSAGE_TYPE.ALL_JOINED.ordinal());
-	  				
+	  			//should be sending the information about cards	
+	  			/*
 	  			for (Session player : gt.getPlayers(game.getId())) {
 	  				try {
 						player.getRemote().sendString(allJoinedMessage.toString());
@@ -170,12 +182,14 @@ public class WebSockets {
 					}
   			}
   		}
+
+	  			*/
+	  		}
 			sendCookie(s, cookies);
 			return newplayer;
 		    
 		}
-		//uuidToUser.put(id, p);
-	    return null;
+		return null;
 	}
   
   private void sendCookie(Session s, List<HttpCookie> cookies){
