@@ -38,15 +38,18 @@
   background-color: #7AB6DD;
 }
 
-#create-button {
-  margin:30px;
+/*
+.submit {
+  padding-top:5px;
+  padding-bottom:5px;
+  padding-left:10px;
+  padding-right:10px;
   background-color: #DD7A7A;
+  font-size:24px;
+  font-family: "Helvetica";
+  color:black;
 }
-
-#join-button {
-  margin:30px;
-  background-color: #DD7A7A;
-}
+*/
 
 td {
   text-align: left;
@@ -67,8 +70,8 @@ p {
   float: left;
 }
 
-#username {
-  margin-left:80px;
-  margin-top:30px;
+
+.username {
+  margin-bottom:30px;
 
 }

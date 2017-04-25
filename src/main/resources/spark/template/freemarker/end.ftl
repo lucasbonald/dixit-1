@@ -18,10 +18,10 @@
 			with 999 Points
 		</div>
 	 	<div id = "buttonwrapper">
-		    <form class = "endform" action="/whatever" id="playagain">
+		    <form class = "endform" action="/" id="playagain">
 	          	<input class = "endbutton" type="submit" id = "againButton" value="Play Again">
 	      	</form>
-	      	<form class = "endform" action="/whatever" id="exit">
+	      	<form class = "endform" id="exit">
 	          	<input class = "endbutton" type="submit" id = "exitButton" value="Exit Game">
 	      	</form>
 	    </div>

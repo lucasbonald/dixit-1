@@ -17,7 +17,7 @@ $(document).ready(function(){
   $('#exit').on('submit', function(e){
 	  	console.log("exiting");
 	    e.preventDefault();
-	    close();
+	    $(this).close();
   });
 });
 
