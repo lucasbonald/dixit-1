@@ -18,8 +18,8 @@ public class DixitGame {
 	//wrapper for all the information 
 	//needs to contain the players & deck & referee & turn
 	
-	public DixitGame(int ID, int cap) {
-		id = ID;
+	public DixitGame(int gameID, int cap) {
+		id = gameID;
 		capacity = cap;
 		deck = new Deck();
 		players = new ArrayList<>();

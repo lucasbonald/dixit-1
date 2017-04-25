@@ -34,7 +34,9 @@ const setup_update = () => {
         break;
       case "set_uid":
         console.log("set uid");
+        deleteirrCookies();
         setuserid(data.payload);
+        //console.log(document.cookies.userid)
         //setgameid(data.payload);
       // connect: get the connected user's ID and use as list of users currently connected
       case MESSAGE_TYPE.CONNECT:
@@ -100,6 +102,21 @@ function setuserid(data){
     }
   }
 }
+
+function deleteirrCookies() {
+    let cookies = document.cookie.split(";");
+
+    for (let i = 0; i < cookies.length; i++) {
+        let cookie = cookies[i];
+        let eqPos = cookie.indexOf("=");
+        let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        if(name!="userid" || name != "gameid"){
+          document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        }
+    }
+}
+
+
 
 function setCookie(cookiename, cookievalue){
   const newcookie = cookiename + "="+cookievalue;

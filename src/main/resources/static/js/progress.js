@@ -1,6 +1,7 @@
 currState = "Storytelling";
 $(document).ready(function(){
   
+  console.log(document.cookie)
   // VStorytelling
   
   $('#promptForm').on('submit', function(e){
