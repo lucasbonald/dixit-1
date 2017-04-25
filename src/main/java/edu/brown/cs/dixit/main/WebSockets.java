@@ -51,20 +51,16 @@ public class WebSockets {
     // TODO Add the session to the queue
   	System.out.println(session);
   	allSessions.add(session);
-  	
-  	//this should check current status -- cookies    
-    
-    
+  	//check current cookies?
   }
 
   @OnWebSocketClose
   public void closed(Session session, int statusCode, String reason) {
     // TODO Remove the session from the queue
-	  //gt.removePlayer(session);
-	  
-//	  if(sessions.size()==0){
-//		  ipaddress = null;
-//	  }
+	//gt.removePlayer(session);  
+    //	  if(sessions.size()==0){
+    //		  ipaddress = null;
+    //	  }
   }
 
   @OnWebSocketMessage
@@ -109,23 +105,7 @@ public class WebSockets {
   			int gameId = payload.get("game_id").getAsInt();
   			String user = payload.get("user_name").getAsString();
   			DixitGame join = gt.getGame(gameId);
-  			if (join.getCapacity() != join.getNumPlayers()) {
-  				join.addPlayer(payload.get("user_id").getAsInt(), payload.get("user_name").getAsString(), join.getDeck());
-    			if (join.getCapacity() == join.getNumPlayers()) {
-    				for (GamePlayer player : join.getPlayers()) {
-    					List<Card> firstHand = player.getFirstHand();
-    				}
-    			}
-  			}
   			createNewUser(session, join, user);
-  			
- 
-  			// distribute cards that have not yet been distributed to new player
-  			// GET request to user's interface pages
-  			
-  			
-  			// inform all players that all players have joined
-  			
   			break;
   		case ST_SUBMIT:
   			//get the variables
@@ -173,12 +153,12 @@ public class WebSockets {
 				}
 				JsonObject allJoinedMessage = new JsonObject();
 	  			allJoinedMessage.addProperty("type", MESSAGE_TYPE.ALL_JOINED.ordinal());
-	  				
+	  			//should be sending the information about cards	
 	  			for (Session player : gt.getPlayers(game.getId())) {
 	  				try {
 						player.getRemote().sendString(allJoinedMessage.toString());
 					} catch (IOException e) {
-						System.out.println("Can't inform the game is full");
+						System.out.println("");
 					}
 	  			}
 	  		}
@@ -186,7 +166,6 @@ public class WebSockets {
 			return newplayer;
 		    
 		}
-		//uuidToUser.put(id, p);
 	    return null;
 	}
   
