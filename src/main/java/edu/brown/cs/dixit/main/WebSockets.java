@@ -38,7 +38,7 @@ public class WebSockets {
     CONNECT,
     CREATE,
     JOIN,
-    GAME_JOINED,
+    NEW_GAME,
     ALL_JOINED,
     ST_SUBMIT,
     GS_SUBMIT,
@@ -48,9 +48,12 @@ public class WebSockets {
   @OnWebSocketConnect
   public void connected(Session session) throws IOException {
     // TODO Add the session to the queue
-  	System.out.println(session);
   	allSessions.add(session);
+  	System.out.println("no. of sessions " + allSessions.size());
+  	
+  	//this should check current status -- cookies    
   	//check current cookies?
+
   }
 
   @OnWebSocketClose
@@ -74,6 +77,7 @@ public class WebSockets {
   			break;
   		case CREATE:
   			//game created
+  			System.out.println("new game created!");
   			int newGameId = gt.createGameID();
   			DixitGame newGame = new DixitGame(newGameId, payload.get("num_players").getAsInt());
   			//need to initialize the game with all information like victory points
@@ -81,10 +85,11 @@ public class WebSockets {
   			newGame.getDeck().initializeDeck("../img/img");
   			
   			//now user should be created
+  			System.out.println(payload.get("user_name").getAsString());
   			createNewUser(session, newGame, payload.get("user_name").getAsString());
   			
   			JsonObject newGameMessage = new JsonObject();
-  			newGameMessage.addProperty("type", MESSAGE_TYPE.GAME_JOINED.ordinal());
+  			newGameMessage.addProperty("type", MESSAGE_TYPE.NEW_GAME.ordinal());
   			JsonObject newGamePayload = new JsonObject();
   			newGamePayload.addProperty("game_id", newGameId);
   			newGamePayload.addProperty("lobby_name", payload.get("lobby_name").getAsString());
@@ -93,12 +98,13 @@ public class WebSockets {
   			newGameMessage.add("payload", newGamePayload);
   			
   			for (Session indivSession : allSessions) {
+  				System.out.println(allSessions.size());
   				indivSession.getRemote().sendString(newGameMessage.toString());
   			}		
   			break;
   			
   		case JOIN:
-  		    System.out.println("joined!");
+  		  System.out.println("joined!");
   			int gameId = payload.get("game_id").getAsInt();
   			String user = payload.get("user_name").getAsString();
   			DixitGame join = gt.getGame(gameId);
@@ -112,13 +118,13 @@ public class WebSockets {
   			System.out.println(prompt);
   			
   			
-			JsonObject stMessage = new JsonObject();
-			stMessage.addProperty("type", MESSAGE_TYPE.ST_SUBMIT.ordinal());
-			
-			JsonObject returnPayload = new JsonObject();
-			returnPayload.addProperty("prompt", prompt);
-			returnPayload.addProperty("answer", answer);
-			stMessage.add("payload", returnPayload);
+				JsonObject stMessage = new JsonObject();
+				stMessage.addProperty("type", MESSAGE_TYPE.ST_SUBMIT.ordinal());
+				
+				JsonObject returnPayload = new JsonObject();
+				returnPayload.addProperty("prompt", prompt);
+				returnPayload.addProperty("answer", answer);
+				stMessage.add("payload", returnPayload);
 			  
   			// build object
   			//send the prompt and answer cardid to all players
@@ -163,6 +169,7 @@ public class WebSockets {
 	  	
 	    if (game.getCapacity() > game.getNumPlayers()) {
 				Player newPlayer = game.addPlayer(id, user_name);
+				System.out.println(game.getNumPlayers());
 			if (game.getCapacity() == game.getNumPlayers()) {
 				for (GamePlayer player : game.getPlayers()) {
 					List<Card> firstHand = player.getFirstHand();
@@ -194,10 +201,10 @@ public class WebSockets {
 	  try {
 		  System.out.println("cookies");
 		  System.out.printf("%s, \n", json.toString());
-		s.getRemote().sendString(json.toString());
-	} catch (IOException e) {
-		System.out.println("Found IOException while sending cookie");
-	}
+			s.getRemote().sendString(json.toString());
+		} catch (IOException e) {
+			System.out.println("Found IOException while sending cookie");
+		}
 	  
   }
 }

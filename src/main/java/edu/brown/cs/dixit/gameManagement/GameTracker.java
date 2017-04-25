@@ -22,8 +22,9 @@ public class GameTracker {
 	  }
 	  return -1;
   }
+
   public void addGame(DixitGame game) {
-	gameInfo.put(game.getId(), game);
+  	gameInfo.put(game.getId(), game);
   }
   
   public DixitGame getGame(int gameId) {
