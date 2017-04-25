@@ -142,14 +142,16 @@ public class WebSockets {
   private Player createNewUser(Session s, DixitGame game, String user_name) {
 	  	List<HttpCookie> cookies = s.getUpgradeRequest().getCookies();
 	  	boolean hasuserid=false;
-	  	for(HttpCookie singcook : cookies){
-	  		if(singcook.getName()=="userid"){
-	  			System.out.println("already has user id");
-	  			hasuserid=true;
-	  		}
-	  	}
+	  	if(cookies!=null){
+	  		for(HttpCookie singcook : cookies){
+		  		if(singcook.getName()=="userid"){
+		  			System.out.println("already has user id");
+		  			hasuserid=true;
+		  		}
+		  	}
+		}
 	  	if(!hasuserid){
-	  		cookies.clear();
+	  		cookies = new ArrayList<HttpCookie>();
 	  		String id = randomId();
 	  		cookies.add(new HttpCookie(Network.USER_IDENTIFER, id));
 		    cookies.add(new HttpCookie(Network.GAME_IDENTIFIER, Integer.toString(game.getId())));
