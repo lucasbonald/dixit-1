@@ -36,18 +36,11 @@ public class GameTracker {
   }
   
   public void addSession(String playerId, Session session) {
-	  System.out.println("player id is :" + playerId);
-    playerSession.put(playerId, session);
-    System.out.println("session added:"+ Integer.toString(session.hashCode()));
-    for(Session sess : playerSession.values()){
-    	System.out.print(sess.hashCode());
-    	System.out.println("");
-    }
+	playerSession.put(playerId, session);
   }
   
   
   public Session getSession(String playerId) {
-	  System.out.println("get session:" + Integer.toString(playerSession.get(playerId).hashCode()));
-    return playerSession.get(playerId);
+	return playerSession.get(playerId);
   }
 }
