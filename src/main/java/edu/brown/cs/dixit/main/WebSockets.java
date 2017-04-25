@@ -98,6 +98,7 @@ public class WebSockets {
   		case CREATE:
   			int newGameId = payload.get("game_id").getAsInt();
   			DixitGame newGame = new DixitGame(newGameId, payload.get("num_players").getAsInt());
+  			//need to initialize the game with all information like victory points
   			gt.addGame(session, newGame, payload.get("user_id").getAsInt());
   			newGame.getDeck().initializeDeck("../img/img");
   			newGame.addPlayer(payload.get("user_id").getAsInt(), payload.get("user_name").getAsString(), newGame.getDeck());
@@ -129,10 +130,6 @@ public class WebSockets {
     				}
     			}
   			}
-  		
-  			
-  			
-  			
   			// distribute cards that have not yet been distributed to new player
   			// GET request to user's interface pages
   			

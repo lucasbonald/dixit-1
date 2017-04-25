@@ -13,6 +13,9 @@ public class GamePlayer implements Player {
   private List<Card> playerDeck;
   private Deck globalDeck;
   
+  
+  //Use ENUM for StoryTeller / Guesser
+  
   //Player needs to switch around his/her roles
   public GamePlayer(int id, String name, Deck deck) {
     playerId = id;

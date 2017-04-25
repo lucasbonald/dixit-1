@@ -21,16 +21,7 @@ public class GameTracker {
 		games.put(game.getId(), newPlayers);
 		playerIds.put(session, playerId);
   }
-  /*
-  public void addPlayer(Session session, int gameId) {
-		Queue<Session> players = games.get(gameId); 
-		players.add(session);
-  }
-  
-  public void removePlayer(Session session) {
-  	games.get(playerIds.get(session)).remove(session);
-  }
-  */
+
   public DixitGame getGame(int gameId) {
   	return gameInfo.get(gameId);
   }

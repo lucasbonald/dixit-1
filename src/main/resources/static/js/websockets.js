@@ -41,7 +41,7 @@ const setup_update = () => {
 //        console.log('document ' + document.cookie);
 //        document.id = myId;
 //        console.log()
-        console.log(document.id);
+        console.log(document.cookie);
         break;
       case MESSAGE_TYPE.GAME_JOINED:
         if(payload.num_players == 1) {
@@ -68,8 +68,8 @@ function new_game(connectMessage) {
   connectMessage.payload.user_id = myId;
   console.log(connectMessage);
   conn.send(JSON.stringify(connectMessage));
-  document.id = myId;
-  console.log(document.id);
+  //document.cookie = myId;
+  //console.log(document.cookie);
 }
 
 function submitPrompt(inputPrompt, inputAnswer) {
