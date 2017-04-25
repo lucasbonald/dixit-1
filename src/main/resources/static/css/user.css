@@ -101,17 +101,17 @@ hr {
     background-color: lightblue;
 }
 
-input[type=submit] {
+#chat-submit {
 	display: inline-block;
-    background-color: #8da7ca;
-    border-radius: 6px;
-    border-color: #8da7ca;
-    color: white;
-    font-size: 1.2vw;
-    padding: 1% 2%;
-    text-decoration: none;
-    margin: auto;
-    height: 33%;
+  background-color: #8da7ca;
+  border-radius: 6px;
+  border-color: #8da7ca;
+  color: white;
+  font-size: 1.2vw;
+  padding: 1% 2%;
+  text-decoration: none;
+  margin: auto;
+  height: 33%;
 }
 
 .chatList {

@@ -25,12 +25,13 @@ public class GameTracker {
 	  }
 	  return -1;
   }
+  
   public void addGame(Session session, DixitGame game) {
   	Queue<Session> newPlayers = new ConcurrentLinkedQueue<>();
 		newPlayers.add(session);
 		gameInfo.put(game.getId(), game);
 		games.put(game.getId(), newPlayers);
-		playerIds.put(session, playerId);
+//		playerIds.put(session, playerId);
   }
   
   public DixitGame getGame(int gameId) {

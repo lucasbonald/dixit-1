@@ -5,23 +5,14 @@ let newGameId = 1;
 
 $(document).ready(function(){
   
-    $("#login").submit(event => {
+    $("#create-form").on("submit", function(event) {
       
       event.preventDefault();
-      
-      
-    });
-  
-  
-    $("#create-button").click(function() {
-      
-      console.log("clicked");
-      
       $(".create-error-message").empty();
       if($(".lobby-name").val() == "" || $("#username").val() == "") {
         $(".create-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Please fill in all details before proceeding.</p>")
       } else {
-        
+
         let gameInit = {
           type: MESSAGE_TYPE.CREATE,
           payload: {
@@ -38,19 +29,18 @@ $(document).ready(function(){
             }
           }
         }
-        
+
         // send new game information to backend
-        new_game(gameInit);
+        conn.send(JSON.stringify(gameInit));
         newGameId++;
-        
+
         // display new available game to allow joining
         $('table.table-hover tbody').append("<tr><td id=\"" + gameInit.payload.game_id + "\">" + gameInit.payload.lobby_name + "</td><td id=\"" + gameInit.payload.game_id + "\">1/" + gameInit.payload.num_players + "</td></tr");
-        
+        window.location = window.location.href + "guessing";
       }
       
     });
-  
-  
+
     $('table.table-hover tbody').on('click', function() {
 //      console.log($(this));
       currSelected = $(this).find('td');
@@ -61,5 +51,25 @@ $(document).ready(function(){
       prevSelected = currSelected;
     });
     
+    $("#join-form").on("submit", function(event) {
+      
+      $(".join-error-message").empty();
+      if(currSelected == undefined ) {
+        $(".join-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Please select an available lobby.</p>");
+      } else {
+        console.log(currSelected.attr('id'));
+        const joinMessage = {
+          type: MESSAGE_TYPE.JOIN,
+          payload: {
+            user_id: myId,
+            game_id: currSelected.attr('id')  
+          }
+        }
+        conn.send(JSON.stringify(joinMessage));
+        window.location = window.location.href + "guessing";
+      }
+      
+    });
+      
 });
 

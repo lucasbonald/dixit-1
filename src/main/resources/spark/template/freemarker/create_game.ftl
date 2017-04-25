@@ -13,7 +13,7 @@
           <div class="col-xs-1"></div>
           <div class="col-xs-10">
             <input type="text" class="form-control username" placeholder="Enter a new username"></input>
-            <div class="init-form">
+            <form id="create-form">
               <span class="glyphicon glyphicon-pencil form-title"></span><span class="form-title-text">Create game</span>
             <div class="row">
               <div class="col-xs-6 form-element">
@@ -67,17 +67,17 @@
                 
               </div>
               <div class="col-xs-1 create-button">
-                <button id="create-button" class="btn btn-default">Create</button>
+                <input type="submit" class="submit create-game" value="Create"></button>
               </div>
             </div>
           
-          </div>
+          </form>
         </div>
       </div>
       <div class="row">
         <div class="col-xs-1"></div>
           <div class="col-xs-10">
-            <form class="init-form" onsubmit="return join_game()" action="/guessing">
+            <form id="join-form">
               <span class="glyphicon glyphicon-arrow-right form-title"></span><span class="form-title-text">Join game</span>
               <table class="table table-hover">
                 <thead>
@@ -92,7 +92,7 @@
               <div class="row">
                 <div class="col-xs-10 join-error-message"></div>
                 <div class="col-xs-1">
-                  <input type="submit" id="join-button" value="Join"></input>
+                  <input type="submit" class="submit-button join-game" value="Join"></input>
                 <div>
               </div>  
             </form>

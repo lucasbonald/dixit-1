@@ -83,7 +83,7 @@
 		          <input type="text" name="message"   id="messageField">
 		          <input type="hidden" name="nickname" id="nicknameField" value="">
 		          <input type="hidden" name="time" id="timeField" value="">
-		          <input type="submit" value="Send">
+		          <input id="chat-submit" type="submit" value="Send">
 		      </form>
 		    </div>
 		    </div>
