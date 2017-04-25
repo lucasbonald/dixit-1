@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class GamePlayer implements Player {
   
-  private final int playerId;
+  private final String playerId;
   private final String playerName;
   private int point;
   private boolean isGuesser;
@@ -17,7 +17,7 @@ public class GamePlayer implements Player {
   //Use ENUM for StoryTeller / Guesser
   
   //Player needs to switch around his/her roles
-  public GamePlayer(int id, String name, Deck deck) {
+  public GamePlayer(String id, String name, Deck deck) {
     playerId = id;
     playerName = name;
     point = 0;
@@ -27,7 +27,7 @@ public class GamePlayer implements Player {
   }
   
   @Override
-  public int playerId() {
+  public String playerId() {
     return playerId;
   }
 

@@ -42,9 +42,10 @@ public class DixitGame {
 	    return deck;
 	}
 	
-	public void addPlayer(int id, String name, Deck deck) {
+	public GamePlayer addPlayer(String id, String name) {
 	  GamePlayer new_player = new GamePlayer(id, name, deck);
 	  players.add(new_player);
+	  return new_player;
 	}
 	
 	public List<GamePlayer> getPlayers() {
