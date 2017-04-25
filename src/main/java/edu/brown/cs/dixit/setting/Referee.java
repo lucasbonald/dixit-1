@@ -10,10 +10,12 @@ public class Referee {
   private int storyTeller;
   private int numPlayers;
   private int victoryPoint;
+  private boolean gameWon;
   private String currPrompt;
   private Map<Integer, Integer> chosen; 
   private Map<Integer, Integer> pickRecord; 
   private Map<Integer, Integer> result;
+  private Map<Integer, Integer> scoreBoard;
   
   public Referee() {
     winnerPoint = -1;
@@ -22,9 +24,11 @@ public class Referee {
     currPrompt = "";
     numPlayers = Setting.NUM_DEFAULT_PLAYERS;
     victoryPoint = Setting.NUM_DEFAULT_VICTORY_POINT;
+    gameWon = false;
     chosen = new HashMap<Integer, Integer>();
     pickRecord = new HashMap<Integer, Integer>();
     result = new HashMap<Integer, Integer>();
+    scoreBoard = new HashMap<Integer, Integer>();
   }
   
   // need new constructor;
@@ -85,8 +89,17 @@ public class Referee {
     pickRecord = new HashMap<Integer, Integer>();
     
     //messages can be added later in the backend?
-    //need to keep track of scores
     //need to check if the game ended
+    
+    for (Integer key: result.keySet()) {
+      int newScore = scoreBoard.get(key) + result.get(key);
+      scoreBoard.put(key, newScore);
+      if (newScore >= victoryPoint) {
+        gameWon = true; // need who's winning as well
+      }
+    }
+    
+    //need to check if all the card is used and manually finish th game
     
     return result;
   }

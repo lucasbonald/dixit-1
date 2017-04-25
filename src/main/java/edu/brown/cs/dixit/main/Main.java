@@ -35,22 +35,16 @@ import edu.brown.cs.dixit.setting.*;
 public class Main {
 
   private static final int PORT_NUM = 4567;
-  //private static final Gson GSON = new Gson();
+  private static final Gson GSON = new Gson();
 
   public static void main(String[] args) {
     new Main(args).run();
   }
   
   private String[] args;
-  private Deck deck; //need db to save deck for each game
-  private Map<Integer, Player> playerMap; //keep track of players
-  private Referee referee;
-  
+
   private Main(String[] args) {
     this.args = args;
-    this.deck = new Deck();
-    this.playerMap = new HashMap<Integer, Player>();
-    this.referee = new Referee();
   }
   
   private void run() {
@@ -58,8 +52,6 @@ public class Main {
     parser.accepts("gui");
     OptionSet options = parser.parse(args);
     if (options.has("gui")) { 
-      //deck initialized
-      deck.initializeDeck("../img/img");
       Spark.port(PORT_NUM);
       runSparkServer();
     }
