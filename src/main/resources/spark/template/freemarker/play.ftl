@@ -43,14 +43,14 @@
 			<hr>
 			<div class = "statuselement" id = "stopwatch">
 			<div id = "stopwatchvalue">
-				13:04
+			     <span style = "color: transparent;"> -sfwe </white>
 			</div>
 			</div>
 			<hr>
 			<div class = "statuselement" id = "userinfo">
 			STORYTELLER
 				<div id = "userinfovalue">
-				Player 4
+				<span style = "color: white;" > Player 4 </span>
 				</div>
 			</div>
 			<hr>
@@ -58,10 +58,7 @@
 			STATUS FEED
 			<div class = "feed">
 				<ul class = "feedList">
-					<li> <span style="color: grey">Player 1</span> : voting </li>
-					<li> <span style="color: grey">Player 2</span> : voting </li>
-					<li> <span style="color: grey">Player 3</span> : voted </li>
-					<li> <span style = "color: #fb8383" >Player 4 </span> : waiting </li>
+				sdfwef
 				</ul>
 			</div>
 			</div>

@@ -44,7 +44,7 @@ public class WebSockets {
     GS_SUBMIT,
     VOTING
   }
-
+  
   @OnWebSocketConnect
   public void connected(Session session) throws IOException {
     // TODO Add the session to the queue
