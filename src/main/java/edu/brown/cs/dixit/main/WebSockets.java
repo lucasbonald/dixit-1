@@ -57,6 +57,7 @@ public class WebSockets {
   	    System.out.println("cookies: " + cookies.toString());
     	for (HttpCookie crumb: cookies) {
           if (crumb.getName().equals("userid")) {
+            System.out.print("session added on connect");
             gt.addSession(crumb.getValue(), session);
           }
     	}
@@ -160,10 +161,7 @@ public class WebSockets {
 	  	String id = "";
 	  	if (cookies != null) {
 	  		for(HttpCookie singcook : cookies){
-	  			System.out.println(singcook.toString());
-	  			System.out.println(singcook.getName());
-	  			
-		  		if(singcook.getName().equals("userid")){
+	  			if(singcook.getName().equals("userid")){
 		  			System.out.println("already has user id");
 		  			id = singcook.getValue();
 		  			hasUserId=true;
@@ -184,7 +182,6 @@ public class WebSockets {
 	  	
 	    if (game.getCapacity() > game.getNumPlayers()) {
 				Player newPlayer = game.addPlayer(id, user_name);
-				System.out.println(game.getNumPlayers());
 			if (game.getCapacity() == game.getNumPlayers()) {
 				for (GamePlayer player : game.getPlayers()) {
 					List<Card> firstHand = player.getFirstHand();
@@ -192,7 +189,6 @@ public class WebSockets {
 				JsonObject allJoinedMessage = new JsonObject();
 	  			allJoinedMessage.addProperty("type", MESSAGE_TYPE.ALL_JOINED.ordinal());
 	  			//should be sending the information about cards	
-	  			System.out.println("happening?");
 	  			for (GamePlayer user : game.getPlayers()) {
 	  			  System.out.println("user :" + user.playerId());
 	  			  try {
@@ -216,9 +212,7 @@ public class WebSockets {
 	  jsonCookie.add("cookies", GSON.toJsonTree(cookies));
 	  json.add("payload", jsonCookie);
 	  try {
-		  System.out.printf("cookies: ");
-		  System.out.printf("%s, \n", json.toString());
-			s.getRemote().sendString(json.toString());
+		  s.getRemote().sendString(json.toString());
 		} catch (IOException e) {
 			System.out.println("Found IOException while sending cookie");
 		}
