@@ -30,7 +30,7 @@ public class GameTracker {
 		newPlayers.add(session);
 		gameInfo.put(game.getId(), game);
 		games.put(game.getId(), newPlayers);
-		playerIds.put(session, playerId);
+		//playerIds.put(session, newPlayer.playerId);
   }
   
   public DixitGame getGame(int gameId) {

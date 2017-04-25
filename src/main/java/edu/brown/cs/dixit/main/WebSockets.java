@@ -109,14 +109,14 @@ public class WebSockets {
   			int gameId = payload.get("game_id").getAsInt();
   			String user = payload.get("user_name").getAsString();
   			DixitGame join = gt.getGame(gameId);
-  			if (join.getCapacity() != join.getNumPlayers()) {
-  				join.addPlayer(payload.get("user_id").getAsInt(), payload.get("user_name").getAsString(), join.getDeck());
+  			/*if (join.getCapacity() != join.getNumPlayers()) {
+  				join.addPlayer(payload.get("user_id").getAsInt(), payload.get("user_name").getAsString());
     			if (join.getCapacity() == join.getNumPlayers()) {
     				for (GamePlayer player : join.getPlayers()) {
     					List<Card> firstHand = player.getFirstHand();
     				}
     			}
-  			}
+  			}*/
   			createNewUser(session, join, user);
   			
  
