@@ -42,6 +42,10 @@ $(document).ready(function(){
         // send new game information to backend
         new_game(gameInit);
         newGameId++;
+        
+        // display new available game to allow joining
+        $('table.table-hover tbody').append("<tr><td id=\"" + gameInit.payload.game_id + "\">" + gameInit.payload.lobby_name + "</td><td id=\"" + gameInit.payload.game_id + "\">1/" + gameInit.payload.num_players + "</td></tr");
+        
       }
       
     });
@@ -57,7 +61,7 @@ $(document).ready(function(){
   
     $("#join-button").click(function() {
       $(".join-error-message").empty();
-      if(currSelected == undefined || $("#username").val() == "") {
+      if(currSelected == undefined ) {
         $(".join-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Please select an available lobby.</p>");
         
       } else {

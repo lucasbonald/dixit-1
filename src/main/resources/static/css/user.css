@@ -76,7 +76,7 @@ hr {
 	width: 100%;
 }
 
-input[type=text] {
+#messageField {
     border: black;
     border-radius: 6px;
     background-color: white;
@@ -97,7 +97,7 @@ input[type=text] {
 
 }
 
-input[type=text]:focus {
+#messageField:focus {
     background-color: lightblue;
 }
 

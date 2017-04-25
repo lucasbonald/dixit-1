@@ -2,7 +2,7 @@ const MESSAGE_TYPE = {
   CONNECT: 0,
   CREATE: 1,
   JOIN: 2,
-  GAME_JOINED: 3,
+  NEW_GAME: 3,
   ALL_JOINED: 4,
   ST_SUBMIT: 5,
   GS_SUBMIT: 6,
@@ -43,13 +43,14 @@ const setup_update = () => {
 //        console.log()
         console.log(document.id);
         break;
-      case MESSAGE_TYPE.GAME_JOINED:
+      case MESSAGE_TYPE.NEW_GAME:
+        console.log("new game");
         if(payload.num_players == 1) {
           $("table.table-hover tbody").append("<tr><td id=\"" + payload.game_id + "\">" + payload.lobby_name + "</td><td class=\"num_players\" id=\"" + payload.game_id + "\">" + payload.num_players + "/" + payload.capacity + "</td></tr>");
         } else if (payload.num_players > 1) {
           $("table.table-hover tbody").find($(".num_players")).text(payload.num_players + "/" + payload.capacity);
         }
-        
+        break;
       case MESSAGE_TYPE.ALL_JOINED:
         // dialog box for each player's screen to see if their ready
         break;
@@ -87,8 +88,11 @@ function submitPrompt(inputPrompt, inputAnswer) {
 
 function join_game(gameId) {
   const joinMessage = {
-    user_id: myId,
-    game_id: gameId
+    type: MESSAGE_TYPE.JOIN,
+    payload: {
+      user_id: myId,
+      game_id: gameId  
+    }
   }
   conn.send(JSON.stringify(joinMessage));
   

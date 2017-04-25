@@ -67,8 +67,8 @@ p {
   float: left;
 }
 
-#username {
-  margin-left:80px;
-  margin-top:30px;
+
+.username {
+  margin-bottom:30px;
 
 }

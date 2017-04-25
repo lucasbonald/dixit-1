@@ -8,10 +8,11 @@
 
 <div class="container-fluid">
 	<h1 class="title">Dixit Online</h1>
-	<input type="text" id="username" placeholder="Enter a new username"></input>
+	
         <div class="row">
           <div class="col-xs-1"></div>
           <div class="col-xs-10">
+            <input type="text" class="form-control username" placeholder="Enter a new username"></input>
             <div class="init-form">
               <span class="glyphicon glyphicon-pencil form-title"></span><span class="form-title-text">Create game</span>
             <div class="row">

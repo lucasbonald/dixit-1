@@ -36,7 +36,7 @@ public class WebSockets {
     CONNECT,
     CREATE,
     JOIN,
-    GAME_JOINED,
+    NEW_GAME,
     ALL_JOINED,
     ST_SUBMIT,
     GS_SUBMIT,
@@ -103,7 +103,7 @@ public class WebSockets {
   			newGame.addPlayer(payload.get("user_id").getAsInt(), payload.get("user_name").getAsString(), newGame.getDeck());
   			
   			JsonObject newGameMessage = new JsonObject();
-  			newGameMessage.addProperty("type", MESSAGE_TYPE.GAME_JOINED.ordinal());
+  			newGameMessage.addProperty("type", MESSAGE_TYPE.NEW_GAME.ordinal());
   			JsonObject newGamePayload = new JsonObject();
   			newGamePayload.addProperty("game_id", newGameId);
   			newGamePayload.addProperty("lobby_name", payload.get("lobby_name").getAsString());
@@ -112,13 +112,16 @@ public class WebSockets {
   			newGameMessage.add("payload", newGamePayload);
   			
   			for (Session indivSession : allSessions) {
+  				System.out.println(allSessions.size());
   				indivSession.getRemote().sendString(newGameMessage.toString());
   			}
   			
   			break;
   			
   		case JOIN:
+  			
   			int gameId = payload.get("game_id").getAsInt();
+  			System.out.println(gameId);
   			DixitGame join = gt.getGame(gameId);
   			if (join.getCapacity() != join.getNumPlayers()) {
   				join.addPlayer(payload.get("user_id").getAsInt(), payload.get("user_name").getAsString(), join.getDeck());
