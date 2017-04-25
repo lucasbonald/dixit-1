@@ -61,6 +61,8 @@ const setup_update = () => {
         }
         break;
       case MESSAGE_TYPE.ALL_JOINED:
+        alert('you ready?')
+        console.log(payload.deck)
         // dialog box for each player's screen to see if their ready
         break;
       case MESSAGE_TYPE.ST_SUBMIT:

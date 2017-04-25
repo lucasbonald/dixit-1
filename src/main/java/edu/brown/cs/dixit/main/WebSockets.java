@@ -62,11 +62,6 @@ public class WebSockets {
           }
     	}
   	}
-  	
-  	
-  	//this should check current status -- cookies    
-  	//check current cookies?
-
   }
 
   @OnWebSocketClose
@@ -109,12 +104,14 @@ public class WebSockets {
   			newGamePayload.addProperty("capacity", newGame.getCapacity());
   			newGameMessage.add("payload", newGamePayload);
   			
+  			//need db to keep track of all the lobbies
   			for (Session indivSession : allSessions) {
   				indivSession.getRemote().sendString(newGameMessage.toString());
   			}		
   			break;
   			
   		case JOIN:
+  		    
   		    System.out.println("joined!");
   			int gameId = payload.get("game_id").getAsInt();
   			String user = payload.get("user_name").getAsString();
@@ -184,14 +181,17 @@ public class WebSockets {
 				Player newPlayer = game.addPlayer(id, user_name);
 			if (game.getCapacity() == game.getNumPlayers()) {
 				for (GamePlayer player : game.getPlayers()) {
-					List<Card> firstHand = player.getFirstHand();
+					player.getFirstHand();
 				}
 				JsonObject allJoinedMessage = new JsonObject();
+				JsonObject playerInfo = new JsonObject();
 	  			allJoinedMessage.addProperty("type", MESSAGE_TYPE.ALL_JOINED.ordinal());
 	  			//should be sending the information about cards	
 	  			for (GamePlayer user : game.getPlayers()) {
-	  			  System.out.println("user :" + user.playerId());
+	  			  // need toString override method
+	              playerInfo.addProperty("deck", user.getFirstHand().toString()) ;
 	  			  try {
+	  			    allJoinedMessage.add("payload", playerInfo);
 	  			    gt.getSession(user.playerId()).getRemote().sendString(allJoinedMessage.toString());
 	  			  } catch (IOException e) {
 	  			    System.out.println(e);
