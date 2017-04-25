@@ -68,9 +68,6 @@ public class Main {
     Spark.get("/voting",new VoteHandler(), freeMarker);   
     Spark.get("/guessing",new GuessHandler(), freeMarker);   
     Spark.get("/end",new EndHandler(), freeMarker);   
-
-
-
   }
   
   private static class LogInHandler implements TemplateViewRoute {
