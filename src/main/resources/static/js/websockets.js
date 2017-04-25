@@ -150,6 +150,7 @@ function setuserid(data){
     if(data.cookies[i].name == "userid"){
       const cook = data.cookies[i];
       setCookie(cook.name, cook.value);
+
     }
     if(data.cookies[i].name == "gameid"){
       const cook = data.cookies[i];
@@ -165,7 +166,7 @@ function deleteirrCookies() {
         let cookie = cookies[i];
         let eqPos = cookie.indexOf("=");
         let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-        if(name!="userid" || name != "gameid"){
+        if(name!="userid" && name != "gameid"){
           document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
         }
     }
@@ -176,13 +177,4 @@ function deleteirrCookies() {
 function setCookie(cookiename, cookievalue){
   const newcookie = cookiename + "="+cookievalue;
   document.cookie = newcookie;
-}
-
-function join_game(gameId) {
-  const joinMessage = {
-    user_id: myId,
-    game_id: gameId
-  }
-  conn.send(JSON.stringify(joinMessage));
-  
 }

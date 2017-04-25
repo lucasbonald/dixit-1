@@ -51,6 +51,19 @@ public class WebSockets {
   	allSessions.add(session);
   	System.out.println("no. of sessions " + allSessions.size());
   	
+  	List<HttpCookie> cookies = session.getUpgradeRequest().getCookies();
+  	if (cookies != null) {
+  	    System.out.println("cookies: " + cookies.toString());
+    	for (HttpCookie crumb: cookies) {
+          if (crumb.getName() == "userid") {
+            System.out.println("??????");
+            System.out.println(crumb.getValue());
+            gt.addSession(crumb.getValue(), session);
+          }
+    	}
+  	}
+  	
+  	
   	//this should check current status -- cookies    
   	//check current cookies?
 
@@ -59,10 +72,7 @@ public class WebSockets {
   @OnWebSocketClose
   public void closed(Session session, int statusCode, String reason) {
     // TODO Remove the session from the queue
-	//gt.removePlayer(session);  
-    //	  if(sessions.size()==0){
-    //		  ipaddress = null;
-    //	  }
+	allSessions.remove(session);  
   }
 
   @OnWebSocketMessage
@@ -104,7 +114,7 @@ public class WebSockets {
   			break;
   			
   		case JOIN:
-  		  System.out.println("joined!");
+  		    System.out.println("joined!");
   			int gameId = payload.get("game_id").getAsInt();
   			String user = payload.get("user_name").getAsString();
   			DixitGame join = gt.getGame(gameId);
