@@ -69,8 +69,8 @@ const setup_update = () => {
     }
   };
 }
-function new_game(connectMessage) {
-  conn.send(JSON.stringify(connectMessage));
+function new_game(createMessage) {
+  conn.send(JSON.stringify(createMessage));
   //document.cookie = myId;
   //console.log(document.cookie);
 }
@@ -107,13 +107,21 @@ function setCookie(cookiename, cookievalue){
   document.cookie = newcookie;
 }
 function join_game(gameId) {
-  const joinMessage = {
+  $(".join-error-message").empty();
+  if(currSelected == undefined ) {
+    $(".join-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Please select an available lobby.</p>");
+    return false;
+  } else {
+    console.log(currSelected.attr('id'));
+    const joinMessage = {
     type: MESSAGE_TYPE.JOIN,
-    payload: {
-      user_id: myId,
-      game_id: gameId  
+      payload: {
+        user_id: myId,
+        game_id: gameId  
+      }
     }
+    conn.send(JSON.stringify(joinMessage));
+    return true;
   }
-  conn.send(JSON.stringify(joinMessage));
-  
+
 }

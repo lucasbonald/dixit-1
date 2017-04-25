@@ -26,7 +26,7 @@ $(document).ready(function(){
           type: MESSAGE_TYPE.CREATE,
           payload: {
             game_id: newGameId,
-            user_name: $("#username").val(),
+            user_name: $(".username").val(),
             lobby_name: $(".lobby-name").val(),
             num_players: Number($(".num-players").val()),
             victory_pts: $(".victory-points").val(),
@@ -49,26 +49,17 @@ $(document).ready(function(){
       }
       
     });
-    
-    $('table.table-hover tbody tr').on('click', function () {
+  
+  
+    $('table.table-hover tbody').on('click', function() {
+//      console.log($(this));
       currSelected = $(this).find('td');
       currSelected.toggleClass('selected-row');
       if (prevSelected != undefined) {
         prevSelected.toggleClass('selected-row');
       }
-      prevSelected = $(this).find('td');
+      prevSelected = currSelected;
     });
-  
-    $("#join-button").click(function() {
-      $(".join-error-message").empty();
-      if(currSelected == undefined ) {
-        $(".join-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Please select an available lobby.</p>");
-        
-      } else {
-        console.log(currSelected.attr('id'));
-        join_game(currSelected.attr('id'));
-      }
- 
-    });
-  
+    
 });
+

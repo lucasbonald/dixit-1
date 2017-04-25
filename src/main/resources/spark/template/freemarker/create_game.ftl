@@ -77,7 +77,7 @@
       <div class="row">
         <div class="col-xs-1"></div>
           <div class="col-xs-10">
-            <div class="init-form">
+            <form class="init-form" onsubmit="return join_game()" action="/guessing">
               <span class="glyphicon glyphicon-arrow-right form-title"></span><span class="form-title-text">Join game</span>
               <table class="table table-hover">
                 <thead>
@@ -90,15 +90,12 @@
                 </tbody>
               </table>
               <div class="row">
-                <div class="col-xs-10 join-error-message">
-                
-                </div>
+                <div class="col-xs-10 join-error-message"></div>
                 <div class="col-xs-1">
-                  <button id="join-button" class="btn btn-default">Join</button>
+                  <input type="submit" id="join-button" value="Join"></input>
                 <div>
               </div>  
-              
-            </div>
+            </form>
           </div>
         </div>  
       </div>
