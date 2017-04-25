@@ -32,7 +32,6 @@ public class WebSockets {
   private static final Gson GSON = new Gson();
   private static final GameTracker gt = new GameTracker();
   private static final Queue<Session> allSessions = new ConcurrentLinkedQueue<>();
-  private static int nextId = 1;
 
   private InetSocketAddress ipaddress;
   private static enum MESSAGE_TYPE {
@@ -79,7 +78,7 @@ public class WebSockets {
   			DixitGame newGame = new DixitGame(newGameId, payload.get("num_players").getAsInt());
   			//need to initialize the game with all information like victory points
   			//gt.addGame(session, newGame, payload.get("user_id").getAsInt());
-  			gt.addGame(session, newGame);
+  			gt.addGame(newGame);
   			newGame.getDeck().initializeDeck("../img/img");
   			
   			//now user should be created
