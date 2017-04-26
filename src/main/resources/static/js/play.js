@@ -10,6 +10,7 @@ $(document).ready(function(){
     
     $(".picked").empty();
     $(".picked").append("<img id=\"" + card.attr('id') + "\" src=\"" + card.attr('src') + "\"></img>");
+    $(this).remove();
     
     // if (currState == "Storytelling" && myId == storyteller) {
       

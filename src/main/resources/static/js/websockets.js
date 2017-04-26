@@ -94,7 +94,10 @@ const setup_update = () => {
         let cardId = payload.card_id;
         let cardUrl = payload.card_url;
         $("#promptvalue").html("\"" + prompt + "\"" );
-        $(".pickedcard").append("<div class=\"card picked hidden\"><img id=\"" + cardId + "\" src=\"" + cardUrl + "\"></div>")
+        if (getElementFromCookies("userid") != storyteller) {
+          $(".pickedcard").append("<div class=\"card answer turned-over\"><img id=\"" + cardId + "\" src=\"" + cardUrl + "\"></div>");
+        }
+        
         setStatus("Guessing");
         startTimer(15);
         break;
