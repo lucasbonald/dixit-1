@@ -84,37 +84,20 @@ const setup_update = () => {
 
         storyteller = payload.storyteller;
         
-        // // console.log(JSON.parse(payload.deck))
-        // const hand = JSON.parse(payload.deck.toString());
-        // console.log(hand);
-
-
-        
-        // // change the img of each hand-card div
-        // for (let i = 1; i <= hand.length; i++) {
-        //   let cardInfo = hand[i].split("url:");
-        //   let url = cardInfo[1];
-        //   let cardId = cardInfo[0].replace("id:", "");
-        //   let $card = $("#card" + i.toString());
-        //   $card.empty();
-        //   $card.append("<img id=\"" + cardId + "\" src=\"" + url + "\"></img>");
-        // }
-        
-//        if (payload.storyteller == getElementFromCookies("userid", document.cookie)) {
-//          $("st-identity").text("You");
-//        } else {
-//          
-//        }
-        
         // dialog box for each player's screen to see if their ready
         setStatus("Storytelling");
         $("#status-indicator-text").text("Storytelling");
 
         break;
       case MESSAGE_TYPE.ST_SUBMIT:
-        let prompt = data.payload.prompt;
-        let answer = data.payload.answer;
+        let prompt = payload.prompt;
+        let cardId = payload.card_id;
+        let cardUrl = payload.card_url;
+        console.log(prompt)
+        console.log(cardId)
+        console.log(cardUrl)
         $("#promptvalue").html("\"" + prompt + "\"" );
+        $(".pickedcard").append("<div class=\"new card picked\"><img id=\"" + cardId + "\" src=\"" + cardUrl + "\"></div>")
         setStatus("Guessing");
         startTimer(15);
         break;
@@ -135,7 +118,7 @@ const setup_update = () => {
     		  console.log("player names" + playernames[i]);
     	  }
     	  updateStatus(statusMap);
-    	break;
+        break;
     	
       case MESSAGE_TYPE.STORY:
     	  console.log("updating storyteller");
@@ -145,12 +128,13 @@ const setup_update = () => {
   };
 }
 
-function submitPrompt(inputPrompt, inputAnswer) {
+function submitPrompt(inputPrompt, card_id, card_url) {
 	const promptMessage = {
 		type: MESSAGE_TYPE.ST_SUBMIT,
 		payload: {
 			prompt: inputPrompt,
-			answer: inputAnswer
+			card_id: card_id,
+      card_url: card_url
 		}
 	}
   console.log("story: " + promptMessage.toString());
@@ -241,11 +225,10 @@ function setCookie(cookiename, cookievalue){
   document.cookie = newcookie;
 }
 
-function sendCard(user_id, card_id, type) {
+function sendGuess(card_id) {
   const card = {
-    type: type,
+    type: MESSAGE_TYPE.GS_SUBMIT,
     payload: {
-      user_id: user_id,
       card_id: card_id
     }
   }

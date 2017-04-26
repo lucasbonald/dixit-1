@@ -11,7 +11,7 @@
 		          <input type="text" name="prompt" id="promptField" placeholder = "Please enter your interesting story here" value = "">
 		          <input type="hidden" name="nickname" id="nicknameField" value="">
 		          <input type="hidden" name="time" id="timeField" value="">
-		          <input type="submit" id = "storyFormSubmit" value="Done">
+		          <input type="submit" class = "formSubmit" value="Done">
 		      </form>
 		    </div>
 		    <div class = "pickedcard">

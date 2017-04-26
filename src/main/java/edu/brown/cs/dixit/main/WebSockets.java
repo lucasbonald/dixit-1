@@ -157,20 +157,20 @@ public class WebSockets {
   			
   		case ST_SUBMIT:
   			//get the variables
-  		    System.out.println("Smart");
+		    System.out.println("Story received");
   			String prompt = payload.get("prompt").getAsString();
-  			int answer = payload.get("answer").getAsInt();
-			
-  			JsonObject stMessage = new JsonObject();
-  			stMessage.addProperty("type", MESSAGE_TYPE.ST_SUBMIT.ordinal());
-      		JsonObject stsubmitPayload = new JsonObject();
-      		stsubmitPayload.addProperty("prompt", prompt);
-			stsubmitPayload.addProperty("answer", answer);
-			stMessage.add("payload", stsubmitPayload);
-      		DixitGame prevGame = getGameFromSession(session);
-      		Referee bestRef = prevGame.getRefree();
-      			
+
+  			int cardId = payload.get("card_id").getAsInt();
+  			String cardUrl = payload.get("card_url").getAsString();
+			JsonObject stMessage = new JsonObject();
+			stMessage.addProperty("type", MESSAGE_TYPE.ST_SUBMIT.ordinal());
 				
+			JsonObject stSubmitPayload = new JsonObject();
+			stSubmitPayload.addProperty("prompt", prompt);
+			stSubmitPayload.addProperty("card_id", cardId);
+			stSubmitPayload.addProperty("card_url", cardUrl);
+			stMessage.add("payload", stSubmitPayload);
+
 			
   			for (Session indivSession : allSessions) {
   				indivSession.getRemote().sendString(stMessage.toString());
@@ -179,7 +179,7 @@ public class WebSockets {
   		  
   			break;
   		case GS_SUBMIT:
-  		    System.out.println("Stupid");
+		    System.out.println("Guess received");
   			break;
   		case VOTING:
   			break;
