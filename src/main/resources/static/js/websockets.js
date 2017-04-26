@@ -10,6 +10,7 @@ const MESSAGE_TYPE = {
   STATUS: 8,
   MULTI_TAB:9,
   STORY: 10
+
 };
 
 const STATUS_TYPE = {
@@ -51,18 +52,12 @@ const setup_update = () => {
         //setgameid(data.payload);
       // connect: get the connected user's ID and use as list of users currently connected
       case MESSAGE_TYPE.CONNECT:
-        //myId = payload.user_id;
-        //console.log("session Id?: " + myId)
-//        console.log(myId);
-//        console.log('conn '+ conn);
-//        console.log('cookie '+ conn.cookie);
-//        console.log('document ' + document.cookie);
-//        document.id = myId;
-//        console.log()
+        
         break;
       case MESSAGE_TYPE.NEW_GAME:
         console.log("new game");
         console.log(payload.game_id);
+        updateCookie("gameid", payload.game_id);
         console.log(payload.num_players);
         
         if(payload.num_players == 1) {
@@ -73,13 +68,32 @@ const setup_update = () => {
 
         break;
       case MESSAGE_TYPE.ALL_JOINED:
-       // alert('you ready?')
-        console.log(payload.deck)
+        console.log("all joined sent");
+        alert('you ready?');
+
+        console.log(payload.hand);
+        // console.log(JSON.parse(payload.deck))
+        const hand = payload.hand;
+        
+        // change the img of each hand-card div
+        for (card of Object.keys(hand)) {
+          let cardInfo = hand[card].split("url:");
+          let url = cardInfo[1];
+          let cardId = cardInfo[0].replace("id:", "");
+          let $card = $("#card" + card);
+          $card.empty();
+          $card.append("<img id=\"" + cardId + "\" src=\"" + url + "\"></img>");
+        }
+        
+        if (payload.storyteller == getElementFromCookies("userid", document.cookie)) {
+          $("st-identity").text("You");
+        } else {
+          
+        }
+        
         // dialog box for each player's screen to see if their ready
         setStatus("STORYTELLING");
-        setStoryTeller(payload.storyteller);
-        console.log("storyteller is " + payload.storyteller);
-        
+        $("#status-indicator-text").text("Storytelling");
 
         break;
       case MESSAGE_TYPE.ST_SUBMIT:
@@ -116,62 +130,6 @@ const setup_update = () => {
   };
 }
 
-//function create_game(createMessage) {
-//  $(".create-error-message").empty();
-//  if($(".lobby-name").val() == "" || $("#username").val() == "") {
-//    $(".create-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Please fill in all details before proceeding.</p>")
-//    return false;
-//  } else {
-//
-//    let gameInit = {
-//      type: MESSAGE_TYPE.CREATE,
-//      payload: {
-//        game_id: newGameId,
-//        user_name: $(".username").val(),
-//        lobby_name: $(".lobby-name").val(),
-//        num_players: Number($(".num-players").val()),
-//        victory_pts: $(".victory-points").val(),
-//        cards: $(".configure-cards.active").text().trim(),
-//        story_types: {
-//          text: $("#story-text").attr("class").includes("active"),
-//          audio: $("#story-audio").attr("class").includes("active"),
-//          video: $("#story-video").attr("class").includes("active")  
-//        }
-//      }
-//    }
-//
-//    // send new game information to backend
-//    conn.send(JSON.stringify(gameInit));
-//    newGameId++;
-//
-//    // display new available game to allow joining
-//    $('table.table-hover tbody').append("<tr><td id=\"" + gameInit.payload.game_id + "\">" + gameInit.payload.lobby_name + "</td><td id=\"" + gameInit.payload.game_id + "\">1/" + gameInit.payload.num_players + "</td></tr");
-//    
-//    
-//    return true;
-//  }
-//}
-//
-//function join_game(gameId) {
-//  $(".join-error-message").empty();
-//  if(currSelected == undefined ) {
-//    $(".join-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Please select an available lobby.</p>");
-//    return false;
-//  } else {
-//    console.log(currSelected.attr('id'));
-//    const joinMessage = {
-//      type: MESSAGE_TYPE.JOIN,
-//      payload: {
-//        user_id: myId,
-//        game_id: gameId  
-//      }
-//    }
-//    conn.send(JSON.stringify(joinMessage));
-//    return true;
-//  }
-//
-//}
-
 function submitPrompt(inputPrompt, inputAnswer) {
 	const promptMessage = {
 		type: MESSAGE_TYPE.ST_SUBMIT,
@@ -184,20 +142,31 @@ function submitPrompt(inputPrompt, inputAnswer) {
 }
 
 function setuserid(data){
+  console.log("set user id called?")
   console.log(data);
   for(let i=0;i<data.cookies.length; i++){
     if(data.cookies[i].name == "userid"){
-      const cook = data.cookies[i];
-      setCookie(cook.name, cook.value);
-
-    }
-    if(data.cookies[i].name == "gameid"){
       const cook = data.cookies[i];
       setCookie(cook.name, cook.value);
     }
   }
 }
 
+
+function updateCookie(cookiename, cookievalue){
+    let cookies = document.cookie.split(";");
+    console.log("update cookies called");
+
+    for (let i = 0; i < cookies.length; i++) {
+        let cookie = cookies[i];
+        let eqPos = cookie.indexOf("=");
+        let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        if(name==cookiename){
+          document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        }
+    }
+    setCookie(cookiename, cookievalue);
+}
 function deleteirrCookies() {
     let cookies = document.cookie.split(";");
 
@@ -218,8 +187,36 @@ function getStoryteller() {
 	conn.send(JSON.stringify(storyMessage));
 }
 
+function sendQuery(){
+  let uid = getElementFromCookies("userid");
+  let gid = getElementFromCookies("gameid"); 
+  const queryMessage = {
+    type: MESSAGE_TYPE.QUERRY,
+    payload: {
+      userid: uid,
+      gameid: gid
+    }
+  }
+  conn.send(JSON.stringify(queryMessage));
+}
+
+function getElementFromCookies(element) {
+  let cookies = cookie.split(";");
+  for (let i = 0; i < cookies.length; i++) {
+    let eqPos = cookies[i].indexOf("=");
+    let name = eqPos > -1 ? cookies[i].substr(0, eqPos) : cookies[i];
+    if (name == element) {
+      let value = eqPos >-1? cookies[i].substr(eqPos+1) : "";
+      return value;
+    }
+  }
+}
+
+
 
 function setCookie(cookiename, cookievalue){
   const newcookie = cookiename + "="+cookievalue;
+  //console.log(cookiename);
   document.cookie = newcookie;
 }
+

@@ -12,7 +12,6 @@ $(document).ready(function() {
 	});
 
 
-	//should be according to each game
 
 });
 // seconds in the form 15

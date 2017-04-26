@@ -45,25 +45,23 @@ public class WebSockets {
     STATUS,
     MULTI_TAB,
     STORY
+
 }
   
   @OnWebSocketConnect
   public void connected(Session session) throws IOException {
-	  allSessions.add(session);
-    // TODO Add the session to the queue
-	System.out.println("session size on connect");
-  	System.out.printf("%d \n", allSessions.size());
+	allSessions.add(session);
   	List<HttpCookie> cookies = session.getUpgradeRequest().getCookies();
   	if (cookies != null) {
   	    System.out.println("cookies: " + cookies.toString());
     	for (HttpCookie crumb: cookies) {
           if (crumb.getName().equals("userid")) {
-        	  if(gt.checkOpenSession(crumb.getValue())){
-        		  sendMultiTab(session);
-        	  }else{
+        	  //if(gt.checkOpenSession(crumb.getValue())){
+              //	  sendMultiTab(session);
+        	  //}else{
         		  gt.addSession(crumb.getValue(), session);
                   //allSessions.add(session);
-        	  }
+        	  //}
             }
     	}
   	}
@@ -119,15 +117,15 @@ public class WebSockets {
   			}		
   			
   			break;
-  			
+
   		case JOIN:
   		    System.out.println("joined!");
   			int gameId = payload.get("game_id").getAsInt();
   			String user = payload.get("user_name").getAsString();
   			DixitGame join = gt.getGame(gameId);
   			createNewUser(session, join, user);
-  			break;			
-  		
+  			break;		
+  			
   		case ST_SUBMIT:
   			//get the variables
   			String prompt = payload.get("prompt").getAsString();
@@ -184,6 +182,7 @@ public class WebSockets {
   
   private GamePlayer createNewUser(Session s, DixitGame game, String user_name) {
 	  	List<HttpCookie> cookies = s.getUpgradeRequest().getCookies();
+
 	  	boolean hasUserId=false;
 	  	String id = "";
 	  	if (cookies != null) {
@@ -191,6 +190,7 @@ public class WebSockets {
 	  			if(singcook.getName().equals("userid")){
 		  			System.out.println("already has user id");
 		  			id = singcook.getValue();
+		  			
 		  			hasUserId=true;
 		  		}
 		  	}
@@ -200,12 +200,11 @@ public class WebSockets {
 	  		id = randomId();
 	  		System.out.println("new user id created");
 	  		cookies.add(new HttpCookie(Network.USER_IDENTIFER, id));
-		    cookies.add(new HttpCookie(Network.GAME_IDENTIFIER, Integer.toString(game.getId())));
 		}
-	  	
+	  	cookies.add(new HttpCookie(Network.GAME_IDENTIFIER, Integer.toString(game.getId())));
+			
 	  	//add or override session
 	  	gt.addSession(id, s);
-	  	//System.out.println(gt.getSession().values().toString());
 	  	
 	    if (game.getCapacity() > game.getNumPlayers()) {
 				GamePlayer newPlayer = game.addPlayer(id, user_name);
@@ -219,10 +218,20 @@ public class WebSockets {
 	  			//should be sending the information about cards	
 	  			for (GamePlayer user : game.getPlayers()) {
 	  			  // need toString override method
-	              playerInfo.addProperty("deck", user.getFirstHand().toString()) ;
-	              playerInfo.addProperty("storyteller", this.getSTName(this.getGame(s))) ;
 
+	  			  System.out.println(gt.getSession().size());
+	  			  
+	  			  // construct JSON object for first hand of cards
+	  			  List<Card> firstHand = user.getFirstHand();
+	  			  JsonObject hand = new JsonObject();
+	  			  for (int i = 0; i < firstHand.size(); i++){
+	  			  	hand.addProperty(String.valueOf(i), firstHand.get(i).toString());
+	  			  }
+	  			  	
+            playerInfo.add("hand", hand);
+            playerInfo.addProperty("isStoryTeller",user.getGuesser().toString());
 	  			  try {
+	  				System.out.println("all player message sent");
 	  			    allJoinedMessage.add("payload", playerInfo);
 	  			    gt.getSession(user.playerId()).getRemote().sendString(allJoinedMessage.toString());
 	  			  } catch (IOException e) {
@@ -248,7 +257,8 @@ public class WebSockets {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
-	}
+  }
+  
   private void sendCookie(Session s, List<HttpCookie> cookies){
 	  JsonObject json = new JsonObject();
 	  JsonObject jsonCookie = new JsonObject();
@@ -256,6 +266,8 @@ public class WebSockets {
 	  jsonCookie.add("cookies", GSON.toJsonTree(cookies));
 	  json.add("payload", jsonCookie);
 	  try {
+		  System.out.println("cookies?");
+		  System.out.print(cookies);
 		  s.getRemote().sendString(json.toString());
 		} catch (IOException e) {
 			System.out.println("Found IOException while sending cookie");
@@ -265,7 +277,7 @@ public class WebSockets {
   
   private String getSTName(DixitGame game) {
 		for (GamePlayer user : game.getPlayers()) {
-			  if (!user.getGuesser()) {
+			  if (user.getGuesser().equals("False")) {
 				  return user.playerName();
 			  }
 		}

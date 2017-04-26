@@ -91,12 +91,16 @@ public class GamePlayer implements Player {
 	  return this.status;
   }
   
-  public boolean getGuesser() {
-	  return isGuesser;
-  }
-  
   public void setGuesser(boolean input) {
 	  isGuesser = input;
   }
   
+  public String getGuesser() {
+    if (isGuesser) {
+      return "False";
+    } else {
+      return "True";
+    }
+  }
+ 
 }
