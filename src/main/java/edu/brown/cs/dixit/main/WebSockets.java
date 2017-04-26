@@ -46,8 +46,7 @@ public class WebSockets {
     STATUS,
     MULTI_TAB,
     STORY
-
-}
+  }
   
   @OnWebSocketConnect
   public void connected(Session session) throws IOException {
@@ -170,7 +169,8 @@ public class WebSockets {
 			stSubmitPayload.addProperty("card_id", cardId);
 			stSubmitPayload.addProperty("card_url", cardUrl);
 			stMessage.add("payload", stSubmitPayload);
-
+            DixitGame prevGame = getGameFromSession(session);
+            Referee bestRef = prevGame.getRefree();
 			
   			for (Session indivSession : allSessions) {
   				indivSession.getRemote().sendString(stMessage.toString());
@@ -181,8 +181,10 @@ public class WebSockets {
   		case GS_SUBMIT:
 		    System.out.println("Guess received");
   			break;
+  			
   		case VOTING:
   			break;
+  	
   		case STORY:
   			JsonObject storyMessage = new JsonObject();
   			JsonObject storyPayload = new JsonObject();

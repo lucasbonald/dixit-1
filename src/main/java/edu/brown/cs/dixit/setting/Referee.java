@@ -157,4 +157,16 @@ public class Referee {
   public void setPrompt(String prompt) {
     this.currPrompt = prompt;
   }
+
+  public Map<String, Integer> getPickRecord() {
+    return pickRecord;
+  }
+
+  public void setPickRecord(Map<String, Integer> pickRecord) {
+    this.pickRecord = pickRecord;
+  }
+
+  public void setChosen(Map<String, Integer> chosen) {
+    this.chosen = chosen;
+  }
 }
