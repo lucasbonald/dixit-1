@@ -43,9 +43,10 @@ public class WebSockets {
     ST_SUBMIT,
     GS_SUBMIT,
     VOTING,
+    STATUS,
     MULTI_TAB
-  }
-
+}
+  
   @OnWebSocketConnect
   public void connected(Session session) throws IOException {
     // TODO Add the session to the queue
@@ -66,11 +67,6 @@ public class WebSockets {
             }
     	}
   	}
-  	
-  	
-  	//this should check current status -- cookies    
-  	//check current cookies?
-
   }
 
   @OnWebSocketClose
@@ -101,7 +97,7 @@ public class WebSockets {
   			newGame.getDeck().initializeDeck("../img/img");
   			
   			//now user should be created
-  			System.out.println(payload.get("user_name").getAsString());
+  			System.out.println("user_name: "+ payload.get("user_name").getAsString());
   			createNewUser(session, newGame, payload.get("user_name").getAsString());
   			
   			JsonObject newGameMessage = new JsonObject();
@@ -113,13 +109,14 @@ public class WebSockets {
   			newGamePayload.addProperty("capacity", newGame.getCapacity());
   			newGameMessage.add("payload", newGamePayload);
   			
+  			//need db to keep track of all the lobbies
   			for (Session indivSession : allSessions) {
-  				System.out.print("session size");
   				indivSession.getRemote().sendString(newGameMessage.toString());
   			}		
   			break;
   			
   		case JOIN:
+  		    
   		    System.out.println("joined!");
   			int gameId = payload.get("game_id").getAsInt();
   			String user = payload.get("user_name").getAsString();
@@ -129,18 +126,24 @@ public class WebSockets {
   		
   		case ST_SUBMIT:
   			//get the variables
+  			System.out.println("got here baby");
   			String prompt = payload.get("prompt").getAsString();
   			int answer = payload.get("answer").getAsInt();
   			System.out.println(prompt);
+  			System.out.println("answer is " + answer);
+
   			
-  			
-				JsonObject stMessage = new JsonObject();
-				stMessage.addProperty("type", MESSAGE_TYPE.ST_SUBMIT.ordinal());
-				
-				JsonObject returnPayload = new JsonObject();
-				returnPayload.addProperty("prompt", prompt);
-				returnPayload.addProperty("answer", answer);
-				stMessage.add("payload", returnPayload);
+			JsonObject stMessage = new JsonObject();
+			stMessage.addProperty("type", MESSAGE_TYPE.ST_SUBMIT.ordinal());
+			
+			JsonObject stsubmitPayload = new JsonObject();
+			stsubmitPayload.addProperty("prompt", prompt);
+			stsubmitPayload.addProperty("answer", answer);
+			stMessage.add("payload", stsubmitPayload);
+			
+  			for (Session indivSession : allSessions) {
+  				indivSession.getRemote().sendString(stMessage.toString());
+  			}	
 			  
   			// build object
   			//send the prompt and answer cardid to all players
@@ -180,20 +183,26 @@ public class WebSockets {
 	  		cookies.add(new HttpCookie(Network.USER_IDENTIFER, id));
 		    cookies.add(new HttpCookie(Network.GAME_IDENTIFIER, Integer.toString(game.getId())));
 		}
+	  	
 	  	//add or override session
 	  	gt.addSession(id, s);
+	  	//System.out.println(gt.getSession().values().toString());
 	  	
 	    if (game.getCapacity() > game.getNumPlayers()) {
 				Player newPlayer = game.addPlayer(id, user_name);
 			if (game.getCapacity() == game.getNumPlayers()) {
 				for (GamePlayer player : game.getPlayers()) {
-					List<Card> firstHand = player.getFirstHand();
+					player.getFirstHand();
 				}
 				JsonObject allJoinedMessage = new JsonObject();
+				JsonObject playerInfo = new JsonObject();
 	  			allJoinedMessage.addProperty("type", MESSAGE_TYPE.ALL_JOINED.ordinal());
 	  			//should be sending the information about cards	
 	  			for (GamePlayer user : game.getPlayers()) {
+	  			  // need toString override method
+	              playerInfo.addProperty("deck", user.getFirstHand().toString()) ;
 	  			  try {
+	  			    allJoinedMessage.add("payload", playerInfo);
 	  			    gt.getSession(user.playerId()).getRemote().sendString(allJoinedMessage.toString());
 	  			  } catch (IOException e) {
 	  			    System.out.println(e);
@@ -229,6 +238,10 @@ public class WebSockets {
 		} catch (IOException e) {
 			System.out.println("Found IOException while sending cookie");
 		}
+	  
+  }
+  
+  private void updateStatus() {
 	  
   }
 }

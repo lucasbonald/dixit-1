@@ -68,6 +68,8 @@ public class Main {
     Spark.get("/voting",new VoteHandler(), freeMarker);   
     Spark.get("/guessing",new GuessHandler(), freeMarker);   
     Spark.get("/end",new EndHandler(), freeMarker);   
+    Spark.get("/waiting",new WaitHandler(), freeMarker);   
+
   }
   
   private static class LogInHandler implements TemplateViewRoute {
@@ -109,6 +111,14 @@ public class Main {
       public ModelAndView handle(Request req, Response res) {
           Map<String, Object> variables = ImmutableMap.of("title", "Dixit Online", "imageLink", "../img/img1.png", "board", "whatever");
           return new ModelAndView(variables, "end.ftl");
+      }
+}
+  
+  private static class WaitHandler implements TemplateViewRoute {
+      @Override
+      public ModelAndView handle(Request req, Response res) {
+          Map<String, Object> variables = ImmutableMap.of("title", "Dixit Online", "imageLink", "../img/img1.png", "board", "whatever");
+          return new ModelAndView(variables, "waiting.ftl");
       }
 }
 

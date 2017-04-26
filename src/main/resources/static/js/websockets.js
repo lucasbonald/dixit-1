@@ -7,8 +7,8 @@ const MESSAGE_TYPE = {
   ST_SUBMIT: 5,
   GS_SUBMIT: 6,
   VOTING: 7,
-  MULTI_TAB:8
-
+  STATUS: 8,
+  MULTI_TAB:9
 };
 
 
@@ -27,11 +27,10 @@ const setup_update = () => {
   conn.onmessage = msg => {
     const data = JSON.parse(msg.data);
     const payload = data.payload;
+    
     switch (data.type) {
       default:
         console.log('Unknown message type!', data.type);
-        console.log(data)
-    
         break;
       case MESSAGE_TYPE.MULTI_TAB:
         alert('multi tab opened! Only one tab is allowed');
@@ -64,11 +63,18 @@ const setup_update = () => {
         }
         break;
       case MESSAGE_TYPE.ALL_JOINED:
+        alert('you ready?')
+        console.log(payload.deck)
         // dialog box for each player's screen to see if their ready
+        setStatus("STORYTELLING");
+
         break;
       case MESSAGE_TYPE.ST_SUBMIT:
-//        let prompt = data.payload.prompt;
-//        let answer = data.payload.answer;
+        let prompt = data.payload.prompt;
+        let answer = data.payload.answer;
+        $("#promptvalue").html("\"" + prompt + "\"" );
+        setStatus("STORYTELLING");
+        startTimer(15);
         break;
       case MESSAGE_TYPE.GS_SUBMIT:
 //        let prompt = data.payload.prompt;
@@ -135,8 +141,6 @@ const setup_update = () => {
 //}
 
 function submitPrompt(inputPrompt, inputAnswer) {
-	console.log("prompt in websockeetsjs called");
-	console.log("conn is  " + conn);
 	const promptMessage = {
 		type: MESSAGE_TYPE.ST_SUBMIT,
 		payload: {
