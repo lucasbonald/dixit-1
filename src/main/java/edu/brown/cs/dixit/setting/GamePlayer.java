@@ -80,5 +80,9 @@ public class GamePlayer implements Player {
       return "True";
     }
   }
+  
+  public List<Card> getHand() {
+    return playerDeck;
+  }
  
 }

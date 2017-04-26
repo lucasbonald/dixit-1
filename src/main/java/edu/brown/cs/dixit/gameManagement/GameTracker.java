@@ -55,4 +55,8 @@ public class GameTracker {
   public Map<String, Session> getSession() {
     return playerSession;
   }
+  
+  public Map<Integer, DixitGame> getAllGame() {
+    return gameInfo;
+  }
 }
