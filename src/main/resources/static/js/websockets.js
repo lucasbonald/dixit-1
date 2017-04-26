@@ -86,7 +86,7 @@ const setup_update = () => {
         }
         
         // dialog box for each player's screen to see if their ready
-        setStatus("STORYTELLING");
+        setStatus("Storytelling");
         $("#status-indicator-text").text("Storytelling");
 
         break;
@@ -94,7 +94,7 @@ const setup_update = () => {
         let prompt = data.payload.prompt;
         let answer = data.payload.answer;
         $("#promptvalue").html("\"" + prompt + "\"" );
-        setStatus("STORYTELLING");
+        setStatus("Guessing");
         startTimer(15);
         break;
       case MESSAGE_TYPE.GS_SUBMIT:
@@ -122,7 +122,7 @@ function setuserid(data){
     if(data.cookies[i].name == "userid"){
       const cook = data.cookies[i];
       setCookie(cook.name, cook.value);
-
+      myId = cook.value;
     }
     if(data.cookies[i].name == "gameid"){
       const cook = data.cookies[i];
@@ -159,4 +159,15 @@ function getElementFromCookies(element, cookie) {
 function setCookie(cookiename, cookievalue){
   const newcookie = cookiename + "="+cookievalue;
   document.cookie = newcookie;
+}
+
+function sendGuess(user_id, card_id) {
+  const guess = {
+    type: MESSAGE_TYPE.GS_SUBMIT,
+    payload: {
+      user_id: user_id,
+      card_id: card_id
+    }
+  }
+  conn.send(JSON.stringify(guess));
 }

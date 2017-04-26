@@ -1,6 +1,23 @@
-let currState = "Voting";
+let currState = "Guessing";
 
 $(document).ready(function(){
+  
+  
+  $(".hand-card").click(function(event) {
+    
+    if (currState == "Storytelling" && myId == /* storyteller's id */) {
+        
+    } else if (currState == "Guessing" && myId != /* storyteller's id */) {
+      
+      console.log("clicked card div: " + event.target.id);
+      const card_id = $(this).find("img").attr("id");
+      // send guess message
+      sendGuess(myId, card_id);
+      
+    }
+    
+  });
+  
   
   // Voting
   $(".drawn").click(function() {

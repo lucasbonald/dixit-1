@@ -116,7 +116,7 @@ public class WebSockets {
   			
   		case JOIN:
   		    
-  		    System.out.println("joined!");
+		    System.out.println("joined!");
   			int gameId = payload.get("game_id").getAsInt();
   			String user = payload.get("user_name").getAsString();
   			DixitGame join = gt.getGame(gameId);
@@ -130,15 +130,14 @@ public class WebSockets {
   			int answer = payload.get("answer").getAsInt();
   			System.out.println(prompt);
   			System.out.println("answer is " + answer);
-
   			
-			JsonObject stMessage = new JsonObject();
-			stMessage.addProperty("type", MESSAGE_TYPE.ST_SUBMIT.ordinal());
-			
-			JsonObject stsubmitPayload = new JsonObject();
-			stsubmitPayload.addProperty("prompt", prompt);
-			stsubmitPayload.addProperty("answer", answer);
-			stMessage.add("payload", stsubmitPayload);
+				JsonObject stMessage = new JsonObject();
+				stMessage.addProperty("type", MESSAGE_TYPE.ST_SUBMIT.ordinal());
+				
+				JsonObject stsubmitPayload = new JsonObject();
+				stsubmitPayload.addProperty("prompt", prompt);
+				stsubmitPayload.addProperty("answer", answer);
+				stMessage.add("payload", stsubmitPayload);
 			
   			for (Session indivSession : allSessions) {
   				indivSession.getRemote().sendString(stMessage.toString());
