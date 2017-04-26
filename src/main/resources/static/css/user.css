@@ -15,9 +15,22 @@ hr {
 .card {
 	border-style: solid;
 	border-width: 5px;
+  flex-shrink: 1;
+	border-radius: 8px;
+	border-color: lightgrey;
+	background-color: grey;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  width: 25%;
+	height: 25%;
 }
 
-.statuscard{
+.hand-card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  border-color: #898989;
+}
+
+.status-indicator{
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -30,23 +43,11 @@ hr {
 	text-align: center;
 }
 
-
-
-#statuscardelement {
+#status-indicator-text {
 	position: relative;
-    font-size: 1.5vw;
-    font-weight: 900;
-    color: white;
-}
-
-.deckcard {
-	flex-shrink: 1;
-	border-radius: 8px;
-	border-color: lightgrey;
-	background-color: grey;
-}
-.card-hover {
-	border-color: #898989;
+  font-size: 1.5vw;
+  font-weight: 900;
+  color: white;
 }
 
 .row {
@@ -164,24 +165,12 @@ hr {
 	color: black;
 }
 
-#userinfovalue {
+#st-identity {
 	margin-top: 1.5%;
 	font-size: 2.2vw;
 
 	color: #fb8383;
 }
-
-.deckcard {
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    transition: 0.3s;
-    width: 25%;
-	height: 25%;
-}
-
-.deckcard:hover {
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-}
-
 
 .overlap{
 	margin-left: 2%;
@@ -277,7 +266,7 @@ hr {
 	background-color: #e06666;
 }
 
-.deck {
+.hand {
 	display: flex;
 	justify-content: center | space-between;
 	align-items: center;

@@ -3,8 +3,8 @@
 <div class = "wrapper">
 	<div class = "row screen">
 		<div class = "col-xs-9 board" style="background-color: #f7f7f7;">
-			<div class = "statuscard">
-				  <div id = "statuscardelement">
+			<div class = "status-indicator">
+				  <div id = "status-indicator-text">
 				    VOTING
 				  </div>
 			</div>
@@ -14,27 +14,24 @@
 			
 			${board}
 			
-			<div class = "deck" style = "text-align: center">
-				<div class="card deckcard">
-				  <img class="card-img-top" src="https://s-media-cache-ak0.pinimg.com/736x/c4/f5/5b/c4f55b1202eaa088ca98dead0c88e378.jpg">
+			<div class="hand" style="text-align: center">
+				<div class="card hand-card" id="card1">
+				  <img src="http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg">
 				</div>
-				<div class="overlap card deckcard">
-				  <img class="card-img-top" src="https://s-media-cache-ak0.pinimg.com/736x/c4/f5/5b/c4f55b1202eaa088ca98dead0c88e378.jpg">
+				<div class="card hand-card" id="card2">
+				  <img src="http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg">
 				</div>
-				<div class="overlap card deckcard">
-				  <img class="card-img-top" src="https://s-media-cache-ak0.pinimg.com/736x/c4/f5/5b/c4f55b1202eaa088ca98dead0c88e378.jpg">
+				<div class="card hand-card" id="card3">
+				  <img src="http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg">
 				</div>
-				<div class="overlap card deckcard">
-				  <img class="card-img-top" src="https://s-media-cache-ak0.pinimg.com/736x/c4/f5/5b/c4f55b1202eaa088ca98dead0c88e378.jpg">
+				<div class="card hand-card" id="card4">
+				  <img src="http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg">
 				</div>
-				<div class="overlap card deckcard">
-				  <img class="card-img-top" src="https://s-media-cache-ak0.pinimg.com/736x/c4/f5/5b/c4f55b1202eaa088ca98dead0c88e378.jpg">
+				<div class="card hand-card" id="card5">
+				  <img src="http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg">
 				</div>
-				<div class="overlap card deckcard">
-				  <img class="card-img-top" src="https://s-media-cache-ak0.pinimg.com/736x/c4/f5/5b/c4f55b1202eaa088ca98dead0c88e378.jpg">
-				</div>
-				<div class="overlap card deckcard">
-				  <img class="card-img-top" src="https://s-media-cache-ak0.pinimg.com/736x/c4/f5/5b/c4f55b1202eaa088ca98dead0c88e378.jpg">
+				<div class="card hand-card" id="card6">
+				  <img src="http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg">
 				</div>
 			</div>
 
@@ -47,10 +44,10 @@
 			</div>
 			</div>
 			<hr>
-			<div class = "statuselement" id = "userinfo">
+			<div class = "statuselement">
 			STORYTELLER
-				<div id = "userinfovalue">
-				<span style = "color: white;" > Player 4 </span>
+				<div>
+				<span id="st-identity">Player</span>
 				</div>
 			</div>
 			<hr>

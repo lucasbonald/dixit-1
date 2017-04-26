@@ -65,8 +65,26 @@ const setup_update = () => {
       case MESSAGE_TYPE.ALL_JOINED:
         //alert('you ready?')
         console.log(payload.deck)
+        
+        // change the img of each hand-card div
+        for (let i = 1; i <= payload.deck.length; i++) {
+          let cardInfo = payload.deck[i].split("url:");
+          let url = cardInfo[1];
+          let cardId = cardInfo[0].replace("id:", "");
+          let $card = $("#card" + i.toString());
+          $card.empty();
+          $card.append("<img id=\"" + cardId + "\" src=\"" + url + "\"></img>");
+        }
+        
+        if (payload.storyteller == getElementFromCookies("userid", document.cookie)) {
+          $("st-identity").text("You");
+        } else {
+          
+        }
+        
         // dialog box for each player's screen to see if their ready
         setStatus("STORYTELLING");
+        $("#status-indicator-text").text("Storytelling");
 
         break;
       case MESSAGE_TYPE.ST_SUBMIT:
@@ -83,62 +101,6 @@ const setup_update = () => {
     }
   };
 }
-
-//function create_game(createMessage) {
-//  $(".create-error-message").empty();
-//  if($(".lobby-name").val() == "" || $("#username").val() == "") {
-//    $(".create-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Please fill in all details before proceeding.</p>")
-//    return false;
-//  } else {
-//
-//    let gameInit = {
-//      type: MESSAGE_TYPE.CREATE,
-//      payload: {
-//        game_id: newGameId,
-//        user_name: $(".username").val(),
-//        lobby_name: $(".lobby-name").val(),
-//        num_players: Number($(".num-players").val()),
-//        victory_pts: $(".victory-points").val(),
-//        cards: $(".configure-cards.active").text().trim(),
-//        story_types: {
-//          text: $("#story-text").attr("class").includes("active"),
-//          audio: $("#story-audio").attr("class").includes("active"),
-//          video: $("#story-video").attr("class").includes("active")  
-//        }
-//      }
-//    }
-//
-//    // send new game information to backend
-//    conn.send(JSON.stringify(gameInit));
-//    newGameId++;
-//
-//    // display new available game to allow joining
-//    $('table.table-hover tbody').append("<tr><td id=\"" + gameInit.payload.game_id + "\">" + gameInit.payload.lobby_name + "</td><td id=\"" + gameInit.payload.game_id + "\">1/" + gameInit.payload.num_players + "</td></tr");
-//    
-//    
-//    return true;
-//  }
-//}
-//
-//function join_game(gameId) {
-//  $(".join-error-message").empty();
-//  if(currSelected == undefined ) {
-//    $(".join-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Please select an available lobby.</p>");
-//    return false;
-//  } else {
-//    console.log(currSelected.attr('id'));
-//    const joinMessage = {
-//      type: MESSAGE_TYPE.JOIN,
-//      payload: {
-//        user_id: myId,
-//        game_id: gameId  
-//      }
-//    }
-//    conn.send(JSON.stringify(joinMessage));
-//    return true;
-//  }
-//
-//}
 
 function submitPrompt(inputPrompt, inputAnswer) {
 	const promptMessage = {
@@ -179,7 +141,17 @@ function deleteirrCookies() {
     }
 }
 
-
+function getElementFromCookies(element, cookie) {
+  let cookies = cookie.split(";");
+  for (let i = 0; i < cookies.length; i++) {
+    let eqPos = cookies[i].indexOf("=");
+    let name = eqPos > -1 ? cookies[i].substr(0, eqPos) : cookies[i];
+    if (name == element) {
+      let value = eqPos >-1? cookies[i].substr(eqPos+1); 
+      return value;
+    }
+  }
+}
 
 function setCookie(cookiename, cookievalue){
   const newcookie = cookiename + "="+cookievalue;
