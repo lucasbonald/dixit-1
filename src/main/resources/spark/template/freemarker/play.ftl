@@ -9,12 +9,15 @@
 				  </div>
 			</div>
 			<div class = "prompt" >
-			<i id = "promptvalue">"Interesting prompt comes here"</i>
+			<i id = "promptvalue"></i>
 			</div>
 			
 			${board}
 			
 			<div class="hand" style="text-align: center">
+				<div class="card hand-card" id="card0">
+				  <img src="http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg">
+				</div>
 				<div class="card hand-card" id="card1">
 				  <img src="http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg">
 				</div>
@@ -28,9 +31,6 @@
 				  <img src="http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg">
 				</div>
 				<div class="card hand-card" id="card5">
-				  <img src="http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg">
-				</div>
-				<div class="card hand-card" id="card6">
 				  <img src="http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg">
 				</div>
 			</div>
@@ -55,7 +55,10 @@
 			STATUS FEED
 			<div class = "feed">
 				<ul class = "feedList">
-				sdfwef
+					<li> <span style="color: transparent">ss</span> </li>
+					<li> <span style="color: transparent">ss</span></li>
+					<li> <span style="color: transparent">ss</span></li>
+					<li> <span style = "color: transparent" ss</span></li>
 				</ul>
 			</div>
 			</div>

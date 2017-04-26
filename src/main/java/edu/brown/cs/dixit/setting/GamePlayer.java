@@ -9,10 +9,18 @@ public class GamePlayer implements Player {
   private final String playerId;
   private final String playerName;
   private int point;
-  private boolean isGuesser;
+  private String isGuesser;
   private List<Card> playerDeck;
   private Deck globalDeck;
-  
+  private String status;
+  public static enum STATUS_TYPE {
+		WAITING,
+		STORYTELLING,
+		GUESSING,
+		GUESSED,
+		VOTING,
+		VOTED
+	  }
   
   //Use ENUM for StoryTeller / Guesser
   
@@ -21,10 +29,12 @@ public class GamePlayer implements Player {
     playerId = id;
     playerName = name;
     point = 0;
-    isGuesser = true;
+    isGuesser = "True";
     playerDeck = new ArrayList<>();
     globalDeck = deck;
+    status = "wating";
   }
+  
   
   @Override
   public String playerId() {
@@ -73,12 +83,24 @@ public class GamePlayer implements Player {
     return newCard;
   }
   
+  public void setStatus(String status) {
+	  this.status = status;
+  }
+  
+  public String getStatus() {
+	  return this.status;
+  }
+  
+  public void setGuesser(String input) {
+	  isGuesser = input;
+  }
+  
   public String getGuesser() {
-    if (isGuesser) {
-      return "False";
-    } else {
-      return "True";
-    }
+    return isGuesser;
+  }
+  
+  public List<Card> getHand() {
+    return playerDeck;
   }
  
 }

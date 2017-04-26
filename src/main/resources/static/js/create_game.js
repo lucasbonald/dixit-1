@@ -4,7 +4,6 @@ let gameCount = 1;
 let newGameId = 1;
 
 $(document).ready(function(){
-  
     $("#create-form").on("submit", function(event) {
       
       event.preventDefault();
@@ -36,7 +35,7 @@ $(document).ready(function(){
 
         // display new available game to allow joining
         $('table.table-hover tbody').append("<tr><td id=\"" + gameInit.payload.game_id + "\">" + gameInit.payload.lobby_name + "</td><td id=\"" + gameInit.payload.game_id + "\">1/" + gameInit.payload.num_players + "</td></tr");
-        window.location = window.location.href + "guessing";
+        window.location = window.location.href + "storytelling";
       }
       
     });
@@ -58,15 +57,17 @@ $(document).ready(function(){
         $(".join-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Please select an available lobby.</p>");
       } else {
         console.log(currSelected.attr('id'));
-        const joinMessage = {
-          type: MESSAGE_TYPE.JOIN,
-          payload: {
-            user_name: $(".username").val(),
-            game_id: currSelected.attr('id')  
-          }
-        }
-        conn.send(JSON.stringify(joinMessage));
+        
         window.location = window.location.href + "guessing";
+        const joinMessage = {
+                type: MESSAGE_TYPE.JOIN,
+                payload: {
+                  user_name: $(".username").val(),
+                  game_id: currSelected.attr('id')  
+                }
+              }
+        conn.send(JSON.stringify(joinMessage));
+
       }
       
     });
