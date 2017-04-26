@@ -49,9 +49,9 @@ public class WebSockets {
   
   @OnWebSocketConnect
   public void connected(Session session) throws IOException {
+	  allSessions.add(session);
     // TODO Add the session to the queue
-	System.out.println("no. of sessions " + allSessions.size());
-  	System.out.println("session size on connect");
+	System.out.println("session size on connect");
   	System.out.printf("%d \n", allSessions.size());
   	List<HttpCookie> cookies = session.getUpgradeRequest().getCookies();
   	if (cookies != null) {
@@ -62,11 +62,13 @@ public class WebSockets {
         		  sendMultiTab(session);
         	  }else{
         		  gt.addSession(crumb.getValue(), session);
-                  allSessions.add(session);
+                  //allSessions.add(session);
         	  }
             }
     	}
   	}
+  	System.out.println("no. of sessions " + allSessions.size());
+  	
   }
 
   @OnWebSocketClose
@@ -218,6 +220,7 @@ public class WebSockets {
   
   
   private void sendMultiTab(Session s){
+	  allSessions.remove(s);
 	  JsonObject multi = new JsonObject();
 	  multi.addProperty("type", MESSAGE_TYPE.MULTI_TAB.ordinal());
 	  try {
