@@ -162,11 +162,19 @@ public class Referee {
     return pickRecord;
   }
 
-  public void setPickRecord(Map<String, Integer> pickRecord) {
-    this.pickRecord = pickRecord;
+  public void setPickRecord(String id, int selectedCard) {
+    pickRecord.put(id, selectedCard);
   }
 
-  public void setChosen(Map<String, Integer> chosen) {
-    this.chosen = chosen;
+  public void setChosen(String id, int chosenCard) {
+    chosen.put(id, chosenCard);
+  }
+  
+  public int getChosenSize() {
+    return chosen.size();
+  }
+  
+  public Integer getChosen(String id) {
+    return chosen.get(id);
   }
 }

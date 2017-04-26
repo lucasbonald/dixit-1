@@ -70,7 +70,7 @@ public class WebSockets {
     if (gt.getAllGame().size() != 0) {
       System.out.println(gameId);
       System.out.println(gt.getGame(gameId));
-      if (gt.getGame(gameId).getPlayers() != null) {
+      if (gt.getGame(gameId) != null && gt.getGame(gameId).getPlayers() != null) {
         List<GamePlayer> users = gt.getGame(gameId).getPlayers();
         for (GamePlayer user: users) {
           //Session s = gt.getSession(user.playerId());
@@ -109,7 +109,7 @@ public class WebSockets {
   	JsonObject received = GSON.fromJson(message, JsonObject.class);
   	JsonObject payload = received.getAsJsonObject("payload");
   	MESSAGE_TYPE messageType = MESSAGE_TYPE.values()[received.get("type").getAsInt()];
-  	
+  
   	switch (messageType) {
   		default:
   			System.out.println("Unknown message type!");
@@ -169,8 +169,12 @@ public class WebSockets {
 			stSubmitPayload.addProperty("card_id", cardId);
 			stSubmitPayload.addProperty("card_url", cardUrl);
 			stMessage.add("payload", stSubmitPayload);
-            DixitGame prevGame = getGameFromSession(session);
-            Referee bestRef = prevGame.getRefree();
+		    DixitGame currGame = getGameFromSession(session);
+		    Referee bestRef = currGame.getRefree();
+			bestRef.setAnswer(cardId);
+			String stId = getSTId(getGameFromSession(session));
+			bestRef.setStoryTeller(stId);
+			bestRef.setChosen(stId, cardId);
 			
   			for (Session indivSession : allSessions) {
   				indivSession.getRemote().sendString(stMessage.toString());
@@ -180,6 +184,33 @@ public class WebSockets {
   			break;
   		case GS_SUBMIT:
 		    System.out.println("Guess received");
+		    List<HttpCookie> cookies = session.getUpgradeRequest().getCookies();
+		    String userId = "";
+		    if (cookies != null) {
+		        for (HttpCookie crumb: cookies) {
+		          if (crumb.getName().equals("userid")) {
+		              userId = crumb.getValue();
+		          }
+		        }
+		    }
+		    int guessedCard = payload.get("card_id").getAsInt();
+		    DixitGame curGame = getGameFromSession(session);
+            Referee besRef = curGame.getRefree();
+		    besRef.setChosen(userId, guessedCard);
+		    if (besRef.getChosenSize() == 2) {
+		        JsonObject votingMessage = new JsonObject();
+	            votingMessage.addProperty("type", MESSAGE_TYPE.VOTING.ordinal());        
+	            JsonObject votePayload = new JsonObject();
+	            //JsonObject answer = new JsonObject();
+	            //JsonObject guessed = new JsonObject();
+	            votePayload.addProperty("answer", besRef.getAnswer());
+	            votePayload.addProperty("guessed", besRef.getChosen(userId));
+	            votingMessage.add("payload", votePayload);
+	            for (GamePlayer player: curGame.getPlayers()) {
+	              gt.getSession(player.playerId()).getRemote().sendString(votingMessage.toString());
+	            }   
+		    }
+		    
   			break;
   			
   		case VOTING:

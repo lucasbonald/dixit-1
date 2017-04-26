@@ -7,6 +7,7 @@ $(document).ready(function() {
 		console.log("form is submitted!!")
 		e.preventDefault();
 		submitPrompt($("#promptField").val(), $(".picked").find("img").attr("id"), $(".picked").find("img").attr("src"));
+		
 	});
 
   $("#guessForm").on('submit', function (e) {
