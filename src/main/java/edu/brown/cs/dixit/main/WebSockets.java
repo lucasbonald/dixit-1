@@ -83,7 +83,7 @@ public class WebSockets {
             hand.addProperty(String.valueOf(i), personalDeck.get(i).toString());
           }    
           playerInfo.add("hand", hand);
-          playerInfo.addProperty("storyteller", this.getSTName(this.getGame(session)));
+          playerInfo.addProperty("storyteller", this.getSTName(this.getGameFromSession(session)));
           try {
             allJoinedMessage.add("payload", playerInfo);
             gt.getSession(user.playerId()).getRemote().sendString(allJoinedMessage.toString());
@@ -156,6 +156,7 @@ public class WebSockets {
   			
   		case ST_SUBMIT:
   			//get the variables
+  		    System.out.println("Smart");
   			String prompt = payload.get("prompt").getAsString();
   			int answer = payload.get("answer").getAsInt();
 				JsonObject stMessage = new JsonObject();
@@ -173,6 +174,7 @@ public class WebSockets {
 			  
   			break;
   		case GS_SUBMIT:
+  		    System.out.println("Stupid");
   			break;
   		case VOTING:
   			break;
@@ -256,7 +258,7 @@ public class WebSockets {
 	  			  }
 	  			  	
             playerInfo.add("hand", hand);
-            playerInfo.addProperty("storyteller", getSTId(getGame(s)));
+            playerInfo.addProperty("storyteller", getSTId(getGameFromSession(s)));
 	  			  try {
 	  				System.out.println("all player message sent");
 	  			    allJoinedMessage.add("payload", playerInfo);

@@ -14,7 +14,10 @@ const MESSAGE_TYPE = {
 };
 
 let conn;
-let myId = getElementFromCookies("userid");
+// if (document.cookie != null) {
+//   let myId = getElementFromCookies("userid");
+// }
+let myId = -1;
 let storyteller = -1;
 
 //set up socket connection and define types
@@ -80,9 +83,6 @@ const setup_update = () => {
         }
 
         storyteller = payload.storyteller;
-        if (storyteller == myId) {
-          
-        }
         
         // // console.log(JSON.parse(payload.deck))
         // const hand = JSON.parse(payload.deck.toString());
@@ -222,7 +222,7 @@ function sendQuery(){
 }
 
 function getElementFromCookies(element) {
-  let cookies = cookie.split(";");
+  let cookies = document.cookie.split(";");
   for (let i = 0; i < cookies.length; i++) {
     let eqPos = cookies[i].indexOf("=");
     let name = eqPos > -1 ? cookies[i].substr(0, eqPos) : cookies[i];

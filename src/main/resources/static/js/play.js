@@ -8,20 +8,23 @@ $(document).ready(function(){
     console.log("clicked card div: " + event.target.id);
     const card = $(this).find("img");
     
-    if (currState == "Storytelling" && myId == storyteller) {
-      
-      $(".picked").empty();
-      $(".picked").append("<img id=\"" + card.attr('id') + "\" src=\"" + card.attr('src') + "\"></img>");
-      
-      console.log("storytelling?");
-      
-    } else if (currState == "Guessing" && myId != storyteller) {
-      
-      console.log("guessing?");
+    $(".picked").empty();
+    $(".picked").append("<img id=\"" + card.attr('id') + "\" src=\"" + card.attr('src') + "\"></img>");
     
-      // send guess message
-      sendCard(myId, card_id, MESSAGE_TYPE.GS_SUBMIT);
-    }
+    // if (currState == "Storytelling" && myId == storyteller) {
+      
+    //   $(".picked").empty();
+    //   $(".picked").append("<img id=\"" + card.attr('id') + "\" src=\"" + card.attr('src') + "\"></img>");
+      
+    //   console.log("storytelling?");
+      
+    // } else if (currState == "Guessing" && myId != storyteller) {
+      
+    //   console.log("guessing?");
+    
+    //   // send guess message
+    //   sendCard(myId, card.attr('id'), MESSAGE_TYPE.GS_SUBMIT);
+    // }
     
   });
   
