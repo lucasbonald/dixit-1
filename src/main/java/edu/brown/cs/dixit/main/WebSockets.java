@@ -42,7 +42,8 @@ public class WebSockets {
     ALL_JOINED,
     ST_SUBMIT,
     GS_SUBMIT,
-    VOTING
+    VOTING,
+    STATUS
   }
   
   @OnWebSocketConnect
@@ -121,18 +122,24 @@ public class WebSockets {
   		
   		case ST_SUBMIT:
   			//get the variables
+  			System.out.println("got here baby");
   			String prompt = payload.get("prompt").getAsString();
   			int answer = payload.get("answer").getAsInt();
   			System.out.println(prompt);
+  			System.out.println("answer is " + answer);
+
   			
-  			
-				JsonObject stMessage = new JsonObject();
-				stMessage.addProperty("type", MESSAGE_TYPE.ST_SUBMIT.ordinal());
-				
-				JsonObject returnPayload = new JsonObject();
-				returnPayload.addProperty("prompt", prompt);
-				returnPayload.addProperty("answer", answer);
-				stMessage.add("payload", returnPayload);
+			JsonObject stMessage = new JsonObject();
+			stMessage.addProperty("type", MESSAGE_TYPE.ST_SUBMIT.ordinal());
+			
+			JsonObject stsubmitPayload = new JsonObject();
+			stsubmitPayload.addProperty("prompt", prompt);
+			stsubmitPayload.addProperty("answer", answer);
+			stMessage.add("payload", stsubmitPayload);
+			
+  			for (Session indivSession : allSessions) {
+  				indivSession.getRemote().sendString(stMessage.toString());
+  			}	
 			  
   			// build object
   			//send the prompt and answer cardid to all players
@@ -216,6 +223,10 @@ public class WebSockets {
 		} catch (IOException e) {
 			System.out.println("Found IOException while sending cookie");
 		}
+	  
+  }
+  
+  private void updateStatus() {
 	  
   }
 }

@@ -102,7 +102,7 @@ hr {
 }
 
 #chat-submit {
-	display: inline-block;
+  display: inline-block;
   background-color: #8da7ca;
   border-radius: 6px;
   border-color: #8da7ca;
@@ -298,6 +298,33 @@ hr {
 	margin-top: 3%;
 }
 
+#promptField {
+	border: black;
+    border-radius: 6px;
+    background-color: white;
+    width: 66%;
+    height: 33%;
+    font-size: 1.2vw;
+    margin: auto;
+    padding: 1% 2%;
+    display: inline-block;
+	
+}
+
+#storyFormSubmit {
+	font-size: 1.2vw;
+	font-weight: 900;
+	padding: 0.7% 1.5%;
+	display: inline-block;
+    background-color: #8da7ca;
+    border-radius: 6px;
+    border-color: #8da7ca;
+    color: white;
+    text-decoration: none;
+    margin: auto;
+    height: 33%;
+
+}
 .timerwrapper {
 	font-size: 10vw;
 	text-align: center;

@@ -5,26 +5,18 @@ $(document).ready(function() {
 	console.log(document.cookie);
 
 	$('#promptForm').on('submit', function(e) {
-		console.log(documnet.cookie)
 		console.log("prompt in storytellingjs called");
-
 		console.log("form is submitted!!")
 		e.preventDefault();
-		submitPrompt($("#promptField").value, 12345);
+		submitPrompt($("#promptField").val(), 12345);
 
 	});
 
-	$('#exit').on('submit', function(e) {
-		console.log("exiting");
-		e.preventDefault();
-		$(this).close();
-	});
 
 	//should be according to each game
 	setStoryTeller("Player 0");
 	
 	updateStatus();
-	startTimer(2);
 
 
 });
@@ -33,13 +25,13 @@ $(document).ready(function() {
 function startTimer(seconds) {
 	$("#stopwatchvalue").html(seconds);
 	let time = seconds;
-	setInterval(function() {
+	let timer = setInterval(function() {
 		if (time > 0) {
 			time -= 1;
 			$("#stopwatchvalue").html(time);
 		} else {
 			$("#stopwatchvalue").html("<span style = \'font-size: 4vw; color: red;\'>Time's Up!</span>");
-			//do some alert? send data back to server so they can alert everyone
+			clearInterval(timer);
 		}
 	}, 1000);
 }
@@ -48,6 +40,9 @@ function setStoryTeller (storyTeller) {
 	$("#userinfovalue").html(storyTeller);
 }
 
+function setStatus (status) {
+	$("#statuscardelement").html(status);
+}
 function updateStatus() {
 	let statusMap = {};
 	statusMap["player1"] = "voting";
@@ -60,4 +55,6 @@ function updateStatus() {
 		$(".feedList").append("<li> <span style=\"color: grey\">" + players[i] + "</span> : " + statusMap[players[i]] + "</li>")
 	}
 } 
+
+
 
