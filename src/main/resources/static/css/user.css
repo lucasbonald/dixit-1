@@ -326,3 +326,7 @@ img {
 html, body, .wrapper, .row, .screen, .board, .statusbar {
 	height: 100%;
 }
+
+.vote-selected {
+  border-color: #FFFF00;
+}

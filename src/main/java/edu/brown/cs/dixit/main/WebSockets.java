@@ -214,6 +214,7 @@ public class WebSockets {
   			break;
   			
   		case VOTING:
+  			System.out.println("Vote received");
   			break;
   	
   		case STORY:

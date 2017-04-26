@@ -34,7 +34,7 @@ public class GamePlayer implements Player {
     isGuesser = "True";
     playerDeck = new ArrayList<>();
     globalDeck = deck;
-    status = "waiting";
+    status = "dixiting";
   }
   
   
