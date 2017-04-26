@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Set;
 
 public class Deck {
-  // default deck of 84 cards
-  private int SIZE = Setting.NUM_DEFAULT_CARDS;
+  // default deck of 40 cards
+  private int SIZE = 40;
   private List<Card> deck;
   
   public Deck () {

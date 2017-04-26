@@ -73,5 +73,12 @@ public class GamePlayer implements Player {
     return newCard;
   }
   
-  
+  public String getGuesser() {
+    if (isGuesser) {
+      return "False";
+    } else {
+      return "True";
+    }
+  }
+ 
 }
