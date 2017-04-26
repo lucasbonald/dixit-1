@@ -13,6 +13,7 @@ public class GamePlayer implements Player {
   private List<Card> playerDeck;
   private Deck globalDeck;
   private String status;
+  /*
   public static enum STATUS_TYPE {
 		WAITING,
 		STORYTELLING,
@@ -21,6 +22,7 @@ public class GamePlayer implements Player {
 		VOTING,
 		VOTED
 	  }
+  */
   
   //Use ENUM for StoryTeller / Guesser
   
@@ -32,7 +34,7 @@ public class GamePlayer implements Player {
     isGuesser = "True";
     playerDeck = new ArrayList<>();
     globalDeck = deck;
-    status = "wating";
+    status = "waiting";
   }
   
   

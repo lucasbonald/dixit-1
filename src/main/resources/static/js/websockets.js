@@ -69,8 +69,6 @@ const setup_update = () => {
         break;
       case MESSAGE_TYPE.ALL_JOINED:
         console.log("all joined sent");
-        alert('you ready?');
-
         console.log(payload.hand);
         // console.log(JSON.parse(payload.deck))
         const hand = payload.hand;

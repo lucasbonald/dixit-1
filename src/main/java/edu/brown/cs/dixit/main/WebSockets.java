@@ -169,7 +169,7 @@ public class WebSockets {
   			for (Session indivSession : allSessions) {
   				indivSession.getRemote().sendString(stMessage.toString());
   			}	
-  			this.updateStatus(this.getGame(session));
+  			this.updateStatus(this.getGameFromSession(session));
 			  
   			break;
   		case GS_SUBMIT:
@@ -180,7 +180,7 @@ public class WebSockets {
   			JsonObject storyMessage = new JsonObject();
   			JsonObject storyPayload = new JsonObject();
   			storyMessage.addProperty("type", MESSAGE_TYPE.STORY.ordinal());
-  			storyPayload.addProperty("storyteller", this.getSTName(this.getGame(session)));
+  			storyPayload.addProperty("storyteller", this.getSTName(this.getGameFromSession(session)));
   			for (Session indivSession : allSessions) {
   				indivSession.getRemote().sendString(storyMessage.toString());
   			}		
@@ -188,8 +188,8 @@ public class WebSockets {
   	}
   		
   }
-  
-  private DixitGame getGame(Session s) {
+ 
+  private DixitGame getGameFromSession(Session s) {
 	  	List<HttpCookie> cookies = s.getUpgradeRequest().getCookies();
 	  	String gameId = "";
 	  	if (cookies != null) {
@@ -308,7 +308,7 @@ public class WebSockets {
 				  return user.playerName();
 			  }
 		}
-			  return "";
+		return "";
   }
   
   private String getSTId(DixitGame game) {
@@ -317,11 +317,8 @@ public class WebSockets {
               return user.playerId();
           }
     }
-          return "";
-}
-  
-  
-  
+    return "";
+  }
   
   private void updateStatus(DixitGame game) {
 	  JsonObject statusMessage = new JsonObject();
