@@ -6,8 +6,9 @@ const MESSAGE_TYPE = {
   ALL_JOINED: 4,
   ST_SUBMIT: 5,
   GS_SUBMIT: 6,
-  VOTING: 7
-
+  VOTING: 7,
+  STATUS: 8,
+  MULTI_TAB:9
 };
 
 
@@ -26,12 +27,13 @@ const setup_update = () => {
   conn.onmessage = msg => {
     const data = JSON.parse(msg.data);
     const payload = data.payload;
+    
     switch (data.type) {
       default:
         console.log('Unknown message type!', data.type);
-        console.log(data)
-    
         break;
+      case MESSAGE_TYPE.MULTI_TAB:
+        alert('multi tab opened! Only one tab is allowed');
       case "set_uid":
         console.log("set uid");
         deleteirrCookies();
@@ -61,11 +63,18 @@ const setup_update = () => {
         }
         break;
       case MESSAGE_TYPE.ALL_JOINED:
+        alert('you ready?')
+        console.log(payload.deck)
         // dialog box for each player's screen to see if their ready
+        setStatus("STORYTELLING");
+
         break;
       case MESSAGE_TYPE.ST_SUBMIT:
-//        let prompt = data.payload.prompt;
-//        let answer = data.payload.answer;
+        let prompt = data.payload.prompt;
+        let answer = data.payload.answer;
+        $("#promptvalue").html("\"" + prompt + "\"" );
+        setStatus("STORYTELLING");
+        startTimer(15);
         break;
       case MESSAGE_TYPE.GS_SUBMIT:
 //        let prompt = data.payload.prompt;
@@ -132,8 +141,6 @@ const setup_update = () => {
 //}
 
 function submitPrompt(inputPrompt, inputAnswer) {
-	console.log("prompt in websockeetsjs called");
-	console.log("conn is  " + conn);
 	const promptMessage = {
 		type: MESSAGE_TYPE.ST_SUBMIT,
 		payload: {
@@ -150,6 +157,7 @@ function setuserid(data){
     if(data.cookies[i].name == "userid"){
       const cook = data.cookies[i];
       setCookie(cook.name, cook.value);
+
     }
     if(data.cookies[i].name == "gameid"){
       const cook = data.cookies[i];
@@ -165,7 +173,7 @@ function deleteirrCookies() {
         let cookie = cookies[i];
         let eqPos = cookie.indexOf("=");
         let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-        if(name!="userid" || name != "gameid"){
+        if(name!="userid" && name != "gameid"){
           document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
         }
     }
@@ -176,13 +184,4 @@ function deleteirrCookies() {
 function setCookie(cookiename, cookievalue){
   const newcookie = cookiename + "="+cookievalue;
   document.cookie = newcookie;
-}
-
-function join_game(gameId) {
-  const joinMessage = {
-    user_id: myId,
-    game_id: gameId
-  }
-  conn.send(JSON.stringify(joinMessage));
-  
 }

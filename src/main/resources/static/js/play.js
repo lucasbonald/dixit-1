@@ -11,7 +11,7 @@ $(document).ready(function(){
       vote: $(this).attr('id')
     }
     
-    $.post("/vote", postParameters, responseJSON => {
+    $.post("/voting", postParameters, responseJSON => {
       
       responseObject = JSON.parse(responseJSON);
       

@@ -6,6 +6,7 @@ import java.util.List;
 import edu.brown.cs.dixit.setting.Deck;
 import edu.brown.cs.dixit.setting.GamePlayer;
 import edu.brown.cs.dixit.setting.Referee;
+import edu.brown.cs.dixit.setting.Turn;
 
 public class DixitGame {
 
@@ -14,6 +15,7 @@ public class DixitGame {
 	private final Deck deck;
 	private List<GamePlayer> players;
 	private Referee referee;
+	private Turn turn;
 	
 	//wrapper for all the information 
 	//needs to contain the players & deck & referee & turn
@@ -24,6 +26,7 @@ public class DixitGame {
 		deck = new Deck();
 		players = new ArrayList<>();
 		referee = new Referee();
+		turn = new Turn(cap);
 	}
 	
 	public int getId() {

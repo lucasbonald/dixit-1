@@ -52,7 +52,7 @@ $(document).ready(function(){
     });
     
     $("#join-form").on("submit", function(event) {
-      
+      event.preventDefault();
       $(".join-error-message").empty();
       if(currSelected == undefined ) {
         $(".join-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Please select an available lobby.</p>");
@@ -61,7 +61,7 @@ $(document).ready(function(){
         const joinMessage = {
           type: MESSAGE_TYPE.JOIN,
           payload: {
-            user_id: myId,
+            user_name: $(".username").val(),
             game_id: currSelected.attr('id')  
           }
         }
