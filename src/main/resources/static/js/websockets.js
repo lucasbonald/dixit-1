@@ -13,17 +13,10 @@ const MESSAGE_TYPE = {
 
 };
 
-const STATUS_TYPE = {
-	WAITING: "Waiting",
-	STORYTELLING: "Storytelling",
-	GUESSING: "Guessing",
-	GUESSED: 3,
-	VOTING: 4,
-	VOTED: 5
-}
-
 let conn;
-let myId = -1;
+let myId = getElementFromCookies("userid");
+let storyteller = -1;
+
 //set up socket connection and define types
 const setup_update = () => {
 	console.log("setup update called")
@@ -86,7 +79,11 @@ const setup_update = () => {
           $card.append("<img id=\"" + cardId + "\" src=\"" + url + "\"></img>");
         }
 
-
+        storyteller = payload.storyteller;
+        if (storyteller == myId) {
+          
+        }
+        
         // // console.log(JSON.parse(payload.deck))
         // const hand = JSON.parse(payload.deck.toString());
         // console.log(hand);
@@ -103,14 +100,14 @@ const setup_update = () => {
         //   $card.append("<img id=\"" + cardId + "\" src=\"" + url + "\"></img>");
         // }
         
-        if (payload.storyteller == getElementFromCookies("userid", document.cookie)) {
-          $("st-identity").text("You");
-        } else {
-          
-        }
+//        if (payload.storyteller == getElementFromCookies("userid", document.cookie)) {
+//          $("st-identity").text("You");
+//        } else {
+//          
+//        }
         
         // dialog box for each player's screen to see if their ready
-        setStatus("STORYTELLING");
+        setStatus("Storytelling");
         $("#status-indicator-text").text("Storytelling");
 
         break;
@@ -118,13 +115,13 @@ const setup_update = () => {
         let prompt = data.payload.prompt;
         let answer = data.payload.answer;
         $("#promptvalue").html("\"" + prompt + "\"" );
-        setStatus("GUESSING");
+        setStatus("Guessing");
         startTimer(15);
         break;
       case MESSAGE_TYPE.GS_SUBMIT:
 //        let prompt = data.payload.prompt;
 //        let answer = data.payload.answer;
-          setStatus("VOTING");
+        setStatus("Voting");
 
         break;
       case MESSAGE_TYPE.STATUS:
@@ -156,6 +153,7 @@ function submitPrompt(inputPrompt, inputAnswer) {
 			answer: inputAnswer
 		}
 	}
+  console.log("story: " + promptMessage.toString());
 	conn.send(JSON.stringify(promptMessage));
 }
 
@@ -164,6 +162,11 @@ function setuserid(data){
   console.log(data);
   for(let i=0;i<data.cookies.length; i++){
     if(data.cookies[i].name == "userid"){
+      const cook = data.cookies[i];
+      setCookie(cook.name, cook.value);
+      myId = cook.value;
+    }
+    if(data.cookies[i].name == "gameid"){
       const cook = data.cookies[i];
       setCookie(cook.name, cook.value);
     }
@@ -238,3 +241,13 @@ function setCookie(cookiename, cookievalue){
   document.cookie = newcookie;
 }
 
+function sendCard(user_id, card_id, type) {
+  const card = {
+    type: type,
+    payload: {
+      user_id: user_id,
+      card_id: card_id
+    }
+  }
+  conn.send(JSON.stringify(card));
+}

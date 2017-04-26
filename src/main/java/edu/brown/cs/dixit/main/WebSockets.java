@@ -83,7 +83,7 @@ public class WebSockets {
             hand.addProperty(String.valueOf(i), personalDeck.get(i).toString());
           }    
           playerInfo.add("hand", hand);
-          playerInfo.addProperty("isStoryTeller",user.getGuesser().toString());
+          playerInfo.addProperty("storyteller", this.getSTName(this.getGame(session)));
           try {
             allJoinedMessage.add("payload", playerInfo);
             gt.getSession(user.playerId()).getRemote().sendString(allJoinedMessage.toString());
@@ -146,7 +146,8 @@ public class WebSockets {
   			break;
 
   		case JOIN:
-  		    System.out.println("joined!");
+
+		    System.out.println("joined!");
   			int gameId = payload.get("game_id").getAsInt();
   			String user = payload.get("user_name").getAsString();
   			DixitGame join = gt.getGame(gameId);
@@ -157,14 +158,13 @@ public class WebSockets {
   			//get the variables
   			String prompt = payload.get("prompt").getAsString();
   			int answer = payload.get("answer").getAsInt();
-  			
-			JsonObject stMessage = new JsonObject();
-			stMessage.addProperty("type", MESSAGE_TYPE.ST_SUBMIT.ordinal());
-			
-			JsonObject stsubmitPayload = new JsonObject();
-			stsubmitPayload.addProperty("prompt", prompt);
-			stsubmitPayload.addProperty("answer", answer);
-			stMessage.add("payload", stsubmitPayload);
+				JsonObject stMessage = new JsonObject();
+				stMessage.addProperty("type", MESSAGE_TYPE.ST_SUBMIT.ordinal());
+				
+				JsonObject stsubmitPayload = new JsonObject();
+				stsubmitPayload.addProperty("prompt", prompt);
+				stsubmitPayload.addProperty("answer", answer);
+				stMessage.add("payload", stsubmitPayload);
 			
   			for (Session indivSession : allSessions) {
   				indivSession.getRemote().sendString(stMessage.toString());
@@ -256,7 +256,7 @@ public class WebSockets {
 	  			  }
 	  			  	
             playerInfo.add("hand", hand);
-            playerInfo.addProperty("isStoryTeller",user.getGuesser().toString());
+            playerInfo.addProperty("storyteller", getSTId(getGame(s)));
 	  			  try {
 	  				System.out.println("all player message sent");
 	  			    allJoinedMessage.add("payload", playerInfo);

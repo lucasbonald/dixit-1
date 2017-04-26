@@ -1,4 +1,3 @@
-currState = "Storytelling";
 $(document).ready(function() {
 
 	console.log(document.cookie);
@@ -7,8 +6,7 @@ $(document).ready(function() {
 		console.log("prompt in storytellingjs called");
 		console.log("form is submitted!!")
 		e.preventDefault();
-		submitPrompt($("#promptField").val(), 12345);
-
+		submitPrompt($("#promptField").val(), $(".picked").find("img").attr("id"));
 	});
 
 
@@ -35,7 +33,7 @@ function setStoryTeller (storyTeller) {
 }
 
 function setStatus (status) {
-	$("#statuscardelement").html(status);
+	$("#st-identity").html(status);
 }
 function updateStatus(statusMap) {
 	console.log("update status, at progress.js");
