@@ -7,16 +7,16 @@ public class Referee {
   
   private int winnerPoint;
   private int answer;
-  private int storyTeller;
+  private String storyTeller;
   private int numPlayers;
   private int victoryPoint;
   private boolean gameWon;
   private String currPrompt;
-  private Map<Integer, Integer> chosen; 
-  private Map<Integer, Integer> pickRecord; 
-  private Map<Integer, Integer> result;
-  private Map<Integer, Integer> scoreBoard;
-  
+  private Map<String, Integer> chosen; 
+  private Map<String, Integer> pickRecord; 
+  private Map<String, Integer> result;
+  private Map<String, Integer> scoreBoard;
+  /*
   public Referee() {
     winnerPoint = -1;
     answer = -1;
@@ -30,46 +30,64 @@ public class Referee {
     result = new HashMap<Integer, Integer>();
     scoreBoard = new HashMap<Integer, Integer>();
   }
+  */
+  
+  public Referee(int cap) {
+    winnerPoint = -1;
+    answer = -1;
+    storyTeller = "";
+    currPrompt = "";
+    numPlayers = cap;
+    victoryPoint = Setting.NUM_DEFAULT_VICTORY_POINT;
+    gameWon = false;
+    chosen = new HashMap<String, Integer>();
+    pickRecord = new HashMap<String, Integer>();
+    //result = new HashMap<String, Integer>();
+    scoreBoard = new HashMap<String, Integer>();
+  }
   
   // need new constructor;
   
-  public void receiveStory(String prompt, int playerId, int cardId) {
+  public void receiveStory(String prompt, String playerId, int cardId) {
     setPrompt(prompt);
     setStoryTeller(playerId);
     setAnswer(cardId);
   }
-  
-  public void receiveCards(int id, int cardId) {
-    chosen.put(id, cardId);
-  }
-  
-  public void receiveVotes(int id, int pick) {
+   
+  public void receiveVotes(String id, int pick) {
      pickRecord.put(id, pick);
   }
   
-  public Map<Integer, Integer> tallyScores() {
+  public Map<String, Integer> tallyScores() {
     //reset result
-    result = new HashMap<Integer, Integer>();
+    result = new HashMap<String, Integer>();
     
     int count_answer = 0;
     //Points for other players
-    for (Integer key: pickRecord.keySet()) {    
+    for (String key: pickRecord.keySet()) {    
       int pickedCard = pickRecord.get(key);
       if (pickedCard == getAnswer()) {
         
-        if (result.containsKey(pickedCard)) {
-          result.put(pickedCard, result.get(pickedCard) + 3);
-        } else {
-          result.put(pickedCard, 3);
+        for (String keyTwo: chosen.keySet()) {
+          if (chosen.get(keyTwo) == pickedCard) {
+            if (result.containsKey(keyTwo)) {
+              result.put(keyTwo, result.get(keyTwo) + 3);
+            } else {
+              result.put(keyTwo, 3);
+            }
+          } 
         }
-        
         count_answer += 1;
         
       } else {
-        if (result.containsKey(pickedCard)) {
-          result.put(pickedCard, result.get(pickedCard) + 1);
-        } else {
-          result.put(pickedCard, 1);
+        for (String keyTwo: chosen.keySet()) {
+          if (chosen.get(keyTwo) == pickedCard) {
+            if (result.containsKey(keyTwo)) {
+              result.put(keyTwo, result.get(keyTwo) + 1);
+            } else {
+              result.put(keyTwo, 1);
+            }
+          } 
         }
       }
     }
@@ -77,7 +95,7 @@ public class Referee {
     //Point for Story-teller
     if ((count_answer == 0) || (count_answer == pickRecord.size())) {
       result.put(storyTeller, 0);
-      for (Integer key: pickRecord.keySet()) {
+      for (String key: pickRecord.keySet()) {
         result.put(key, 2);
       }
     } else {
@@ -85,13 +103,13 @@ public class Referee {
     }
     
     //reset 
-    chosen = new HashMap<Integer, Integer>();
-    pickRecord = new HashMap<Integer, Integer>();
+
+    pickRecord = new HashMap<String, Integer>();
     
     //messages can be added later in the backend?
     //need to check if the game ended
     
-    for (Integer key: result.keySet()) {
+    for (String key: result.keySet()) {
       int newScore = scoreBoard.get(key) + result.get(key);
       scoreBoard.put(key, newScore);
       if (newScore >= victoryPoint) {
@@ -116,11 +134,11 @@ public class Referee {
     this.answer = cardId;
   }
   
-  public int getStoryTeller() {
+  public String getStoryTeller() {
     return storyTeller;
   }
   
-  public void setStoryTeller(int id) {
+  public void setStoryTeller(String id) {
     this.storyTeller = id;
   }
 
@@ -139,5 +157,4 @@ public class Referee {
   public void setPrompt(String prompt) {
     this.currPrompt = prompt;
   }
-  
 }

@@ -25,7 +25,7 @@ public class DixitGame {
 		capacity = cap;
 		deck = new Deck();
 		players = new ArrayList<>();
-		referee = new Referee();
+		referee = new Referee(cap);
 		turn = new Turn(cap);
 	}
 	
@@ -53,5 +53,9 @@ public class DixitGame {
 	
 	public List<GamePlayer> getPlayers() {
 		return players;
+	}
+	
+	public Referee getRefree() {
+	  return referee;
 	}
 }

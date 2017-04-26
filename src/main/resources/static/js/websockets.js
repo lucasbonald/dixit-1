@@ -93,11 +93,13 @@ const setup_update = () => {
         let prompt = payload.prompt;
         let cardId = payload.card_id;
         let cardUrl = payload.card_url;
+        console.log(prompt)
+        console.log(cardId)
+        console.log(cardUrl)
         $("#promptvalue").html("\"" + prompt + "\"" );
         if (getElementFromCookies("userid") != storyteller) {
           $(".pickedcard").append("<div class=\"card answer turned-over\"><img id=\"" + cardId + "\" src=\"" + cardUrl + "\"></div>");
         }
-        
         setStatus("Guessing");
         startTimer(15);
         break;

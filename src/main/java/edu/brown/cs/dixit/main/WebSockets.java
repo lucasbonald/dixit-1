@@ -20,6 +20,7 @@ import edu.brown.cs.dixit.gameManagement.GameTracker;
 import edu.brown.cs.dixit.setting.Card;
 import edu.brown.cs.dixit.setting.GamePlayer;
 import edu.brown.cs.dixit.setting.Player;
+import edu.brown.cs.dixit.setting.Referee;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
@@ -158,22 +159,24 @@ public class WebSockets {
   			//get the variables
 		    System.out.println("Story received");
   			String prompt = payload.get("prompt").getAsString();
+
   			int cardId = payload.get("card_id").getAsInt();
   			String cardUrl = payload.get("card_url").getAsString();
-				JsonObject stMessage = new JsonObject();
-				stMessage.addProperty("type", MESSAGE_TYPE.ST_SUBMIT.ordinal());
+			JsonObject stMessage = new JsonObject();
+			stMessage.addProperty("type", MESSAGE_TYPE.ST_SUBMIT.ordinal());
 				
-				JsonObject stSubmitPayload = new JsonObject();
-				stSubmitPayload.addProperty("prompt", prompt);
-				stSubmitPayload.addProperty("card_id", cardId);
-				stSubmitPayload.addProperty("card_url", cardUrl);
-				stMessage.add("payload", stSubmitPayload);
+			JsonObject stSubmitPayload = new JsonObject();
+			stSubmitPayload.addProperty("prompt", prompt);
+			stSubmitPayload.addProperty("card_id", cardId);
+			stSubmitPayload.addProperty("card_url", cardUrl);
+			stMessage.add("payload", stSubmitPayload);
+
 			
   			for (Session indivSession : allSessions) {
   				indivSession.getRemote().sendString(stMessage.toString());
   			}	
   			this.updateStatus(this.getGameFromSession(session));
-			  
+  		  
   			break;
   		case GS_SUBMIT:
 		    System.out.println("Guess received");
