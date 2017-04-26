@@ -30,7 +30,7 @@
 				<div class="card hand-card" id="card5">
 				  <img src="http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg">
 				</div>
-				<div class="card hand-card" id="card6">
+				<div class="card hand-card" id="card0">
 				  <img src="http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg">
 				</div>
 			</div>
