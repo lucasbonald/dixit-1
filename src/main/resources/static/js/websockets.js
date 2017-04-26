@@ -8,9 +8,16 @@ const MESSAGE_TYPE = {
   GS_SUBMIT: 6,
   VOTING: 7,
   STATUS: 8
-
 };
 
+const STATUS_TYPE = {
+	WAITING: 0,
+	STORYTELLING: 1,
+	GUESSING: 2,
+	GUESSED: 3,
+	VOTING: 4,
+	VOTED: 5
+}
 
 let conn;
 let myId = -1;

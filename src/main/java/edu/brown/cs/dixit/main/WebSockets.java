@@ -32,7 +32,7 @@ public class WebSockets {
   private static final Gson GSON = new Gson();
   private static final GameTracker gt = new GameTracker();
   private static final Queue<Session> allSessions = new ConcurrentLinkedQueue<>();
-
+  
   private InetSocketAddress ipaddress;
   private static enum MESSAGE_TYPE {
     CONNECT,
@@ -227,6 +227,6 @@ public class WebSockets {
   }
   
   private void updateStatus() {
-	  
+	  JsonObject statusMessage = new JsonObject();
   }
 }

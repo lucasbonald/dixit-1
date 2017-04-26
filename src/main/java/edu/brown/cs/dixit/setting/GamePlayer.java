@@ -12,7 +12,15 @@ public class GamePlayer implements Player {
   private boolean isGuesser;
   private List<Card> playerDeck;
   private Deck globalDeck;
-  
+  private STATUS_TYPE status;
+  public static enum STATUS_TYPE {
+		WAITING,
+		STORYTELLING,
+		GUESSING,
+		GUESSED,
+		VOTING,
+		VOTED
+	  }
   
   //Use ENUM for StoryTeller / Guesser
   
@@ -24,7 +32,9 @@ public class GamePlayer implements Player {
     isGuesser = true;
     playerDeck = new ArrayList<>();
     globalDeck = deck;
+    status = STATUS_TYPE.WAITING;
   }
+  
   
   @Override
   public String playerId() {
@@ -73,5 +83,12 @@ public class GamePlayer implements Player {
     return newCard;
   }
   
+  public void setStatus(STATUS_TYPE status) {
+	  this.status = status;
+  }
+  
+  public int getStatus() {
+	  return this.status.ordinal();
+  }
   
 }
