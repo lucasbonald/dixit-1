@@ -9,7 +9,7 @@
 				  </div>
 			</div>
 			<div class = "prompt" >
-			<i id = "promptvalue">"Interesting prompt comes here"</i>
+			<i id = "promptvalue"></i>
 			</div>
 			
 			${board}
@@ -55,7 +55,10 @@
 			STATUS FEED
 			<div class = "feed">
 				<ul class = "feedList">
-				sdfwef
+					<li> <span style="color: transparent">ss</span> </li>
+					<li> <span style="color: transparent">ss</span></li>
+					<li> <span style="color: transparent">ss</span></li>
+					<li> <span style = "color: transparent" ss</span></li>
 				</ul>
 			</div>
 			</div>

@@ -1,7 +1,6 @@
 currState = "Storytelling";
 $(document).ready(function() {
 
-
 	console.log(document.cookie);
 
 	$('#promptForm').on('submit', function(e) {
@@ -12,11 +11,6 @@ $(document).ready(function() {
 
 	});
 
-
-	//should be according to each round
-//	setStoryTeller("Player 0");
-	
-	updateStatus();
 
 
 });
@@ -43,18 +37,15 @@ function setStoryTeller (storyTeller) {
 function setStatus (status) {
 	$("#statuscardelement").html(status);
 }
-function updateStatus() {
-	let statusMap = {};
-	statusMap["player1"] = "voting";
-	statusMap["player2"] = "whatevering";
-	statusMap["player3"] = "vsting";
-	statusMap["player4"] = "votsfwing";
+function updateStatus(statusMap) {
+	console.log("update status, at progress.js");
 	$(".feedList").empty();
 	let players = Object.keys(statusMap);
 	for (let i = 0 ; i < players.length; i ++) {
 		$(".feedList").append("<li> <span style=\"color: grey\">" + players[i] + "</span> : " + statusMap[players[i]] + "</li>")
 	}
 } 
+
 
 
 

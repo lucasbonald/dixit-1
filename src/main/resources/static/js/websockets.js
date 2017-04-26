@@ -8,17 +8,27 @@ const MESSAGE_TYPE = {
   GS_SUBMIT: 6,
   VOTING: 7,
   STATUS: 8,
-  MULTI_TAB:9
+  MULTI_TAB:9,
+  STORY: 10
+
 };
 
+const STATUS_TYPE = {
+	WAITING: "Waiting",
+	STORYTELLING: "Storytelling",
+	GUESSING: "Guessing",
+	GUESSED: 3,
+	VOTING: 4,
+	VOTED: 5
+}
 
 let conn;
 let myId = -1;
-
 //set up socket connection and define types
 const setup_update = () => {
 	console.log("setup update called")
 	conn = new WebSocket("ws://localhost:4567/play");
+
   console.log(conn);
 	conn.onerror = err => {
     	console.log('Connection error:', err);
@@ -42,18 +52,12 @@ const setup_update = () => {
         //setgameid(data.payload);
       // connect: get the connected user's ID and use as list of users currently connected
       case MESSAGE_TYPE.CONNECT:
-        //myId = payload.user_id;
-        //console.log("session Id?: " + myId)
-//        console.log(myId);
-//        console.log('conn '+ conn);
-//        console.log('cookie '+ conn.cookie);
-//        console.log('document ' + document.cookie);
-//        document.id = myId;
-//        console.log()
+        
         break;
       case MESSAGE_TYPE.NEW_GAME:
         console.log("new game");
         console.log(payload.game_id);
+        updateCookie("gameid", payload.game_id);
         console.log(payload.num_players);
         
         if(payload.num_players == 1) {
@@ -61,9 +65,11 @@ const setup_update = () => {
         } else if (payload.num_players > 1) {
           $("table.table-hover tbody").find($(".num_players")).text(payload.num_players + "/" + payload.capacity);
         }
+
         break;
       case MESSAGE_TYPE.ALL_JOINED:
-        //alert('you ready?')
+        console.log("all joined sent");
+        alert('you ready?');
 
         console.log(payload.hand);
         // console.log(JSON.parse(payload.deck))
@@ -76,8 +82,6 @@ const setup_update = () => {
           let cardInfo = hand[card].split("url:");
           let url = cardInfo[1];
           let cardId = cardInfo[0].replace("id:", "");
-          console.log(url);
-          console.log(cardId);
           let $card = $("#card" + card);
           console.log($card.attr("id"));
           $card.empty();
@@ -116,13 +120,32 @@ const setup_update = () => {
         let prompt = data.payload.prompt;
         let answer = data.payload.answer;
         $("#promptvalue").html("\"" + prompt + "\"" );
-        setStatus("STORYTELLING");
+        setStatus("GUESSING");
         startTimer(15);
         break;
       case MESSAGE_TYPE.GS_SUBMIT:
 //        let prompt = data.payload.prompt;
 //        let answer = data.payload.answer;
+          setStatus("VOTING");
+
         break;
+      case MESSAGE_TYPE.STATUS:
+    	  console.log("updating status, at websockets");
+    	  let statusMap = {};
+    	  let statuses = JSON.parse(data.payload.statuses);
+    	  let playernames = JSON.parse(data.payload.playernames);
+    	  console.log(playernames);
+    	  for (let i = 0; i < statuses.length; i ++) {
+    		  statusMap[playernames[i]] = statuses[i];
+    		  console.log("player names" + playernames[i]);
+    	  }
+    	  updateStatus(statusMap);
+    	break;
+    	
+      case MESSAGE_TYPE.STORY:
+    	  console.log("updating storyteller");
+    	  let storytellller = data.payload.storyteller;
+    	  setStoryTeller(storytellller);
     }
   };
 }
@@ -139,20 +162,31 @@ function submitPrompt(inputPrompt, inputAnswer) {
 }
 
 function setuserid(data){
+  console.log("set user id called?")
   console.log(data);
   for(let i=0;i<data.cookies.length; i++){
     if(data.cookies[i].name == "userid"){
-      const cook = data.cookies[i];
-      setCookie(cook.name, cook.value);
-
-    }
-    if(data.cookies[i].name == "gameid"){
       const cook = data.cookies[i];
       setCookie(cook.name, cook.value);
     }
   }
 }
 
+
+function updateCookie(cookiename, cookievalue){
+    let cookies = document.cookie.split(";");
+    console.log("update cookies called");
+
+    for (let i = 0; i < cookies.length; i++) {
+        let cookie = cookies[i];
+        let eqPos = cookie.indexOf("=");
+        let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        if(name==cookiename){
+          document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        }
+    }
+    setCookie(cookiename, cookievalue);
+}
 function deleteirrCookies() {
     let cookies = document.cookie.split(";");
 
@@ -166,7 +200,27 @@ function deleteirrCookies() {
     }
 }
 
-function getElementFromCookies(element, cookie) {
+function getStoryteller() {
+	const storyMessage = {
+			type: MESSAGE_TYPE.STORY,
+		}
+	conn.send(JSON.stringify(storyMessage));
+}
+
+function sendQuery(){
+  let uid = getElementFromCookies("userid");
+  let gid = getElementFromCookies("gameid"); 
+  const queryMessage = {
+    type: MESSAGE_TYPE.QUERRY,
+    payload: {
+      userid: uid,
+      gameid: gid
+    }
+  }
+  conn.send(JSON.stringify(queryMessage));
+}
+
+function getElementFromCookies(element) {
   let cookies = cookie.split(";");
   for (let i = 0; i < cookies.length; i++) {
     let eqPos = cookies[i].indexOf("=");
@@ -178,7 +232,11 @@ function getElementFromCookies(element, cookie) {
   }
 }
 
+
+
 function setCookie(cookiename, cookievalue){
   const newcookie = cookiename + "="+cookievalue;
+  //console.log(cookiename);
   document.cookie = newcookie;
 }
+
