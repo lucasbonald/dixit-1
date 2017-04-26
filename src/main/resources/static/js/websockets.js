@@ -66,19 +66,34 @@ const setup_update = () => {
         //alert('you ready?')
 
         console.log(payload.deck);
-        // console.log(JSON.parse(payload.deck))
-        const hand = JSON.parse(payload.deck.toString());
-        console.log(hand);
-        
-        // change the img of each hand-card div
-        for (let i = 1; i <= hand.length; i++) {
-          let cardInfo = hand[i].split("url:");
+        let hand = payload.deck;
+        console.log(hand)
+        console.log(hand[0])
+        for (let i = 1; i <= payload.deck.length; i++) {
+          let cardInfo = payload.deck[i]//.split("url:");
           let url = cardInfo[1];
           let cardId = cardInfo[0].replace("id:", "");
           let $card = $("#card" + i.toString());
           $card.empty();
           $card.append("<img id=\"" + cardId + "\" src=\"" + url + "\"></img>");
         }
+
+
+        // // console.log(JSON.parse(payload.deck))
+        // const hand = JSON.parse(payload.deck.toString());
+        // console.log(hand);
+
+
+        
+        // // change the img of each hand-card div
+        // for (let i = 1; i <= hand.length; i++) {
+        //   let cardInfo = hand[i].split("url:");
+        //   let url = cardInfo[1];
+        //   let cardId = cardInfo[0].replace("id:", "");
+        //   let $card = $("#card" + i.toString());
+        //   $card.empty();
+        //   $card.append("<img id=\"" + cardId + "\" src=\"" + url + "\"></img>");
+        // }
         
         if (payload.storyteller == getElementFromCookies("userid", document.cookie)) {
           $("st-identity").text("You");
