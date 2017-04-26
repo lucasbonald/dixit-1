@@ -8,13 +8,14 @@ const MESSAGE_TYPE = {
   GS_SUBMIT: 6,
   VOTING: 7,
   STATUS: 8,
-  MULTI_TAB:9
+  MULTI_TAB:9,
+  STORY: 10
 };
 
 const STATUS_TYPE = {
-	WAITING: 0,
-	STORYTELLING: 1,
-	GUESSING: 2,
+	WAITING: "Waiting",
+	STORYTELLING: "Storytelling",
+	GUESSING: "Guessing",
 	GUESSED: 3,
 	VOTING: 4,
 	VOTED: 5
@@ -22,11 +23,11 @@ const STATUS_TYPE = {
 
 let conn;
 let myId = -1;
-
 //set up socket connection and define types
 const setup_update = () => {
 	console.log("setup update called")
 	conn = new WebSocket("ws://localhost:4567/play");
+
   console.log(conn);
 	conn.onerror = err => {
     	console.log('Connection error:', err);
@@ -69,25 +70,48 @@ const setup_update = () => {
         } else if (payload.num_players > 1) {
           $("table.table-hover tbody").find($(".num_players")).text(payload.num_players + "/" + payload.capacity);
         }
+
         break;
       case MESSAGE_TYPE.ALL_JOINED:
-        alert('you ready?')
+       // alert('you ready?')
         console.log(payload.deck)
         // dialog box for each player's screen to see if their ready
         setStatus("STORYTELLING");
+        setStoryTeller(payload.storyteller);
+        console.log("storyteller is " + payload.storyteller);
+        
 
         break;
       case MESSAGE_TYPE.ST_SUBMIT:
         let prompt = data.payload.prompt;
         let answer = data.payload.answer;
         $("#promptvalue").html("\"" + prompt + "\"" );
-        setStatus("STORYTELLING");
+        setStatus("GUESSING");
         startTimer(15);
         break;
       case MESSAGE_TYPE.GS_SUBMIT:
 //        let prompt = data.payload.prompt;
 //        let answer = data.payload.answer;
+          setStatus("VOTING");
+
         break;
+      case MESSAGE_TYPE.STATUS:
+    	  console.log("updating status, at websockets");
+    	  let statusMap = {};
+    	  let statuses = JSON.parse(data.payload.statuses);
+    	  let playernames = JSON.parse(data.payload.playernames);
+    	  console.log(playernames);
+    	  for (let i = 0; i < statuses.length; i ++) {
+    		  statusMap[playernames[i]] = statuses[i];
+    		  console.log("player names" + playernames[i]);
+    	  }
+    	  updateStatus(statusMap);
+    	break;
+    	
+      case MESSAGE_TYPE.STORY:
+    	  console.log("updating storyteller");
+    	  let storytellller = data.payload.storyteller;
+    	  setStoryTeller(storytellller);
     }
   };
 }
@@ -187,6 +211,12 @@ function deleteirrCookies() {
     }
 }
 
+function getStoryteller() {
+	const storyMessage = {
+			type: MESSAGE_TYPE.STORY,
+		}
+	conn.send(JSON.stringify(storyMessage));
+}
 
 
 function setCookie(cookiename, cookievalue){

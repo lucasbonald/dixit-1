@@ -12,7 +12,7 @@ public class GamePlayer implements Player {
   private boolean isGuesser;
   private List<Card> playerDeck;
   private Deck globalDeck;
-  private STATUS_TYPE status;
+  private String status;
   public static enum STATUS_TYPE {
 		WAITING,
 		STORYTELLING,
@@ -32,7 +32,7 @@ public class GamePlayer implements Player {
     isGuesser = true;
     playerDeck = new ArrayList<>();
     globalDeck = deck;
-    status = STATUS_TYPE.WAITING;
+    status = "wating";
   }
   
   
@@ -83,12 +83,20 @@ public class GamePlayer implements Player {
     return newCard;
   }
   
-  public void setStatus(STATUS_TYPE status) {
+  public void setStatus(String status) {
 	  this.status = status;
   }
   
-  public int getStatus() {
-	  return this.status.ordinal();
+  public String getStatus() {
+	  return this.status;
+  }
+  
+  public boolean getGuesser() {
+	  return isGuesser;
+  }
+  
+  public void setGuesser(boolean input) {
+	  isGuesser = input;
   }
   
 }

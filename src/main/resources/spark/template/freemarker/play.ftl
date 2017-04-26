@@ -5,11 +5,11 @@
 		<div class = "col-xs-9 board" style="background-color: #f7f7f7;">
 			<div class = "statuscard">
 				  <div id = "statuscardelement">
-				    VOTING
+				    STORYTELLING
 				  </div>
 			</div>
 			<div class = "prompt" >
-			<i id = "promptvalue">"Interesting prompt comes here"</i>
+			<i id = "promptvalue"></i>
 			</div>
 			
 			${board}
@@ -50,7 +50,7 @@
 			<div class = "statuselement" id = "userinfo">
 			STORYTELLER
 				<div id = "userinfovalue">
-				<span style = "color: white;" > Player 4 </span>
+				<span style = "color: white;" > </span>
 				</div>
 			</div>
 			<hr>
@@ -58,7 +58,10 @@
 			STATUS FEED
 			<div class = "feed">
 				<ul class = "feedList">
-				sdfwef
+					<li> <span style="color: transparent">ss</span> </li>
+					<li> <span style="color: transparent">ss</span></li>
+					<li> <span style="color: transparent">ss</span></li>
+					<li> <span style = "color: transparent" ss</span></li>
 				</ul>
 			</div>
 			</div>
