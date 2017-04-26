@@ -91,12 +91,6 @@ hr {
 
 }
 
-#storyFormSubmit {
-	font-size: 1.2vw;
-	font-weight: 900;
-	padding: 0.7% 1.5%;
-
-}
 
 #messageField:focus {
     background-color: lightblue;
@@ -295,18 +289,21 @@ hr {
 	
 }
 
-#storyFormSubmit {
+.formSubmit {
 	font-size: 1.2vw;
 	font-weight: 900;
 	padding: 0.7% 1.5%;
 	display: inline-block;
-    background-color: #8da7ca;
-    border-radius: 6px;
-    border-color: #8da7ca;
-    color: white;
-    text-decoration: none;
-    margin: auto;
-    height: 33%;
+  background-color: #8da7ca;
+  border-radius: 6px;
+  border-color: #8da7ca;
+  color: white;
+  text-decoration: none;
+  margin: auto;
+  height: 33%;
+  font-size: 1.2vw;
+	font-weight: 900;
+	padding: 0.7% 1.5%;
 
 }
 .timerwrapper {

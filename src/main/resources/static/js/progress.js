@@ -6,10 +6,14 @@ $(document).ready(function() {
 		console.log("prompt in storytellingjs called");
 		console.log("form is submitted!!")
 		e.preventDefault();
-		submitPrompt($("#promptField").val(), $(".picked").find("img").attr("id"));
+		submitPrompt($("#promptField").val(), $(".picked").find("img").attr("id"), $(".picked").find("img").attr("src"));
 	});
 
-
+  $("#guessForm").on('submit', function (e) {
+    console.log("guessed");
+    e.preventDefault();
+    sendGuess($(".picked").find("img").attr("id"));
+  });
 
 });
 // seconds in the form 15
@@ -33,7 +37,7 @@ function setStoryTeller (storyTeller) {
 }
 
 function setStatus (status) {
-	$("#st-identity").html(status);
+	$("#status-indicator-text").html(status);
 }
 function updateStatus(statusMap) {
 	console.log("update status, at progress.js");
