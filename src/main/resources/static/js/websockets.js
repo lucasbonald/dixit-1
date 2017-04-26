@@ -7,7 +7,8 @@ const MESSAGE_TYPE = {
   ST_SUBMIT: 5,
   GS_SUBMIT: 6,
   VOTING: 7,
-  STATUS: 8
+  STATUS: 8,
+  MULTI_TAB:9
 };
 
 const STATUS_TYPE = {
@@ -39,6 +40,8 @@ const setup_update = () => {
       default:
         console.log('Unknown message type!', data.type);
         break;
+      case MESSAGE_TYPE.MULTI_TAB:
+        alert('multi tab opened! Only one tab is allowed');
       case "set_uid":
         console.log("set uid");
         deleteirrCookies();

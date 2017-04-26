@@ -39,6 +39,14 @@ public class GameTracker {
 	playerSession.put(playerId, session);
   }
   
+  public boolean checkOpenSession(String playerId){
+	  Session sess = playerSession.get(playerId);
+	  if(sess == null || !sess.isOpen()){
+		  return false;
+	  }else{
+		  return true;
+	  }
+	}
   
   public Session getSession(String playerId) {
 	return playerSession.get(playerId);

@@ -43,26 +43,32 @@ public class WebSockets {
     ST_SUBMIT,
     GS_SUBMIT,
     VOTING,
-    STATUS
-  }
+    STATUS,
+    MULTI_TAB
+}
   
   @OnWebSocketConnect
   public void connected(Session session) throws IOException {
+	  allSessions.add(session);
     // TODO Add the session to the queue
-  	allSessions.add(session);
-  	System.out.println("no. of sessions " + allSessions.size());
-  	System.out.println("session size on connect");
+	System.out.println("session size on connect");
   	System.out.printf("%d \n", allSessions.size());
   	List<HttpCookie> cookies = session.getUpgradeRequest().getCookies();
   	if (cookies != null) {
   	    System.out.println("cookies: " + cookies.toString());
     	for (HttpCookie crumb: cookies) {
           if (crumb.getName().equals("userid")) {
-            System.out.print("session added on connect");
-            gt.addSession(crumb.getValue(), session);
-          }
+        	  if(gt.checkOpenSession(crumb.getValue())){
+        		  sendMultiTab(session);
+        	  }else{
+        		  gt.addSession(crumb.getValue(), session);
+                  //allSessions.add(session);
+        	  }
+            }
     	}
   	}
+  	System.out.println("no. of sessions " + allSessions.size());
+  	
   }
 
   @OnWebSocketClose
@@ -182,7 +188,7 @@ public class WebSockets {
 	  	
 	  	//add or override session
 	  	gt.addSession(id, s);
-	  	System.out.println(gt.getSession().values().toString());
+	  	//System.out.println(gt.getSession().values().toString());
 	  	
 	    if (game.getCapacity() > game.getNumPlayers()) {
 				Player newPlayer = game.addPlayer(id, user_name);
@@ -212,6 +218,18 @@ public class WebSockets {
 		return null;
 	}
   
+  
+  private void sendMultiTab(Session s){
+	  allSessions.remove(s);
+	  JsonObject multi = new JsonObject();
+	  multi.addProperty("type", MESSAGE_TYPE.MULTI_TAB.ordinal());
+	  try {
+		s.getRemote().sendString(multi.toString());
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	}
   private void sendCookie(Session s, List<HttpCookie> cookies){
 	  JsonObject json = new JsonObject();
 	  JsonObject jsonCookie = new JsonObject();
