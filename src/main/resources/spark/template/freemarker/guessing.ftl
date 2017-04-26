@@ -9,7 +9,7 @@
  					<input type="submit" class="formSubmit" id="guesser-button" value="Guess">
  				</form>
 				<div class="card picked" >
-				  <img class="card-img-top" src="https://s-media-cache-ak0.pinimg.com/736x/c4/f5/5b/c4f55b1202eaa088ca98dead0c88e378.jpg">
+				  <img class="card-img-top" src="../img/blank.jpg">
 				</div>
 			</div>				
 			
