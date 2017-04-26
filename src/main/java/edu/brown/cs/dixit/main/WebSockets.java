@@ -182,6 +182,7 @@ public class WebSockets {
 		    System.out.println("Guess received");
   			break;
   		case VOTING:
+  			System.out.println("Vote received");
   			break;
   		case STORY:
   			JsonObject storyMessage = new JsonObject();

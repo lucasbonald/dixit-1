@@ -97,16 +97,13 @@ const setup_update = () => {
         console.log(cardId)
         console.log(cardUrl)
         $("#promptvalue").html("\"" + prompt + "\"" );
-        if (getElementFromCookies("userid") != storyteller) {
-          $(".pickedcard").append("<div class=\"card answer turned-over\"><img id=\"" + cardId + "\" src=\"" + cardUrl + "\"></div>");
-        }
         setStatus("Guessing");
         startTimer(15);
         break;
       case MESSAGE_TYPE.GS_SUBMIT:
 //        let prompt = data.payload.prompt;
 //        let answer = data.payload.answer;
-        setStatus("Voting");
+        
 
         break;
       case MESSAGE_TYPE.STATUS:
@@ -122,10 +119,15 @@ const setup_update = () => {
     	  updateStatus(statusMap);
         break;
     	
-      case MESSAGE_TYPE.STORY:
-    	  console.log("updating storyteller");
-    	  let storytellller = data.payload.storyteller;
-    	  setStoryTeller(storytellller);
+      case MESSAGE_TYPE.VOTING:
+        setStatus("Voting");
+    	  const answerCardId = payload.answer.id;
+        const answerCardUrl = payload.answer.url;
+        const guessedCardId = payload.guess.id;
+        const guessedCardUrl = payload.guess.url;
+        $(".pickedcard").append("<div class=\"card picked\"><img id=\"" + answerCardId + "\" src=\"" + answerCardUrl + "\"></div>");
+        $(".pickedcard").append("<div class=\"card picked\"><img id=\"" + guessedCardId + "\" src=\"" + guessedCardUrl + "\"></div>");
+        
     }
   };
 }
@@ -228,11 +230,21 @@ function setCookie(cookiename, cookievalue){
 }
 
 function sendGuess(card_id) {
-  const card = {
+  const guess = {
     type: MESSAGE_TYPE.GS_SUBMIT,
     payload: {
       card_id: card_id
     }
   }
-  conn.send(JSON.stringify(card));
+  conn.send(JSON.stringify(guess));
+}
+
+function sendVote(card_id) {
+  const CanvasRenderingContext2D = {
+    type: MESSAGE_TYPE.VOTING,
+    payload: {
+      card_id: card_id
+    }
+  }
+  conn.send(JSON.stringify(vote));
 }

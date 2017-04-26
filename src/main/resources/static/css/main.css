@@ -76,9 +76,4 @@ p {
 
 }
 
-.turned-over {
-  background: rgba(39,62,84,0.82);
-  overflow: hidden;
-  height: 100%;
-  z-index: 2;
-}
+
