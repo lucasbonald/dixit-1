@@ -43,6 +43,6 @@ public class Card {
   
   @Override
   public String toString() {
-    return "id:" + id + "url: " + imgLink;    
+    return "id:" + id + "url:" + imgLink;    
   }
 }

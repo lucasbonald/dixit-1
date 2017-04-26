@@ -64,11 +64,15 @@ const setup_update = () => {
         break;
       case MESSAGE_TYPE.ALL_JOINED:
         //alert('you ready?')
-        console.log(payload.deck)
+
+        console.log(payload.deck);
+        // console.log(JSON.parse(payload.deck))
+        const hand = JSON.parse(payload.deck.toString());
+        console.log(hand);
         
         // change the img of each hand-card div
-        for (let i = 1; i <= payload.deck.length; i++) {
-          let cardInfo = payload.deck[i].split("url:");
+        for (let i = 1; i <= hand.length; i++) {
+          let cardInfo = hand[i].split("url:");
           let url = cardInfo[1];
           let cardId = cardInfo[0].replace("id:", "");
           let $card = $("#card" + i.toString());
@@ -147,7 +151,7 @@ function getElementFromCookies(element, cookie) {
     let eqPos = cookies[i].indexOf("=");
     let name = eqPos > -1 ? cookies[i].substr(0, eqPos) : cookies[i];
     if (name == element) {
-      let value = eqPos >-1? cookies[i].substr(eqPos+1); 
+      let value = eqPos >-1? cookies[i].substr(eqPos+1) : "";
       return value;
     }
   }
