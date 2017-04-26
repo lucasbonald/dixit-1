@@ -13,8 +13,8 @@ $(document).ready(function() {
 	});
 
 
-	//should be according to each game
-	setStoryTeller("Player 0");
+	//should be according to each round
+//	setStoryTeller("Player 0");
 	
 	updateStatus();
 
