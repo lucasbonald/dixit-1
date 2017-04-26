@@ -65,14 +65,13 @@ const setup_update = () => {
       case MESSAGE_TYPE.ALL_JOINED:
         //alert('you ready?')
 
-        console.log(payload.deck);
+        console.log(payload.hand);
         // console.log(JSON.parse(payload.deck))
-        const hand = JSON.parse(payload.deck.toString());
-        console.log(hand);
+        const hand = payload.hand;
         
         // change the img of each hand-card div
-        for (let i = 1; i <= hand.length; i++) {
-          let cardInfo = hand[i].split("url:");
+        for (card of Object.keys(hand)) {
+          let cardInfo = hand[card].split("url:");
           let url = cardInfo[1];
           let cardId = cardInfo[0].replace("id:", "");
           let $card = $("#card" + i.toString());

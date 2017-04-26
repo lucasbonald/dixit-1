@@ -199,8 +199,16 @@ public class WebSockets {
 	  			for (GamePlayer user : game.getPlayers()) {
 	  			  // need toString override method
 	  			  System.out.println(gt.getSession().size());
-	              playerInfo.addProperty("deck", user.getFirstHand().toString());
-	              playerInfo.addProperty("isStoryTeller",user.getGuesser().toString());
+	  			  
+	  			  // construct JSON object for first hand of cards
+	  			  List<Card> firstHand = user.getFirstHand();
+	  			  JsonObject hand = new JsonObject();
+	  			  for (int i = 1; i <= firstHand.size(); i++){
+	  			  	hand.addProperty(String.valueOf(i), firstHand.get(i).toString());
+	  			  }
+	  			  	
+            playerInfo.add("hand", hand);
+            playerInfo.addProperty("isStoryTeller",user.getGuesser().toString());
 	  			  try {
 	  			    allJoinedMessage.add("payload", playerInfo);
 	  			    gt.getSession(user.playerId()).getRemote().sendString(allJoinedMessage.toString());
