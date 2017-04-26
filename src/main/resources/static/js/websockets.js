@@ -14,7 +14,7 @@ const MESSAGE_TYPE = {
 };
 
 let conn;
-let myId = -1;
+let myId = getElementFromCookies("userid");
 let storyteller = -1;
 
 //set up socket connection and define types
@@ -81,7 +81,11 @@ const setup_update = () => {
           $card.append("<img id=\"" + cardId + "\" src=\"" + url + "\"></img>");
         }
 
-
+        storyteller = payload.storyteller;
+        if (storyteller == myId) {
+          
+        }
+        
         // // console.log(JSON.parse(payload.deck))
         // const hand = JSON.parse(payload.deck.toString());
         // console.log(hand);
@@ -98,11 +102,11 @@ const setup_update = () => {
         //   $card.append("<img id=\"" + cardId + "\" src=\"" + url + "\"></img>");
         // }
         
-        if (payload.storyteller == getElementFromCookies("userid", document.cookie)) {
-          $("st-identity").text("You");
-        } else {
-          
-        }
+//        if (payload.storyteller == getElementFromCookies("userid", document.cookie)) {
+//          $("st-identity").text("You");
+//        } else {
+//          
+//        }
         
         // dialog box for each player's screen to see if their ready
         setStatus("Storytelling");
@@ -119,7 +123,7 @@ const setup_update = () => {
       case MESSAGE_TYPE.GS_SUBMIT:
 //        let prompt = data.payload.prompt;
 //        let answer = data.payload.answer;
-          setStatus("VOTING");
+        setStatus("Voting");
 
         break;
       case MESSAGE_TYPE.STATUS:
@@ -151,6 +155,7 @@ function submitPrompt(inputPrompt, inputAnswer) {
 			answer: inputAnswer
 		}
 	}
+  console.log("story: " + promptMessage.toString());
 	conn.send(JSON.stringify(promptMessage));
 }
 
@@ -238,13 +243,13 @@ function setCookie(cookiename, cookievalue){
   document.cookie = newcookie;
 }
 
-function sendGuess(user_id, card_id) {
-  const guess = {
-    type: MESSAGE_TYPE.GS_SUBMIT,
+function sendCard(user_id, card_id, type) {
+  const card = {
+    type: type,
     payload: {
       user_id: user_id,
       card_id: card_id
     }
   }
-  conn.send(JSON.stringify(guess));
+  conn.send(JSON.stringify(card));
 }

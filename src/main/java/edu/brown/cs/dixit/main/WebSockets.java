@@ -83,7 +83,7 @@ public class WebSockets {
             hand.addProperty(String.valueOf(i), personalDeck.get(i).toString());
           }    
           playerInfo.add("hand", hand);
-          playerInfo.addProperty("isStoryTeller",user.getGuesser().toString());
+          playerInfo.addProperty("storyteller", this.getSTName(this.getGame(session)));
           try {
             allJoinedMessage.add("payload", playerInfo);
             gt.getSession(user.playerId()).getRemote().sendString(allJoinedMessage.toString());

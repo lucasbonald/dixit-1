@@ -2,18 +2,25 @@ let currState = "Guessing";
 
 $(document).ready(function(){
   
-  
+  // submitting a card
   $(".hand-card").click(function(event) {
     
-    if (currState == "Storytelling" && myId == /* storyteller's id */) {
-        
-    } else if (currState == "Guessing" && myId != /* storyteller's id */) {
+    console.log("clicked card div: " + event.target.id);
+    const card = $(this).find("img");
+    
+    if (currState == "Storytelling" && myId == storyteller) {
       
-      console.log("clicked card div: " + event.target.id);
-      const card_id = $(this).find("img").attr("id");
+      $(".picked").empty();
+      $(".picked").append("<img id=\"" + card.attr('id') + "\" src=\"" + card.attr('src') + "\"></img>");
+      
+      console.log("storytelling?");
+      
+    } else if (currState == "Guessing" && myId != storyteller) {
+      
+      console.log("guessing?");
+    
       // send guess message
-      sendGuess(myId, card_id);
-      
+      sendCard(myId, card_id, MESSAGE_TYPE.GS_SUBMIT);
     }
     
   });
