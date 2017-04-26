@@ -20,6 +20,7 @@ import edu.brown.cs.dixit.gameManagement.GameTracker;
 import edu.brown.cs.dixit.setting.Card;
 import edu.brown.cs.dixit.setting.GamePlayer;
 import edu.brown.cs.dixit.setting.Player;
+import edu.brown.cs.dixit.setting.Referee;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
@@ -159,19 +160,23 @@ public class WebSockets {
   		    System.out.println("Smart");
   			String prompt = payload.get("prompt").getAsString();
   			int answer = payload.get("answer").getAsInt();
-				JsonObject stMessage = new JsonObject();
-				stMessage.addProperty("type", MESSAGE_TYPE.ST_SUBMIT.ordinal());
+			
+  			JsonObject stMessage = new JsonObject();
+  			stMessage.addProperty("type", MESSAGE_TYPE.ST_SUBMIT.ordinal());
+      		JsonObject stsubmitPayload = new JsonObject();
+      		stsubmitPayload.addProperty("prompt", prompt);
+			stsubmitPayload.addProperty("answer", answer);
+			stMessage.add("payload", stsubmitPayload);
+      		DixitGame prevGame = getGameFromSession(session);
+      		Referee bestRef = prevGame.getRefree();
+      			
 				
-				JsonObject stsubmitPayload = new JsonObject();
-				stsubmitPayload.addProperty("prompt", prompt);
-				stsubmitPayload.addProperty("answer", answer);
-				stMessage.add("payload", stsubmitPayload);
 			
   			for (Session indivSession : allSessions) {
   				indivSession.getRemote().sendString(stMessage.toString());
   			}	
   			this.updateStatus(this.getGameFromSession(session));
-			  
+  		  
   			break;
   		case GS_SUBMIT:
   		    System.out.println("Stupid");
