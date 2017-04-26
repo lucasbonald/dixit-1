@@ -42,14 +42,14 @@ public class WebSockets {
     ALL_JOINED,
     ST_SUBMIT,
     GS_SUBMIT,
-    VOTING
+    VOTING,
+    MULTI_TAB
   }
 
   @OnWebSocketConnect
   public void connected(Session session) throws IOException {
     // TODO Add the session to the queue
-  	allSessions.add(session);
-  	System.out.println("no. of sessions " + allSessions.size());
+	System.out.println("no. of sessions " + allSessions.size());
   	System.out.println("session size on connect");
   	System.out.printf("%d \n", allSessions.size());
   	List<HttpCookie> cookies = session.getUpgradeRequest().getCookies();
@@ -57,9 +57,13 @@ public class WebSockets {
   	    System.out.println("cookies: " + cookies.toString());
     	for (HttpCookie crumb: cookies) {
           if (crumb.getName().equals("userid")) {
-            System.out.print("session added on connect");
-            gt.addSession(crumb.getValue(), session);
-          }
+        	  if(gt.checkOpenSession(crumb.getValue())){
+        		  sendMultiTab(session);
+        	  }else{
+        		  gt.addSession(crumb.getValue(), session);
+                  allSessions.add(session);
+        	  }
+            }
     	}
   	}
   	
@@ -203,6 +207,17 @@ public class WebSockets {
 		return null;
 	}
   
+  
+  private void sendMultiTab(Session s){
+	  JsonObject multi = new JsonObject();
+	  multi.addProperty("type", MESSAGE_TYPE.MULTI_TAB.ordinal());
+	  try {
+		s.getRemote().sendString(multi.toString());
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	}
   private void sendCookie(Session s, List<HttpCookie> cookies){
 	  JsonObject json = new JsonObject();
 	  JsonObject jsonCookie = new JsonObject();

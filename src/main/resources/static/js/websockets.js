@@ -6,7 +6,8 @@ const MESSAGE_TYPE = {
   ALL_JOINED: 4,
   ST_SUBMIT: 5,
   GS_SUBMIT: 6,
-  VOTING: 7
+  VOTING: 7,
+  MULTI_TAB:8
 
 };
 
@@ -32,6 +33,8 @@ const setup_update = () => {
         console.log(data)
     
         break;
+      case MESSAGE_TYPE.MULTI_TAB:
+        alert('multi tab opened! Only one tab is allowed');
       case "set_uid":
         console.log("set uid");
         deleteirrCookies();
