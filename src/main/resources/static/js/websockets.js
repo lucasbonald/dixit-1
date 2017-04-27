@@ -33,7 +33,8 @@ const setup_update = () => {
   conn.onmessage = msg => {
     const data = JSON.parse(msg.data);
     const payload = data.payload;
-    
+    console.log("message got!");
+    console.log(payload);
     switch (data.type) {
       default:
         console.log('Unknown message type!', data.type);
@@ -42,8 +43,8 @@ const setup_update = () => {
         alert('multi tab opened! Only one tab is allowed');
       case "set_uid":
         console.log("set uid");
-        deleteirrCookies();
-        setuserid(data.payload);
+        updateCookie(payload.cookies[0].name, payload.cookies[0].value)
+        updateCookie(payload.cookies[0].name, payload.cookies[0].value)
         //console.log(document.cookies.userid)
         //setgameid(data.payload);
       // connect: get the connected user's ID and use as list of users currently connected
@@ -61,6 +62,7 @@ const setup_update = () => {
         } else if (payload.num_players > 1) {
           $("table.table-hover tbody").find($(".num_players")).text(payload.num_players + "/" + payload.capacity);
         }
+
 
         break;
       case MESSAGE_TYPE.ALL_JOINED:
@@ -182,16 +184,14 @@ function updateCookie(cookiename, cookievalue){
     }
     setCookie(cookiename, cookievalue);
 }
-function deleteirrCookies() {
+function deleteAllCookies() {
+  console.log("all cookies deleted");
     let cookies = document.cookie.split(";");
-
     for (let i = 0; i < cookies.length; i++) {
         let cookie = cookies[i];
         let eqPos = cookie.indexOf("=");
         let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-        if(name!="userid" && name != "gameid"){
-          document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-        }
+        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
     }
 }
 
@@ -230,6 +230,7 @@ function getElementFromCookies(element) {
 
 
 function setCookie(cookiename, cookievalue){
+  console.log
   const newcookie = cookiename + "="+cookievalue;
   //console.log(cookiename);
   document.cookie = newcookie;
@@ -244,6 +245,7 @@ function sendGuess(card_id) {
   }
   conn.send(JSON.stringify(guess));
 }
+
 
 function sendVote(card_id) {
   const CanvasRenderingContext2D = {

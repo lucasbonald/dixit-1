@@ -3,6 +3,7 @@
 <script>
 	$(document).ready(function() {
 	  setup_update();
+	  deleteAllCookies();
 	});
 </script>
 

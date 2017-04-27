@@ -37,6 +37,11 @@ public class GameTracker {
   
   public void addSession(String playerId, Session session) {
 	playerSession.put(playerId, session);
+	System.out.printf("add session %s, %d \n", playerId, session.hashCode());
+	for(Session value : playerSession.values()){
+		System.out.print(value.hashCode());
+		System.out.println("");
+	}
   }
   
   public boolean checkOpenSession(String playerId){
@@ -49,6 +54,7 @@ public class GameTracker {
 	}
   
   public Session getSession(String playerId) {
+	  
 	return playerSession.get(playerId);
   }
   
