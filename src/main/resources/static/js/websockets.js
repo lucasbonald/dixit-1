@@ -82,7 +82,7 @@ const setup_update = () => {
           $card.append("<img id=\"" + cardId + "\" src=\"" + url + "\"></img>");
         }
 
-        setStoryTeller(payload.storyteller);
+        //setStoryTeller(payload.storyteller);
         
         // dialog box for each player's screen to see if their ready
         setStatus("Storytelling");
