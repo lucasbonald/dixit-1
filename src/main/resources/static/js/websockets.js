@@ -67,8 +67,6 @@ const setup_update = () => {
         break;
       case MESSAGE_TYPE.ALL_JOINED:
         console.log("all joined sent");
-        console.log(payload.hand);
-        // console.log(JSON.parse(payload.deck))
         const hand = payload.hand;
         
         // change the img of each hand-card div
@@ -79,7 +77,6 @@ const setup_update = () => {
           let url = cardInfo[1];
           let cardId = cardInfo[0].replace("id:", "");
           let $card = $("#card" + card);
-          console.log($card.attr("id"));
           $card.empty();
           $card.append("<img id=\"" + cardId + "\" src=\"" + url + "\"></img>");
         }
@@ -95,9 +92,6 @@ const setup_update = () => {
         let prompt = payload.prompt;
         let cardId = payload.card_id;
         let cardUrl = payload.card_url;
-        console.log(prompt)
-        console.log(cardId)
-        console.log(cardUrl)
         $("#promptvalue").html("\"" + prompt + "\"" );
         setStatus("Guessing");
         startTimer(15);
@@ -125,11 +119,7 @@ const setup_update = () => {
         console.log("voting");
         setStatus("Voting");
     	  const answerCardId = payload.answer;
-        //const answerCardUrl = payload.answer.url;
         const guessedCardId = payload.guessed;
-        //const guessedCardUrl = payload.guess.url;
-        console.log(answerCardId)
-        console.log(guessedCardId)
         const answerCardUrl = "../img/img" + answerCardId + ".jpg";
         const guessedCardUrl = "../img/img" + guessedCardId + ".jpg";
         $(".picked").empty();

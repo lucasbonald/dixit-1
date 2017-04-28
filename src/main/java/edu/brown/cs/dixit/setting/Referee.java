@@ -16,21 +16,19 @@ public class Referee {
   private Map<String, Integer> pickRecord; 
   private Map<String, Integer> result;
   private Map<String, Integer> scoreBoard;
-  /*
+  
   public Referee() {
     winnerPoint = -1;
     answer = -1;
-    storyTeller = -1;
+    storyTeller = "";
     currPrompt = "";
     numPlayers = Setting.NUM_DEFAULT_PLAYERS;
     victoryPoint = Setting.NUM_DEFAULT_VICTORY_POINT;
     gameWon = false;
-    chosen = new HashMap<Integer, Integer>();
-    pickRecord = new HashMap<Integer, Integer>();
-    result = new HashMap<Integer, Integer>();
-    scoreBoard = new HashMap<Integer, Integer>();
+    chosen = new HashMap<String, Integer>();
+    pickRecord = new HashMap<String, Integer>();
+    scoreBoard = new HashMap<String, Integer>();
   }
-  */
   
   public Referee(int cap) {
     winnerPoint = -1;
@@ -42,22 +40,22 @@ public class Referee {
     gameWon = false;
     chosen = new HashMap<String, Integer>();
     pickRecord = new HashMap<String, Integer>();
-    //result = new HashMap<String, Integer>();
     scoreBoard = new HashMap<String, Integer>();
   }
   
-  // need new constructor;
-  
+  // receive submissions
   public void receiveStory(String prompt, String playerId, int cardId) {
     setPrompt(prompt);
     setStoryTeller(playerId);
     setAnswer(cardId);
   }
-   
+  
+  // receive votes
   public void receiveVotes(String id, int pick) {
      pickRecord.put(id, pick);
   }
   
+  // tally scores
   public Map<String, Integer> tallyScores() {
     //reset result
     result = new HashMap<String, Integer>();
@@ -103,7 +101,6 @@ public class Referee {
     }
     
     //reset 
-
     pickRecord = new HashMap<String, Integer>();
     
     //messages can be added later in the backend?

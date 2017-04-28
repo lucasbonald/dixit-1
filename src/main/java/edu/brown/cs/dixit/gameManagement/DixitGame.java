@@ -46,9 +46,9 @@ public class DixitGame {
 	}
 	
 	public GamePlayer addPlayer(String id, String name) {
-	  GamePlayer new_player = new GamePlayer(id, name, deck);
-	  players.add(new_player);
-	  return new_player;
+	    GamePlayer new_player = new GamePlayer(id, name, deck);
+	    players.add(new_player);
+	    return new_player;
 	}
 	
 	public List<GamePlayer> getPlayers() {
@@ -56,6 +56,6 @@ public class DixitGame {
 	}
 	
 	public Referee getRefree() {
-	  return referee;
+	    return referee;
 	}
 }

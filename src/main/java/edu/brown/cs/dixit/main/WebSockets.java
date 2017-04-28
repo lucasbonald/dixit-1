@@ -19,7 +19,6 @@ import edu.brown.cs.dixit.gameManagement.DixitGame;
 import edu.brown.cs.dixit.gameManagement.GameTracker;
 import edu.brown.cs.dixit.setting.Card;
 import edu.brown.cs.dixit.setting.GamePlayer;
-import edu.brown.cs.dixit.setting.Player;
 import edu.brown.cs.dixit.setting.Referee;
 
 import org.eclipse.jetty.websocket.api.Session;
@@ -51,49 +50,14 @@ public class WebSockets {
   
   @OnWebSocketConnect
   public void connected(Session session) throws IOException {
-	 System.out.printf("curr session hashcode :%d, \n", session.hashCode());
+	System.out.println("curr session hashcode: " + session.hashCode());
 	allSessions.add(session);
   	List<HttpCookie> cookies = session.getUpgradeRequest().getCookies();
-  	if(cookies == null){
+  	if (cookies == null) {
   		System.out.println("cookie is null, should be redirected to beginning page");
-  	}else{
-  	    /*System.out.println("cookies: " + cookies.toString());
-    	for (HttpCookie crumb: cookies) {
-    	  if (crumb.getName().equals("gameid")) {
-    	      currGame = gt.getGame(Integer.parseInt(crumb.getValue()));
-    	  }
-    	  if (crumb.getName().equals("userid")) {
-              userId = crumb.getValue();
-              System.out.printf("session added to %s %d \n", userId, session.hashCode());
-              gt.addSession(userId, session);
-          }
-    	}
-    	if(currGame.getPlayers().size() == currGame.getCapacity()){
-    		List<GamePlayer> users = currGame.getPlayers();
-            for(GamePlayer user:users){
-            	JsonObject allJoinedMessage = new JsonObject();
-                JsonObject playerInfo = new JsonObject();
-                allJoinedMessage.addProperty("type", MESSAGE_TYPE.ALL_JOINED.ordinal());
-                List<Card> personalDeck = user.getFirstHand();
-               // List<Card> personalDeck = user.getHand();
-                JsonObject hand = new JsonObject();
-                for (int i = 0; i < personalDeck.size(); i++){
-                  hand.addProperty(String.valueOf(i), personalDeck.get(i).toString());
-                }
-                playerInfo.add("hand", hand);
-                playerInfo.addProperty("storyteller", this.getSTName(currGame));
-                try {
-                    allJoinedMessage.add("payload", playerInfo);
-                    System.out.println("all messages sent");
-                    gt.getSession(user.playerId()).getRemote().sendString(allJoinedMessage.toString());
-                  } catch (IOException e) {
-                    System.out.println(e);
-                  }   
-            }
-    	}
-    }*/
-  	this.updateCookies(session, cookies);
-  	System.out.println("no. of sessions " + allSessions.size());
+  	} else {
+    	this.updateCookies(session, cookies);
+    	System.out.println("no. of sessions " + allSessions.size());
   	}
   }
 
@@ -101,7 +65,10 @@ public class WebSockets {
   public void closed(Session session, int statusCode, String reason) {
     // TODO Remove the session from the queue
 	System.out.println("session closed");
+	System.out.println("before: "+allSessions.size());
 	allSessions.remove(session);  
+	System.out.println("session removed");
+	System.out.println("after: "+allSessions.size());
   }
 
   @OnWebSocketMessage
@@ -123,8 +90,7 @@ public class WebSockets {
   			gt.addGame(newGame);
   			newGame.getDeck().initializeDeck("../img/img");
   			
-  			//now user should be created
-  			System.out.println("user_name: "+ payload.get("user_name").getAsString());
+  			//set Storyteller
   			GamePlayer teller = createNewUser(session, newGame, payload.get("user_name").getAsString());
   			teller.setGuesser("False");
   			
@@ -181,6 +147,7 @@ public class WebSockets {
   			this.updateStatus(currGame);
   		  
   			break;
+  			
   		case GS_SUBMIT:
 		    System.out.println("Guess received");
 		    int guessedCard = payload.get("card_id").getAsInt();
@@ -225,13 +192,10 @@ public class WebSockets {
 			List<HttpCookie> cookies = new ArrayList<HttpCookie>();
 			String id = randomId();
 			cookies.add(new HttpCookie(Network.USER_IDENTIFER, id));
-			cookies.add(new HttpCookie(Network.GAME_IDENTIFIER, Integer.toString(game.getId())));
-					
-			  	//add or override session
-			  	gt.addSession(id, s);
-			  	
-			  	GamePlayer newPlayer = game.addPlayer(id, user_name);
-			
+			cookies.add(new HttpCookie(Network.GAME_IDENTIFIER, Integer.toString(game.getId())));					
+			//add or override session
+			gt.addSession(id, s);	  	
+			GamePlayer newPlayer = game.addPlayer(id, user_name);
 			sendCookie(s, cookies);
 			return newPlayer;
 		    

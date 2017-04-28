@@ -39,22 +39,20 @@ public class GameTracker {
 	playerSession.put(playerId, session);
 	System.out.printf("add session %s, %d \n", playerId, session.hashCode());
 	for(Session value : playerSession.values()){
-		System.out.print(value.hashCode());
-		System.out.println("");
+		System.out.println(value.hashCode());
 	}
   }
   
   public boolean checkOpenSession(String playerId){
 	  Session sess = playerSession.get(playerId);
-	  if(sess == null || !sess.isOpen()){
+	  if (sess == null || !sess.isOpen()){
 		  return false;
-	  }else{
+	  } else {
 		  return true;
 	  }
-	}
+  }
   
-  public Session getSession(String playerId) {
-	  
+  public Session getSession(String playerId) {	  
 	return playerSession.get(playerId);
   }
   
