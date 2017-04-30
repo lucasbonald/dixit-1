@@ -15,11 +15,8 @@ import java.util.UUID;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-import edu.brown.cs.dixit.gameManagement.DixitGame;
-import edu.brown.cs.dixit.gameManagement.GameTracker;
-import edu.brown.cs.dixit.setting.Card;
-import edu.brown.cs.dixit.setting.GamePlayer;
-import edu.brown.cs.dixit.setting.Referee;
+import edu.brown.cs.dixit.gameManagement.*;
+import edu.brown.cs.dixit.setting.*;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
@@ -109,15 +106,19 @@ public class WebSockets {
   				indivSession.getRemote().sendString(newGameMessage.toString());
   			}		
   			
+  			
+  			assignRole(session, newGame.getNumPlayers());
   			break;
 
   		case JOIN:
-
+  			
 		    System.out.println("joined!");
   			int gameId = payload.get("game_id").getAsInt();
   			String user = payload.get("user_name").getAsString();
   			DixitGame join = gt.getGame(gameId);
   			createNewUser(session, join, user);
+  			assignRole(session, join.getNumPlayers());
+  			
   			break;		
   			
   		case ST_SUBMIT:
@@ -330,6 +331,27 @@ public class WebSockets {
 			// TODO Auto-generated catch block
 		  System.out.println("Find how to refresh Browser");
 		  
+		}
+  }
+  
+  private void assignRole(Session s, int num){
+	  String role="";
+		if(num==1){
+			role = "teller";
+		}else{
+			role = "guessor";
+		}
+		
+		JsonObject joinGameMessage = new JsonObject();
+		joinGameMessage.addProperty("type", MESSAGE_TYPE.JOIN.ordinal());
+		JsonObject joinGamePayload = new JsonObject();
+		joinGamePayload.addProperty("role", role);
+		joinGameMessage.add("payload",joinGamePayload);
+		try {
+			s.getRemote().sendString(joinGameMessage.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
   }
 }
