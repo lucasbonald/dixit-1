@@ -6,18 +6,14 @@ const MESSAGE_TYPE = {
   ALL_JOINED: 4,
   ST_SUBMIT: 5,
   GS_SUBMIT: 6,
-  VOTING: 7,
-  STATUS: 8,
-  MULTI_TAB:9,
-  STORY: 10
-
+  ALL_GUESSES: 7,
+  VOTE: 8,
+  STATUS: 9,
+  MULTI_TAB: 10,
+  STORY: 11
 };
 
 let conn;
-// if (document.cookie != null) {
-//   let myId = getElementFromCookies("userid");
-// }
-let myId = -1;
 let storyteller = -1;
 
 //set up socket connection and define types
@@ -42,7 +38,6 @@ const setup_update = () => {
       case MESSAGE_TYPE.MULTI_TAB:
         alert('multi tab opened! Only one tab is allowed');
       case "set_uid":
-        console.log("set uid");
         updateCookie(payload.cookies[0].name, payload.cookies[0].value)
         updateCookie(payload.cookies[1].name, payload.cookies[1].value)
         //console.log(document.cookies.userid)
@@ -72,7 +67,7 @@ const setup_update = () => {
       case MESSAGE_TYPE.ALL_JOINED:
         console.log("all joined sent");
         const hand = payload.hand;
-        
+        console.log("storyteller is " + payload.storyteller.user_id);
         // change the img of each hand-card div
 
         for (card of Object.keys(hand)) {
@@ -85,7 +80,7 @@ const setup_update = () => {
           $card.append("<img id=\"" + cardId + "\" src=\"" + url + "\"></img>");
         }
 
-        //setStoryTeller(payload.storyteller);
+        setStoryTeller(payload.storyteller);
         
         // dialog box for each player's screen to see if their ready
         setStatus("Storytelling");
@@ -118,7 +113,7 @@ const setup_update = () => {
     	  updateStatus(statusMap);
         break;
     	
-      case MESSAGE_TYPE.VOTING:
+      case MESSAGE_TYPE.ALL_GUESSES:
         console.log("voting");
         setStatus("Voting");
     	  const answerCardId = payload.answer;
@@ -126,8 +121,15 @@ const setup_update = () => {
         const answerCardUrl = "../img/img" + answerCardId + ".jpg";
         const guessedCardUrl = "../img/img" + guessedCardId + ".jpg";
         $(".picked-cards").empty();
-        $(".picked-cards").append("<div class=\"card picked\"><img id=\"" + answerCardId + "\" src=\"" + answerCardUrl + "\"></div>");
-        $(".picked-cards").append("<div class=\"card picked\"><img id=\"" + guessedCardId + "\" src=\"" + guessedCardUrl + "\"></div>");
+        $(".picked-cards").append("<div class=\"card picked\"><img id=\"" + answerCardId + "\" src=\"" + answerCardUrl + "\"><div class=\"voters\"></div></div>");
+        $(".picked-cards").append("<div class=\"card picked\"><img id=\"" + guessedCardId + "\" src=\"" + guessedCardUrl + "\"><div class=\"voters\"></div></div>");
+        break;
+      
+      case MESSAGE_TYPE.VOTE:
+        console.log(payload);
+        let imgId = payload.card_id;
+        let votedCardDiv = $("#" + imgId).parent().find(".voters");
+        votedCardDiv.append("<span class=\"voter\">" + payload.user_name + "</span>");
         
     }
   };
@@ -203,7 +205,7 @@ function getElementFromCookies(element) {
     let eqPos = cookies[i].indexOf("=");
     let name = eqPos > -1 ? cookies[i].substr(0, eqPos) : cookies[i];
     if (name == element) {
-      let value = eqPos >-1? cookies[i].substr(eqPos+1) : "";
+      let value = eqPos > -1 ? cookies[i].substr(eqPos+1) : "";
       return value;
     }
   }

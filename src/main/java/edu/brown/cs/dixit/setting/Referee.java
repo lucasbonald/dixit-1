@@ -163,6 +163,10 @@ public class Referee {
     pickRecord.put(id, selectedCard);
   }
 
+  public int getPickedSize() {
+  	return pickRecord.size();
+  }
+  
   public void setChosen(String id, int chosenCard) {
     chosen.put(id, chosenCard);
   }

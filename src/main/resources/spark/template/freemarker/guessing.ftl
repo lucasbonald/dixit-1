@@ -10,8 +10,8 @@
 		</form>
 		<div class="picked-cards" >
 			<div class="card picked">
-		  		<img class="card-img-top" src="../img/blank.jpg">
-	  		</div>
+	  			<img class="card-img-top" src="../img/blank.jpg">
+  			</div>	  		
 		</div>
 	</div>				
 			

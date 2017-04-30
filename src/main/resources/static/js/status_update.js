@@ -17,8 +17,9 @@ function startTimer(seconds) {
 	}, 1000);
 }
 
-function setStoryTeller (storyTeller) {
-	$("#userinfovalue").html(storyTeller);
+function setStoryTeller (st) {
+  storyteller = st.user_id;
+	$("#st-identity").html(st.user_name);
 }
 
 function setStatus (status) {

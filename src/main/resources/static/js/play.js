@@ -8,15 +8,12 @@ $(document).ready(function(){
     console.log("clicked card div: " + event.target.id);
     const card = $(this).find("img");
     
-    if (currState == "Storytelling" || currState == "Guessing") {
+    let myId = getElementFromCookies("userid");
+    if ((currState == "Storytelling" && myId == storyteller) || (currState == "Guessing" && myId != storyteller)) {
       $(".picked").empty();
       $(".picked").append("<img id=\"" + card.attr('id') + "\" src=\"" + card.attr('src') + "\"></img>");
-    
-    }
-    
+    } 
   });
-  
-  console.log(document.cookie);
   
   // submitting a story, with its associated card
 	$('#promptForm').on('submit', function(e) {
@@ -33,6 +30,8 @@ $(document).ready(function(){
       submitPrompt(prompt, pickedId, $(".picked").find("img").attr("src")); 
       // remove the selected card
       $(".hand").find("#" + pickedId).parent().remove();
+      $("#board-error-message").text("");
+      $("#promptForm").toggleClass("hidden");
     }
 		
     
@@ -42,17 +41,19 @@ $(document).ready(function(){
   
   $(".picked-cards").click(function(event) {
     
-    //
-    if($(event.target).attr("class") == undefined){
-      $(".picked").each(function() {
-        $(this).removeClass("vote-selected");
-      });
-      $(event.target).parent().toggleClass("vote-selected");
-    } else if ($(event.target).attr("class") == "card picked") {
-      $(".picked").each(function() {
-        $(this).removeClass("vote-selected");
-      });
-      $(event.target).toggleClass("vote-selected");
+    let myId = getElementFromCookies("userid");
+    if (currState == "Voting" && myId != storyteller ) {
+      if($(event.target).attr("class") == undefined){
+        $(".picked").each(function() {
+          $(this).removeClass("vote-selected");
+        });
+        $(event.target).parent().toggleClass("vote-selected");
+      } else if ($(event.target).attr("class") == "card picked") {
+        $(".picked").each(function() {
+          $(this).removeClass("vote-selected");
+        });
+        $(event.target).toggleClass("vote-selected");
+      }
     }
   });
   
@@ -73,6 +74,7 @@ $(document).ready(function(){
       const votedId = $(".vote-selected").find('img') .attr("id");
       if (votedId != undefined) {
         sendVote(votedId);
+        $("#guesser-button").toggleClass("hidden");
       }
       console.log(votedId);
     }
@@ -80,7 +82,7 @@ $(document).ready(function(){
   });
   
   $(document).click(function (){
-    console.log(currState);
+    console.log(storyteller);
   })
     
 });
@@ -103,6 +105,7 @@ function sendGuess(card_id) {
   const guess = {
     type: MESSAGE_TYPE.GS_SUBMIT,
     payload: {
+      user_id: getElementFromCookies("userid"),
       card_id: card_id
     }
   }
@@ -112,8 +115,9 @@ function sendGuess(card_id) {
 
 function sendVote(card_id) {
   const vote = {
-    type: MESSAGE_TYPE.VOTING,
+    type: MESSAGE_TYPE.VOTE,
     payload: {
+      user_id: getElementFromCookies("userid"),
       card_id: card_id
     }
   }
