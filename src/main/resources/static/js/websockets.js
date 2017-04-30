@@ -44,7 +44,7 @@ const setup_update = () => {
       case "set_uid":
         console.log("set uid");
         updateCookie(payload.cookies[0].name, payload.cookies[0].value)
-        updateCookie(payload.cookies[0].name, payload.cookies[0].value)
+        updateCookie(payload.cookies[1].name, payload.cookies[1].value)
         //console.log(document.cookies.userid)
         //setgameid(data.payload);
       // connect: get the connected user's ID and use as list of users currently connected
@@ -54,7 +54,6 @@ const setup_update = () => {
       case MESSAGE_TYPE.NEW_GAME:
         console.log("new game");
         console.log(payload.game_id);
-        updateCookie("gameid", payload.game_id);
         console.log(payload.num_players);
         
         if(payload.num_players == 1) {
@@ -62,9 +61,14 @@ const setup_update = () => {
         } else if (payload.num_players > 1) {
           $("table.table-hover tbody").find($(".num_players")).text(payload.num_players + "/" + payload.capacity);
         }
-
-
-        break;
+      
+      case MESSAGE_TYPE.JOIN:
+        if(payload.role == "teller"){
+          window.location = window.location.href + "storytelling";
+        }else if(payload.role == "guessor"){
+            window.location = window.location.href + "guessing";
+        }
+      break;
       case MESSAGE_TYPE.ALL_JOINED:
         console.log("all joined sent");
         const hand = payload.hand;

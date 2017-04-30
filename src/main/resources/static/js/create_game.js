@@ -47,7 +47,7 @@ $(document).ready(function(){
 
         // display new available game to allow joining
         $('table.table-hover tbody').append("<tr><td id=\"" + gameInit.payload.game_id + "\">" + gameInit.payload.lobby_name + "</td><td id=\"" + gameInit.payload.game_id + "\">1/" + gameInit.payload.num_players + "</td></tr");
-        window.location = window.location.href + "storytelling";
+        //window.location = window.location.href + "storytelling";
       }
       
     });
