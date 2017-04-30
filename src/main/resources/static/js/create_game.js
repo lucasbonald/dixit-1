@@ -2,21 +2,33 @@ let prevSelected;
 let currSelected;
 let gameCount = 1;
 let newGameId = 1;
+let username;
 
 $(document).ready(function(){
+    
+    // user enters a username
+    $("#username-form").on("submit", function(event) {
+      event.preventDefault();
+      if($(".username").val() != "") {
+        username = $(".username").val();
+        $("#username-form").toggleClass("hidden");
+        $(".start-game").removeClass("hidden");
+      }
+    });
+  
     $("#create-form").on("submit", function(event) {
       
       event.preventDefault();
       $(".create-error-message").empty();
-      if($(".lobby-name").val() == "" || $("#username").val() == "") {
-        $(".create-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Please fill in all details before proceeding.</p>")
+      if($(".lobby-name").val() == "") {
+        $(".create-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Please provide a lobby name.</p>")
       } else {
 
         let gameInit = {
           type: MESSAGE_TYPE.CREATE,
           payload: {
             game_id: newGameId,
-            user_name: $(".username").val(),
+            user_name: username,
             lobby_name: $(".lobby-name").val(),
             num_players: Number($(".num-players").val()),
             victory_pts: $(".victory-points").val(),

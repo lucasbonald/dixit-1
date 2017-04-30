@@ -99,8 +99,7 @@ const setup_update = () => {
       case MESSAGE_TYPE.GS_SUBMIT:
 //        let prompt = data.payload.prompt;
 //        let answer = data.payload.answer;
-        
-
+      
         break;
       case MESSAGE_TYPE.STATUS:
     	  console.log("updating status, at websockets");
@@ -122,26 +121,15 @@ const setup_update = () => {
         const guessedCardId = payload.guessed;
         const answerCardUrl = "../img/img" + answerCardId + ".jpg";
         const guessedCardUrl = "../img/img" + guessedCardId + ".jpg";
-        $(".picked").empty();
-        $(".pickedcard").append("<div class=\"card picked\"><img id=\"" + answerCardId + "\" src=\"" + answerCardUrl + "\"></div>");
-        $(".pickedcard").append("<div class=\"card picked\"><img id=\"" + guessedCardId + "\" src=\"" + guessedCardUrl + "\"></div>");
+        $(".picked-cards").empty();
+        $(".picked-cards").append("<div class=\"card picked\"><img id=\"" + answerCardId + "\" src=\"" + answerCardUrl + "\"></div>");
+        $(".picked-cards").append("<div class=\"card picked\"><img id=\"" + guessedCardId + "\" src=\"" + guessedCardUrl + "\"></div>");
         
     }
   };
 }
 
-function submitPrompt(inputPrompt, card_id, card_url) {
-	const promptMessage = {
-		type: MESSAGE_TYPE.ST_SUBMIT,
-		payload: {
-			prompt: inputPrompt,
-			card_id: card_id,
-      card_url: card_url
-		}
-	}
-  console.log("story: " + promptMessage.toString());
-	conn.send(JSON.stringify(promptMessage));
-}
+
 
 function setuserid(data){
   console.log("set user id called?")
@@ -217,8 +205,6 @@ function getElementFromCookies(element) {
   }
 }
 
-
-
 function setCookie(cookiename, cookievalue){
   console.log
   const newcookie = cookiename + "="+cookievalue;
@@ -226,23 +212,3 @@ function setCookie(cookiename, cookievalue){
   document.cookie = newcookie;
 }
 
-function sendGuess(card_id) {
-  const guess = {
-    type: MESSAGE_TYPE.GS_SUBMIT,
-    payload: {
-      card_id: card_id
-    }
-  }
-  conn.send(JSON.stringify(guess));
-}
-
-
-function sendVote(card_id) {
-  const CanvasRenderingContext2D = {
-    type: MESSAGE_TYPE.VOTING,
-    payload: {
-      card_id: card_id
-    }
-  }
-  conn.send(JSON.stringify(vote));
-}

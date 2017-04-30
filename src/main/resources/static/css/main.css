@@ -1,11 +1,18 @@
 .title {
   text-align: center;
   font-size: 60px;
+  margin-bottom: 50px;
 }
 
 .form-title {
   margin-bottom: 30px;
   font-size: 28px;
+}
+
+.form-title-text {
+  margin-left: 10px;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .col-xs-4 {
@@ -38,18 +45,20 @@
   background-color: #7AB6DD;
 }
 
-/*
 .submit {
+  width: 120px;
+/*
   padding-top:5px;
   padding-bottom:5px;
   padding-left:10px;
   padding-right:10px;
+*/
   background-color: #DD7A7A;
-  font-size:24px;
+  font-size:20px;
+  font-weight: bold;
   font-family: "Helvetica";
   color:black;
 }
-*/
 
 td {
   text-align: left;
@@ -70,6 +79,18 @@ p {
   float: left;
 }
 
+.enter-username {
+  width: 500px;
+  height: 50px;
+
+  position: absolute;
+  top:0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  margin: auto;
+}
 
 .username {
   margin-bottom:30px;

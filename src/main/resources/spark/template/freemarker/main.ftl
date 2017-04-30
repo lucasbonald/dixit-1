@@ -9,9 +9,9 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/user.css">
     <script type="text/javascript" src="js/websockets.js"></script>
-    <script type="text/javascript" src="js/play.js"></script>
-    <script type="text/javascript" src="js/progress.js"></script>
     <script type="text/javascript" src="js/create_game.js"></script>
+    <script type="text/javascript" src="js/play.js"></script>
+    <script type="text/javascript" src="js/status_update.js"></script>
   </head>
   <body>
      ${content}

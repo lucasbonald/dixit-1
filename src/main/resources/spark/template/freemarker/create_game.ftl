@@ -7,13 +7,19 @@
 	});
 </script>
 
-<div class="container-fluid">
-	<h1 class="title">Dixit Online</h1>
-	
+
+<h1 class="title">Dixit Online</h1>
+<div class="container-fluid text-center enter-username">
+	<form id="username-form">
+		<input type="text" class="form-control username" placeholder="Enter a new username"></input>
+		<input type="submit" class="btn submit" id="username-submit"></input>
+	</form>
+</div>
+
+<div class="container-fluid start-game hidden">
         <div class="row">
           <div class="col-xs-1"></div>
           <div class="col-xs-10">
-            <input type="text" class="form-control username" placeholder="Enter a new username"></input>
             <form id="create-form">
               <span class="glyphicon glyphicon-pencil form-title"></span><span class="form-title-text">Create game</span>
             <div class="row">
@@ -68,7 +74,7 @@
                 
               </div>
               <div class="col-xs-1 create-button">
-                <input type="submit" class="submit create-game" value="Create"></button>
+                <input type="submit" class="btn submit" value="Create"></button>
               </div>
             </div>
           
@@ -93,7 +99,7 @@
               <div class="row">
                 <div class="col-xs-10 join-error-message"></div>
                 <div class="col-xs-1">
-                  <input type="submit" class="submit-button join-game" value="Join"></input>
+                  <input type="submit" class="btn submit" value="Join"></input>
                 <div>
               </div>  
             </form>

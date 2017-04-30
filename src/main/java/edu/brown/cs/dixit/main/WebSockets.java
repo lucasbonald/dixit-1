@@ -154,15 +154,16 @@ public class WebSockets {
 		    Referee besRef = currGame.getRefree();
 		    besRef.setChosen(userId, guessedCard);
 		    if (besRef.getChosenSize() == 2) {
-		        JsonObject votingMessage = new JsonObject();
-	            votingMessage.addProperty("type", MESSAGE_TYPE.VOTING.ordinal());        
-	            JsonObject votePayload = new JsonObject();
-	            //JsonObject answer = new JsonObject();
-	            //JsonObject guessed = new JsonObject();
-	            votePayload.addProperty("answer", besRef.getAnswer());
-	            votePayload.addProperty("guessed", besRef.getChosen(userId));
-	            votingMessage.add("payload", votePayload);
-	            sendMsgtoGame(votingMessage.toString());   
+	    		System.out.println("all guesses received");
+	        JsonObject votingMessage = new JsonObject();
+          votingMessage.addProperty("type", MESSAGE_TYPE.VOTING.ordinal());        
+          JsonObject votePayload = new JsonObject();
+          //JsonObject answer = new JsonObject();
+          //JsonObject guessed = new JsonObject();
+          votePayload.addProperty("answer", besRef.getAnswer());
+          votePayload.addProperty("guessed", besRef.getChosen(userId));
+          votingMessage.add("payload", votePayload);
+          sendMsgtoGame(votingMessage.toString());   
 		    }
 		    
   			break;

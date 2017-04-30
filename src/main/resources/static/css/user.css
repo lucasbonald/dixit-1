@@ -2,8 +2,6 @@ body {
 	font-family: "Helvetica Neue";
 }
 
-html {
-}
 hr {
 	border-width: 5px;
 	margin-top: 4%;
@@ -71,6 +69,7 @@ hr {
 }
 
 #storyFormWrapper {
+  margin-top: 50px;
 	display: block;
 	color: black;
 	text-align: center;
@@ -88,7 +87,6 @@ hr {
     margin: auto;
     padding: 1% 2%;
     display: inline-block;
-
 }
 
 
@@ -155,14 +153,12 @@ hr {
 
 #stopwatch {
 	font-size: 6vw;
-
 	color: black;
 }
 
 #st-identity {
 	margin-top: 1.5%;
 	font-size: 2.2vw;
-
 	color: #fb8383;
 }
 
@@ -183,22 +179,17 @@ hr {
 	 margin-bottom:5%;
 }
 
-.pickedcard {
+.picked-cards {
 	margin-top: 3%;
 	display: flex;
 	justify-content: center;
-	justify-content: space-between;
+/*	justify-content: space-between;*/
 	text-align: center;
 	margin: auto;
 	width: 80%;
 	margin-bottom:3%;
 }
-
-.picked {
-	margin: auto;
-	margin-top: 3%;
-}
-
+  
 .message {
 	margin: auto;
 	text-align: center;
@@ -228,18 +219,15 @@ hr {
 #buttonwrapper {
 	display: flex;
 	justify-content: center;
-
 }
+
 .endform {
 	flex-shrink: 1;
 	height: 50%;
 	margin-left: 3%;
 	margin-right: 3%;
 	margin-top: 4%;
-
 }
-
-
 
 #againButton, #exitButton {
 	font-size: 3vw;
@@ -263,9 +251,9 @@ hr {
 }
 
 .prompt {
-	margin-top:2%;
+	margin-top:50px;
 	text-align: center;
-    font-size: 4.2vw;
+  font-size: 4.2vw;
 }
 
 .thumbswrapper {
@@ -278,14 +266,15 @@ hr {
 
 #promptField {
 	border: black;
-    border-radius: 6px;
-    background-color: white;
-    width: 66%;
-    height: 33%;
-    font-size: 1.2vw;
-    margin: auto;
-    padding: 1% 2%;
-    display: inline-block;
+  border-radius: 6px;
+  background-color: white;
+  width: 66%;
+  height: 33%;
+  font-size: 1.2vw;
+  margin: auto;
+  padding: 1% 2%;
+  display: inline-block;
+  margin-bottom:50px;
 	
 }
 
@@ -329,4 +318,11 @@ html, body, .wrapper, .row, .screen, .board, .statusbar {
 
 .vote-selected {
   border-color: #FFFF00;
+}
+
+#board-error-message {
+  margin-top:10px;
+  margin-left:10px;
+  color:red;
+  font-weight:bold;
 }
