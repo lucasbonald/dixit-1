@@ -13,6 +13,7 @@ public class GamePlayer implements Player {
   private List<Card> playerDeck;
   private Deck globalDeck;
   private String status;
+ 
   /*
   public static enum STATUS_TYPE {
 		WAITING,

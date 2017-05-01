@@ -6,22 +6,17 @@ import java.util.Map;
 public class Referee {
   
   private int winnerPoint;
-  private int answer;
-  private String storyTeller;
   private int numPlayers;
   private int victoryPoint;
   private boolean gameWon;
-  private String currPrompt;
   private Map<String, Integer> chosen; 
   private Map<String, Integer> pickRecord; 
   private Map<String, Integer> result;
   private Map<String, Integer> scoreBoard;
+  private Turn gameTurn;
   
   public Referee() {
     winnerPoint = -1;
-    answer = -1;
-    storyTeller = "";
-    currPrompt = "";
     numPlayers = Setting.NUM_DEFAULT_PLAYERS;
     victoryPoint = Setting.NUM_DEFAULT_VICTORY_POINT;
     gameWon = false;
@@ -30,23 +25,21 @@ public class Referee {
     scoreBoard = new HashMap<String, Integer>();
   }
   
-  public Referee(int cap) {
+  public Referee(int cap, int victPoint, Turn turn) {
     winnerPoint = -1;
-    answer = -1;
-    storyTeller = "";
-    currPrompt = "";
     numPlayers = cap;
-    victoryPoint = Setting.NUM_DEFAULT_VICTORY_POINT;
+    victoryPoint = victPoint;
     gameWon = false;
     chosen = new HashMap<String, Integer>();
     pickRecord = new HashMap<String, Integer>();
     scoreBoard = new HashMap<String, Integer>();
+    gameTurn = turn;
   }
   
   // receive submissions
   public void receiveStory(String prompt, String playerId, int cardId) {
     setPrompt(prompt);
-    setStoryTeller(playerId);
+    setTeller(playerId);
     setAnswer(cardId);
   }
   
@@ -92,12 +85,12 @@ public class Referee {
     
     //Point for Story-teller
     if ((count_answer == 0) || (count_answer == pickRecord.size())) {
-      result.put(storyTeller, 0);
+      result.put(gameTurn.getCurrTeller(), 0);
       for (String key: pickRecord.keySet()) {
         result.put(key, 2);
       }
     } else {
-      result.put(storyTeller, 3);
+      result.put(gameTurn.getCurrTeller(), 3);
     }
     
     //reset 
@@ -124,21 +117,25 @@ public class Referee {
   }
 
   public int getAnswer() {
-    return answer;
+    return gameTurn.getAnswer();
   }
 
   public void setAnswer(int cardId) {
-    this.answer = cardId;
+    gameTurn.setAnswer(cardId);
   }
   
   public String getStoryTeller() {
-    return storyTeller;
+    return gameTurn.getCurrTeller();
   }
   
-  public void setStoryTeller(String id) {
-    this.storyTeller = id;
+  public void setTeller(String id) {
+    gameTurn.setCurrTeller(id);
   }
-
+  
+  public void incrementTurn() {
+    gameTurn.incrementTurn();
+  }
+  
   public int getNumPlayers() {
     return numPlayers;
   }  
@@ -148,11 +145,11 @@ public class Referee {
   }
   
   public String getPrompt() {
-    return currPrompt;
+    return gameTurn.getPrompt();
   }
   
   public void setPrompt(String prompt) {
-    this.currPrompt = prompt;
+    gameTurn.setPrompt(prompt);
   }
 
   public Map<String, Integer> getPickRecord() {

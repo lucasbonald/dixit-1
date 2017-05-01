@@ -15,18 +15,16 @@ public class DixitGame {
 	private final Deck deck;
 	private List<GamePlayer> players;
 	private Referee referee;
-	private Turn turn;
 	
 	//wrapper for all the information 
 	//needs to contain the players & deck & referee & turn
 	
-	public DixitGame(int gameID, int cap) {
+	public DixitGame(int gameID, int cap, int victPoint) {
 		id = gameID;
 		capacity = cap;
 		deck = new Deck();
 		players = new ArrayList<>();
-		referee = new Referee(cap);
-		turn = new Turn(cap);
+		referee = new Referee(cap, victPoint, new Turn(cap));
 	}
 	
 	public int getId() {
@@ -58,4 +56,18 @@ public class DixitGame {
 	public Referee getRefree() {
 	    return referee;
 	}
+	
+	public void setST(String id) {
+	  referee.setTeller(id);
+	}
+	
+	public String getST() {
+	  return referee.getStoryTeller();
+	}
+	
+	public void nextTurn() {
+	  referee.incrementTurn();
+	}
+	
+	
 }
