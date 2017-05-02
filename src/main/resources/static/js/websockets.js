@@ -77,7 +77,8 @@ const setup_update = () => {
           let cardId = cardInfo[0].replace("id:", "");
           let $card = $("#card" + card);
           $card.empty();
-          $card.append("<img id=\"" + cardId + "\" src=\"" + url + "\"></img>");
+          $card.append("<div class = \"image\" id=\"" + cardId + "\" style = \"background-image: url(" + url + ");\"></div>" );
+          //$card.append("<img id=\"" + cardId + "\" src=\"" + url + "\"></img>");
         }
 
         setStoryTeller(payload.storyteller);
@@ -121,8 +122,10 @@ const setup_update = () => {
         const answerCardUrl = "../img/img" + answerCardId + ".jpg";
         const guessedCardUrl = "../img/img" + guessedCardId + ".jpg";
         $(".picked-cards").empty();
-        $(".picked-cards").append("<div class=\"card picked\"><img id=\"" + answerCardId + "\" src=\"" + answerCardUrl + "\"><div class=\"voters\"></div></div>");
-        $(".picked-cards").append("<div class=\"card picked\"><img id=\"" + guessedCardId + "\" src=\"" + guessedCardUrl + "\"><div class=\"voters\"></div></div>");
+        //$(".picked-cards").append("<div class=\"card picked\"><img id=\"" + answerCardId + "\" src=\"" + answerCardUrl + "\"><div class=\"voters\"></div></div>");
+
+        $(".picked-cards").append("<div class=\"card picked\"><div class = \"image bigimg\" id=\"" + answerCardId + "\" style = \"background-image: url(" + answerCardUrl + "); background-size: cover; background-repeat: no-repeat;\"></div><div class=\"voters\"></div></div>");
+        $(".picked-cards").append("<div class=\"card picked\"><div class = \"image bigimg\" id=\"" + guessedCardId + "\" style = \"background-image: url(" + guessedCardUrl + "); background-size: cover; background-repeat: no-repeat;\"></div><div class=\"voters\"></div></div>");
         break;
       
       case MESSAGE_TYPE.VOTE:
