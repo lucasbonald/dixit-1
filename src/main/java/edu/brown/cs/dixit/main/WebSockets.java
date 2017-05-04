@@ -251,7 +251,7 @@ public class WebSockets {
           //updateStatus(currGame);
           
 		    }
-		    
+
   			break;
   			
   		case VOTE:
@@ -259,11 +259,12 @@ public class WebSockets {
   			int vote = payload.get("card_id").getAsInt();
   			String voterId = payload.get("user_id").getAsString();
   			GamePlayer voter = currGame.getPlayer(voterId);
-  			voter.setStatus("Voted");
-  			//updateStatus(currGame);
+  			currGame.addStatus(voterId, "Voted");
+  			updateStatus(currGame);
   			
-  			Referee toTallyVotes = currGame.getRefree();
-  			toTallyVotes.receiveVotes(voterId, vote);
+  			currRef = currGame.getRefree();
+  			currRef.receiveVotes(voterId, vote);
+  			
   			JsonObject voteUpdate = new JsonObject();
   			voteUpdate.addProperty("type", MESSAGE_TYPE.VOTE.ordinal());
   			JsonObject voteInfo = new JsonObject();
@@ -272,28 +273,17 @@ public class WebSockets {
   			voteUpdate.add("payload", voteInfo);
   			sendMsgToGame(voteUpdate.toString());
   			
-  			if (toTallyVotes.getPickedSize() == currGame.getCapacity() - 1) {
-  				
+  			if (currRef.getPickedSize() == currGame.getCapacity() - 1) {
+  				System.out.println("all voting done!");
   			}
-  			
-  			// do something when all votes are received
-  			break;
-  	
-  		case STORY:
-  			JsonObject storyMessage = new JsonObject();
-  			JsonObject storyPayload = new JsonObject();
-  			storyMessage.addProperty("type", MESSAGE_TYPE.STORY.ordinal());
-  			//storyPayload.addProperty("storyteller", this.getSTName(currGame));
-  			for (Session indivSession : allSessions) {
-  				indivSession.getRemote().sendString(storyMessage.toString());
-  			}		
   			break;
   			
   		case CHAT_MSG:
   			this.getMessage("gameid");
+
   	}
-  		
   }
+  
  private String randomId(){
 	  return UUID.randomUUID().toString();
   }
