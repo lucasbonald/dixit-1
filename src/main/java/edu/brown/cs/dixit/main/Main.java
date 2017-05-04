@@ -37,7 +37,7 @@ public class Main {
   private static final int PORT_NUM = 4567;
   private static final Gson GSON = new Gson();
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws ClassNotFoundException, SQLException {
     new Main(args).run();
   }
   
@@ -47,7 +47,7 @@ public class Main {
     this.args = args;
   }
   
-  private void run() {
+  private void run() throws ClassNotFoundException, SQLException {
     OptionParser parser = new OptionParser();
     parser.accepts("gui");
     OptionSet options = parser.parse(args);
@@ -57,12 +57,13 @@ public class Main {
     }
   }
   
-  private static void runSparkServer() {
+  private static void runSparkServer() throws ClassNotFoundException, SQLException {
     Spark.externalStaticFileLocation("src/main/resources/static");
     Spark.exception(Exception.class, new ExceptionPrinter());
     FreeMarkerEngine freeMarker = createEngine();
 
     Spark.webSocket("/play", WebSockets.class);
+    WebSockets.connectDB();
     Spark.get("/", new LogInHandler(), freeMarker);   
     Spark.get("/storytelling",new StoryHandler(), freeMarker);   
     Spark.get("/voting",new VoteHandler(), freeMarker);   
