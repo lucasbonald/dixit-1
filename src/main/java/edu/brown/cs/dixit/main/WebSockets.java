@@ -87,12 +87,12 @@ public class WebSockets {
   
   
   private void getMessage(String game) throws SQLException {
-	  System.out.println("getmessage in java called");
+	  System.out.println("getmessage in java called with gameid " + game);
 	  ChatMessage message = new ChatMessage();
 	  PreparedStatement prep;
       prep = conn.prepareStatement("SELECT game, username, body, time FROM messages WHERE game = ? ORDER BY time;");
       prep.setString(1, game);
-      ResultSet rs = prep.executeQuery();
+      ResultSet rs = prep.executeQuery(); 
       while (rs.next()) {
     	  message.game.add(rs.getString(1));
     	  message.username.add(rs.getString(2));

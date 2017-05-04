@@ -48,7 +48,8 @@ $(document).ready(function(){
       $("#board-error-message").text("");
       $("#promptForm").toggleClass("hidden");
     }
-		
+    sendUpdate();
+
     
     
     

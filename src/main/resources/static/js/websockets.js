@@ -87,7 +87,7 @@ const setup_update = () => {
         }
 
         setStoryTeller(payload.storyteller);
-        
+
         // dialog box for each player's screen to see if their ready
         setStatus("Storytelling");
         $("#status-indicator-text").text("Storytelling");
@@ -101,7 +101,7 @@ const setup_update = () => {
         $("#promptvalue").html("\"" + prompt + "\"" );
         setStatus("Guessing");
         startTimer(15);
-        sendUpdate();
+        
         break;
       case MESSAGE_TYPE.GS_SUBMIT:
 //        let prompt = data.payload.prompt;
@@ -144,13 +144,12 @@ const setup_update = () => {
         votedCardDiv.append("<span class=\"voter\">" + payload.user_name + "</span>");
         break;
         
-      case MESSAGE_TYPE.CHAT_UPATE:
+      case MESSAGE_TYPE.CHAT_MSG:
     	console.log("chat update");
     	let messages = payload.messages;
-    	console.log ("messages" + messages);
-    	$(".chatList").append(messages);
-    	  
-    	  
+    	for (let i = 0; i < messages.length ; i ++ ) {
+        	$(".chatList").append("<li> <span style=\"color: grey\">" + messages.username[i] + "</span> :" + messages.body[i]  + "</li>");
+    	} 
     }
   };
 }
