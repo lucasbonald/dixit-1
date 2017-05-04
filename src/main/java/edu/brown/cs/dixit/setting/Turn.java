@@ -20,8 +20,8 @@ public class Turn {
     currTeller = "";
   }
   
-  public void setPlayers(List<GamePlayer> users) {
-    players = users;
+  public void addPlayers(GamePlayer user) {
+    players.add(user);
   }
   
   public void setCurrTeller(String id) {
