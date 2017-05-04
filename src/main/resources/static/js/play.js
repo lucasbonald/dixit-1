@@ -6,13 +6,25 @@ $(document).ready(function(){
   $(".hand-card").click(function(event) {
     
     console.log("clicked card div: " + event.target.id);
-    const card = $(this).find("img");
-    
+    const card = $(this).find("div");
+    const img = card.attr("style");
+    const url = img.replace(/.*\s?url\([\'\"]?/, '').replace(/[\'\"]?\).*/, '');
+
+
+    console.log("clicked card url " + url);
+     
+    //     console.log("url is " + url);
+
+    console.log("card id of licked " + card.attr('id'));
     let myId = getElementFromCookies("userid");
     if ((currState == "Storytelling" && myId == storyteller) || (currState == "Guessing" && myId != storyteller)) {
       $(".picked").empty();
-      $(".picked").append("<img id=\"" + card.attr('id') + "\" src=\"" + card.attr('src') + "\"></img>");
+     // $(".picked").append("<img id=\"" + card.attr('id') + "\" src=\"" + card.attr('src') + "\"></img>");
+      $(".picked").append("<div class = \"image bigimg\" id=\"" + card.attr('id') + "\" style = \"background-image: url(" + url + "); background-size: cover; background-repeat: no-repeat;\"></div>"
+)
+      
     } 
+
   });
   
   // submitting a story, with its associated card
@@ -20,14 +32,17 @@ $(document).ready(function(){
 		console.log("prompt in storytellingjs called");
 		console.log("form is submitted!!")
 		e.preventDefault();
-    const pickedId = $(".picked").find("img").attr("id");
+    const pickedId = $(".picked").find("div").attr("id");
     const prompt = $("#promptField").val();
     if(pickedId == undefined) {
       $("#board-error-message").text("Please pick a card.");
     } else if (prompt == "") {
       $("#board-error-message").text("Please submit a prompt.");
     } else {
-      submitPrompt(prompt, pickedId, $(".picked").find("img").attr("src")); 
+      const img = $(".picked").find("div").attr("style");
+      const url = img.replace(/.*\s?url\([\'\"]?/, '').replace(/[\'\"]?\).*/, '');
+      console.log("id of prompt here" + pickedId + "url of prompt" + url);
+      submitPrompt(prompt, pickedId, url); 
       // remove the selected card
       $(".hand").find("#" + pickedId).parent().remove();
       $("#board-error-message").text("");
@@ -43,18 +58,25 @@ $(document).ready(function(){
     
     let myId = getElementFromCookies("userid");
     if (currState == "Voting" && myId != storyteller ) {
+      console.log("condition met");
       if($(event.target).attr("class") == undefined){
+        console.log("class undefined");
         $(".picked").each(function() {
           $(this).removeClass("vote-selected");
         });
         $(event.target).parent().toggleClass("vote-selected");
-      } else if ($(event.target).attr("class") == "card picked") {
-        $(".picked").each(function() {
+      } else if ($(event.target).attr("class") == "image bigimg") {
+                console.log("class is image bigimg");
+
+        $(".image").each(function() {
           $(this).removeClass("vote-selected");
         });
         $(event.target).toggleClass("vote-selected");
       }
+      else {
+      console.log("wtf class is " + $(event.target).attr("class"));
     }
+    } 
   });
   
   // submitting a guessed card
@@ -63,7 +85,7 @@ $(document).ready(function(){
     e.preventDefault();
     
     if (currState == "Guessing") {
-      const pickedId = $(".picked").find("img").attr("id");
+      const pickedId = $(".picked").find("div").attr("id");
       if (pickedId != undefined) {
         sendGuess(pickedId);
         $(".hand").find("#" + pickedId).parent().remove();
@@ -71,12 +93,12 @@ $(document).ready(function(){
       }
     } else if (currState == "Voting") {
       
-      const votedId = $(".vote-selected").find('img') .attr("id");
+      const votedId = $(".vote-selected").attr("id");
+      console.log("vote id is" + votedId);
       if (votedId != undefined) {
         sendVote(votedId);
         $("#guesser-button").toggleClass("hidden");
       }
-      console.log(votedId);
     }
     
   });

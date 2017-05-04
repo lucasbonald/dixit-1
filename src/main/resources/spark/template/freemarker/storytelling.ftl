@@ -16,7 +16,7 @@
 	</div>
 	<div class="picked-cards">
 		<div class="card picked">
-  			<img class="card-img-top" src="../img/blank.jpg">
+  			<div class = "image bigimg" style ="background-image: url(../img/blank.jpg)"></div>
 		</div>
 	</div>		
 			
