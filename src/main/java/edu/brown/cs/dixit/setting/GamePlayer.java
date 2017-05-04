@@ -94,6 +94,7 @@ public class GamePlayer implements Player {
 	  return this.status;
   }
   
+  /*
   public void setGuesser(String input) {
 	  isGuesser = input;
   }
@@ -105,5 +106,5 @@ public class GamePlayer implements Player {
   public List<Card> getHand() {
     return playerDeck;
   }
- 
+ */
 }

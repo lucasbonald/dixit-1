@@ -3,11 +3,12 @@
 <div class = "wrapper">
 	<div class = "row screen">
 		<div class = "col-xs-9 board" style="background-color: #f7f7f7;">
-			<div class = "status-indicator">
+			<div class = "status-indicator" style="float:left;">
 				  <div id = "status-indicator-text">
-				    VOTING
 				  </div>
 			</div>
+			<div id="board-error-message" style="float:left;">
+		  	</div>
 			<div class = "prompt" >
 			<i id = "promptvalue"></i>
 			</div>

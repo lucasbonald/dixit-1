@@ -160,6 +160,10 @@ public class Referee {
     pickRecord.put(id, selectedCard);
   }
 
+  public int getPickedSize() {
+  	return pickRecord.size();
+  }
+  
   public void setChosen(String id, int chosenCard) {
     chosen.put(id, chosenCard);
   }
@@ -170,5 +174,9 @@ public class Referee {
   
   public Integer getChosen(String id) {
     return chosen.get(id);
+  }
+  
+  public Turn getTurn() {
+    return gameTurn;
   }
 }

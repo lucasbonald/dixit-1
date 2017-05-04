@@ -1,7 +1,10 @@
 package edu.brown.cs.dixit.gameManagement;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.brown.cs.dixit.setting.Deck;
 import edu.brown.cs.dixit.setting.GamePlayer;
@@ -13,8 +16,10 @@ public class DixitGame {
 	private final int id;
 	private final int capacity;
 	private final Deck deck;
-	private List<GamePlayer> players;
+	private Map<String, GamePlayer> players;
 	private Referee referee;
+	private Map<String, String> playerStatus;
+	private GamePlayer storyTeller;
 	
 	//wrapper for all the information 
 	//needs to contain the players & deck & referee & turn
@@ -23,8 +28,9 @@ public class DixitGame {
 		id = gameID;
 		capacity = cap;
 		deck = new Deck();
-		players = new ArrayList<>();
+		players = new HashMap<>();
 		referee = new Referee(cap, victPoint, new Turn(cap));
+		playerStatus = new HashMap<>();
 	}
 	
 	public int getId() {
@@ -45,12 +51,16 @@ public class DixitGame {
 	
 	public GamePlayer addPlayer(String id, String name) {
 	    GamePlayer new_player = new GamePlayer(id, name, deck);
-	    players.add(new_player);
+	    players.put(id, new_player);
 	    return new_player;
 	}
 	
-	public List<GamePlayer> getPlayers() {
-		return players;
+	public GamePlayer getPlayer(String id) {
+		return players.get(id);
+	}
+	
+	public Collection<GamePlayer> getPlayers() {
+		return players.values();
 	}
 	
 	public Referee getRefree() {
@@ -69,5 +79,11 @@ public class DixitGame {
 	  referee.incrementTurn();
 	}
 	
+	public void addStatus(String id, String status) {
+	  playerStatus.put(id, status);
+	}
 	
+	public String getStatus(String id) {
+	  return playerStatus.get(id);
+	}
 }
