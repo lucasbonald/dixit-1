@@ -37,6 +37,7 @@ public class WebSockets {
   private static final GameTracker gt = new GameTracker();
   private static final Queue<Session> allSessions = new ConcurrentLinkedQueue<>();
   private DixitGame currGame;
+  private Referee currRef;
   private String userId;
   private static Connection conn = null;
   private static enum MESSAGE_TYPE {
@@ -121,6 +122,7 @@ public class WebSockets {
   @OnWebSocketConnect
   public void connected(Session session) throws IOException, ClassNotFoundException, SQLException {
 	System.out.println("curr session hashcode: " + session.hashCode());
+
 	allSessions.add(session);
   	List<HttpCookie> cookies = session.getUpgradeRequest().getCookies();
   	if (cookies == null) {
@@ -133,12 +135,9 @@ public class WebSockets {
 
   @OnWebSocketClose
   public void closed(Session session, int statusCode, String reason) {
-    // TODO Remove the session from the queue
-	System.out.println("session closed");
-	System.out.println("before: "+allSessions.size());
+	//don't we have to remove session in the hashmap as well?
+    System.out.println("session closed");
 	allSessions.remove(session);  
-	System.out.println("session removed");
-	System.out.println("after: "+allSessions.size());
   }
 
   @OnWebSocketMessage
@@ -155,16 +154,15 @@ public class WebSockets {
   			//game created
   			System.out.println("new game created!");
   			int newGameId = gt.createGameID();
-  			DixitGame newGame = new DixitGame(newGameId, payload.get("num_players").getAsInt());
-  			//need to initialize the game with all information like victory points
+  			DixitGame newGame = new DixitGame(newGameId, payload.get("num_players").getAsInt(), payload.get("victory_pts").getAsInt());
+  			//need to initialize the game with additional features like more cards / input types
   			gt.addGame(newGame);
   			newGame.getDeck().initializeDeck("../img/img");
-  			
   			//set Storyteller
   			GamePlayer teller = createNewUser(session, newGame, payload.get("user_name").getAsString());
-  			teller.setGuesser("False");
-  			teller.setStatus("Storytelling");
-  			
+  			newGame.setST(teller.playerId());
+  			newGame.addStatus(teller.playerId(), "Storytelling");
+  			//send message
   			JsonObject newGameMessage = new JsonObject();
   			newGameMessage.addProperty("type", MESSAGE_TYPE.NEW_GAME.ordinal());
   			JsonObject newGamePayload = new JsonObject();
@@ -178,11 +176,10 @@ public class WebSockets {
   			//need db to keep track of all the lobbies
   			for (Session indivSession : allSessions) {
   				indivSession.getRemote().sendString(newGameMessage.toString());
-  			}		
+  			}
   			
-  			
-  			assignRole(session, newGame.getNumPlayers());
-  			this.updateStatus(currGame);
+  			//fix needed
+  			assignRole(session, 1);
   			break;
 
   		case JOIN:
@@ -192,10 +189,9 @@ public class WebSockets {
   			String user = payload.get("user_name").getAsString();
   			DixitGame join = gt.getGame(gameId);
   			GamePlayer joiner = createNewUser(session, join, user);
-  			joiner.setStatus("Waiting");
-  			assignRole(session, join.getNumPlayers());
+  			join.addStatus(joiner.playerId(), "Waiting");
+  			updateStatus(join);
   			
-  			this.updateStatus(currGame);
   			break;		
   			
   		case ST_SUBMIT:
@@ -214,24 +210,22 @@ public class WebSockets {
 			stSubmitPayload.addProperty("card_url", cardUrl);
 			stMessage.add("payload", stSubmitPayload);
 		    System.out.println("curr:" + currGame);
-		    Referee bestRef = currGame.getRefree();
-			bestRef.setAnswer(cardId);
-			String stId = getSTDetails(currGame).get("user_id").getAsString();
-			bestRef.setStoryTeller(stId);
-			bestRef.setChosen(stId, cardId);
+		    currRef = currGame.getRefree();
+			currRef.receiveStory(prompt, currGame.getST(), cardId);
+			currRef.setChosen(currGame.getST(), cardId);			
 			
-			// update status of guessers and storyteller
+			
 			for (GamePlayer player : currGame.getPlayers()){
-				player.setStatus("Guessing");
+				currGame.addStatus(player.playerId(), "Voting");
 			}
-			currGame.getPlayer(stId).setStatus("Waiting");
+			currGame.addStatus(currGame.getST(), "Waiting");
 			sendMsgToGame(stMessage.toString());
-			
-  			this.updateStatus(currGame);
+			updateStatus(currGame);
   		  
   			break;
   			
   		case GS_SUBMIT:
+  		  
 		    System.out.println("Guess received");
 		    int guessedCard = payload.get("card_id").getAsInt();
 		    GamePlayer guesser = currGame.getPlayer(payload.get("user_id").getAsString());
@@ -254,7 +248,7 @@ public class WebSockets {
           	}
           }
           
-          updateStatus(currGame);
+          //updateStatus(currGame);
           
 		    }
 		    
@@ -266,7 +260,7 @@ public class WebSockets {
   			String voterId = payload.get("user_id").getAsString();
   			GamePlayer voter = currGame.getPlayer(voterId);
   			voter.setStatus("Voted");
-  			updateStatus(currGame);
+  			//updateStatus(currGame);
   			
   			Referee toTallyVotes = currGame.getRefree();
   			toTallyVotes.receiveVotes(voterId, vote);
@@ -289,7 +283,7 @@ public class WebSockets {
   			JsonObject storyMessage = new JsonObject();
   			JsonObject storyPayload = new JsonObject();
   			storyMessage.addProperty("type", MESSAGE_TYPE.STORY.ordinal());
-  			storyPayload.add("storyteller", this.getSTDetails(currGame));
+  			//storyPayload.addProperty("storyteller", this.getSTName(currGame));
   			for (Session indivSession : allSessions) {
   				indivSession.getRemote().sendString(storyMessage.toString());
   			}		
@@ -310,17 +304,15 @@ public class WebSockets {
 			String id = randomId();
 			cookies.add(new HttpCookie(Network.USER_IDENTIFER, id));
 			cookies.add(new HttpCookie(Network.GAME_IDENTIFIER, Integer.toString(game.getId())));					
-			//add or override session
 			gt.addSession(id, s);	  	
 			GamePlayer newPlayer = game.addPlayer(id, user_name);
 			sendCookie(s, cookies);
-			return newPlayer;
-		    
+			return newPlayer;		    
 		}
 		return null;
 	}
   
-  private void sendMsgToGame(String message){
+  private void sendMsgToGame(String message) {
 	  for (GamePlayer player: currGame.getPlayers()) {
           try {
 			gt.getSession(player.playerId()).getRemote().sendString(message);
@@ -328,20 +320,7 @@ public class WebSockets {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        }   
-  }
-  
-  
-  private void sendMultiTab(Session s){
-	  allSessions.remove(s);
-	  JsonObject multi = new JsonObject();
-	  multi.addProperty("type", MESSAGE_TYPE.MULTI_TAB.ordinal());
-	  try {
-		s.getRemote().sendString(multi.toString());
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+      }   
   }
   
   private void sendCookie(Session s, List<HttpCookie> cookies){
@@ -351,26 +330,13 @@ public class WebSockets {
 	  jsonCookie.add("cookies", GSON.toJsonTree(cookies));
 	  json.add("payload", jsonCookie);
 	  try {
-		  System.out.println("cookies?");
-		  System.out.print(json);
+		  //System.out.println("cookies?");
+		  //System.out.print(json);
 		  s.getRemote().sendString(json.toString());
 		} catch (IOException e) {
 			System.out.println("Found IOException while sending cookie");
 		}
 	  
-  }
-  
-  private JsonObject getSTDetails(DixitGame game) {
-  	JsonObject STDetails = new JsonObject();
-		for (GamePlayer user : game.getPlayers()) {
-			  if (user.getGuesser().equals("False")) {
-			  	STDetails.addProperty("user_name", user.playerName());
-			  	STDetails.addProperty("user_id", user.playerId());
-				  return STDetails;
-			  }
-			  
-		}
-		return null;
   }
   
   private void updateStatus(DixitGame game) {
@@ -383,11 +349,8 @@ public class WebSockets {
 		for (GamePlayer user : game.getPlayers()) {
 			  // need toString override method
 			playernames.add(user.playerName());
-			statuses.add(user.getStatus());
+			statuses.add(game.getStatus(user.playerId()));
 		}
-		System.out.println("playernames and status");
-		System.out.println(playernames);
-		System.out.println(statuses);
 
 		statusPayload.addProperty("playernames", GSON.toJson(playernames));
 		statusPayload.addProperty("statuses", GSON.toJson(statuses));
@@ -403,6 +366,8 @@ public class WebSockets {
 		}	
 			  
   }
+ 
+  
   private void updateCookies(Session session, List<HttpCookie> cookies){
 	  try{
 		  for (HttpCookie crumb: cookies) {
@@ -411,45 +376,51 @@ public class WebSockets {
 		  	  }
 		  	  if (crumb.getName().equals("userid")) {
 		            userId = crumb.getValue();
-		            System.out.printf("session added to %s %d \n", userId, session.hashCode());
+		            //System.out.printf("session added to %s %d \n", userId, session.hashCode());
 		            gt.addSession(userId, session);
-		        }
+		      }
 		  	}
+		  
 		  	if(currGame.getPlayers().size() == currGame.getCapacity()){
 		  		Collection<GamePlayer> users = currGame.getPlayers();
-          for(GamePlayer user:users){
-          	JsonObject allJoinedMessage = new JsonObject();
-            JsonObject playerInfo = new JsonObject();
-            allJoinedMessage.addProperty("type", MESSAGE_TYPE.ALL_JOINED.ordinal());
-            List<Card> personalDeck = user.getFirstHand();
-           // List<Card> personalDeck = user.getHand();
-            JsonObject hand = new JsonObject();
-            for (int i = 0; i < personalDeck.size(); i++){
-              hand.addProperty(String.valueOf(i), personalDeck.get(i).toString());
-            }
-            playerInfo.add("hand", hand);
-            playerInfo.add("storyteller", this.getSTDetails(currGame));
-            try {
-              allJoinedMessage.add("payload", playerInfo);
-              System.out.println("all messages sent");
-              gt.getSession(user.playerId()).getRemote().sendString(allJoinedMessage.toString());
-            } catch (IOException e) {
-              System.out.println(e);
-            }   
-          }
+                currGame.getRefree().getTurn().setPlayers(new ArrayList(users));               
+		  		for(GamePlayer user:users) {
+                  	JsonObject allJoinedMessage = new JsonObject();
+                    JsonObject playerInfo = new JsonObject();
+                    allJoinedMessage.addProperty("type", MESSAGE_TYPE.ALL_JOINED.ordinal());
+                    List<Card> personalDeck = user.getFirstHand();
+                    
+                    JsonObject hand = new JsonObject();
+                    for (int i = 0; i < personalDeck.size(); i++){
+                      hand.addProperty(String.valueOf(i), personalDeck.get(i).toString());
+                    }
+                    playerInfo.add("hand", hand);
+                    JsonObject stInfo = new JsonObject();
+                    GamePlayer st = currGame.getPlayer(currGame.getST());
+                    stInfo.addProperty("user_name", st.playerName());
+                    stInfo.addProperty("user_id", st.playerId());
+                    playerInfo.add("storyteller", stInfo);
+                    try {
+                      allJoinedMessage.add("payload", playerInfo);
+                      System.out.println("all messages sent");
+                      gt.getSession(user.playerId()).getRemote().sendString(allJoinedMessage.toString());
+                    } catch (IOException e) {
+                      System.out.println(e);
+                    }   
+                  }
 		  	}
-	  }catch (NullPointerException e) {
+	  } catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 		  System.out.println("Find how to refresh Browser");
 		  
-		}
+	  }
   }
-  
+
   private void assignRole(Session s, int num){
 	  String role="";
-		if(num==1){
+		if (num==1) {
 			role = "teller";
-		}else{
+		} else {
 			role = "guessor";
 		}
 		

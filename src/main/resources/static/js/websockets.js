@@ -32,7 +32,7 @@ const setup_update = () => {
     const data = JSON.parse(msg.data);
     const payload = data.payload;
     console.log("message got!");
-    console.log(payload);
+    console.log("payload" + payload);
     switch (data.type) {
       default:
         console.log('Unknown message type!', data.type);
@@ -52,23 +52,26 @@ const setup_update = () => {
         console.log("new game");
         console.log(payload.game_id);
         console.log(payload.num_players);
-        
+
         if(payload.num_players == 1) {
           $("table.table-hover tbody").append("<tr><td id=\"" + payload.game_id + "\">" + payload.lobby_name + "</td><td class=\"num_players\" id=\"" + payload.game_id + "\">" + payload.num_players + "/" + payload.capacity + "</td></tr>");
         } else if (payload.num_players > 1) {
           $("table.table-hover tbody").find($(".num_players")).text(payload.num_players + "/" + payload.capacity);
         }
       
+      
       case MESSAGE_TYPE.JOIN:
         if(payload.role == "teller"){
           window.location = window.location.href + "storytelling";
-        }else if(payload.role == "guessor"){
+        } else if(payload.role == "guessor"){
             window.location = window.location.href + "guessing";
         }
       break;
+      
       case MESSAGE_TYPE.ALL_JOINED:
         console.log("all joined sent");
         const hand = payload.hand;
+        console.log(payload.storyteller)
         console.log("storyteller is " + payload.storyteller.user_id);
         // change the img of each hand-card div
 
@@ -90,6 +93,7 @@ const setup_update = () => {
         $("#status-indicator-text").text("Storytelling");
 
         break;
+        
       case MESSAGE_TYPE.ST_SUBMIT:
         let prompt = payload.prompt;
         let cardId = payload.card_id;
@@ -110,6 +114,8 @@ const setup_update = () => {
     	  let statuses = JSON.parse(data.payload.statuses);
     	  let playernames = JSON.parse(data.payload.playernames);
     	  console.log(playernames);
+        console.log(statuses);
+
     	  for (let i = 0; i < statuses.length; i ++) {
     		  statusMap[playernames[i]] = statuses[i];
     		  console.log("player names" + playernames[i]);

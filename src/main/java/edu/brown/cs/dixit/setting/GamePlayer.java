@@ -13,6 +13,7 @@ public class GamePlayer implements Player {
   private List<Card> playerDeck;
   private Deck globalDeck;
   private String status;
+ 
   /*
   public static enum STATUS_TYPE {
 		WAITING,
@@ -93,6 +94,7 @@ public class GamePlayer implements Player {
 	  return this.status;
   }
   
+  /*
   public void setGuesser(String input) {
 	  isGuesser = input;
   }
@@ -104,5 +106,5 @@ public class GamePlayer implements Player {
   public List<Card> getHand() {
     return playerDeck;
   }
- 
+ */
 }

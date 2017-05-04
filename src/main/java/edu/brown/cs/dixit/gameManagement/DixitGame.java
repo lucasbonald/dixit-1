@@ -18,18 +18,19 @@ public class DixitGame {
 	private final Deck deck;
 	private Map<String, GamePlayer> players;
 	private Referee referee;
-	private Turn turn;
+	private Map<String, String> playerStatus;
+	private GamePlayer storyTeller;
 	
 	//wrapper for all the information 
 	//needs to contain the players & deck & referee & turn
 	
-	public DixitGame(int gameID, int cap) {
+	public DixitGame(int gameID, int cap, int victPoint) {
 		id = gameID;
 		capacity = cap;
 		deck = new Deck();
 		players = new HashMap<>();
-		referee = new Referee(cap);
-		turn = new Turn(cap);
+		referee = new Referee(cap, victPoint, new Turn(cap));
+		playerStatus = new HashMap<>();
 	}
 	
 	public int getId() {
@@ -64,5 +65,25 @@ public class DixitGame {
 	
 	public Referee getRefree() {
 	    return referee;
+	}
+	
+	public void setST(String id) {
+	  referee.setTeller(id);
+	}
+	
+	public String getST() {
+	  return referee.getStoryTeller();
+	}
+	
+	public void nextTurn() {
+	  referee.incrementTurn();
+	}
+	
+	public void addStatus(String id, String status) {
+	  playerStatus.put(id, status);
+	}
+	
+	public String getStatus(String id) {
+	  return playerStatus.get(id);
 	}
 }
