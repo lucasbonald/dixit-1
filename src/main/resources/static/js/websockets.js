@@ -146,9 +146,11 @@ const setup_update = () => {
         
       case MESSAGE_TYPE.CHAT_MSG:
     	console.log("chat update");
-    	let messages = payload.messages;
-    	for (let i = 0; i < messages.length ; i ++ ) {
-        	$(".chatList").append("<li> <span style=\"color: grey\">" + messages.username[i] + "</span> :" + messages.body[i]  + "</li>");
+    	let messages = JSON.parse(payload.messages);
+    	console.log(messages);
+    	console.log("usrname" + messages.username[0]);
+    	for (let i = 0; i < messages.username.length ; i ++ ) {
+        	$(".chatList").append("<li> <span style=\"color: grey\">" + messages.username[i] + "</span> : " + messages.body[i]  + "</li>");
     	} 
     }
   };
