@@ -10,7 +10,9 @@ const MESSAGE_TYPE = {
   VOTE: 8,
   STATUS: 9,
   MULTI_TAB: 10,
-  STORY: 11
+  STORY: 11,
+  CHAT_UPDATE: 12,
+  CHAT_MSG: 13
 };
 
 let conn;
@@ -99,6 +101,7 @@ const setup_update = () => {
         $("#promptvalue").html("\"" + prompt + "\"" );
         setStatus("Guessing");
         startTimer(15);
+        sendUpdate();
         break;
       case MESSAGE_TYPE.GS_SUBMIT:
 //        let prompt = data.payload.prompt;
@@ -139,7 +142,15 @@ const setup_update = () => {
         let imgId = payload.card_id;
         let votedCardDiv = $("#" + imgId).parent().find(".voters");
         votedCardDiv.append("<span class=\"voter\">" + payload.user_name + "</span>");
+        break;
         
+      case MESSAGE_TYPE.CHAT_UPATE:
+    	console.log("chat update");
+    	let messages = payload.messages;
+    	console.log ("messages" + messages);
+    	$(".chatList").append(messages);
+    	  
+    	  
     }
   };
 }
@@ -225,5 +236,13 @@ function setCookie(cookiename, cookievalue){
   const newcookie = cookiename + "="+cookievalue;
   //console.log(cookiename);
   document.cookie = newcookie;
+}
+
+function sendUpdate() {
+	console.log("sendupdate called from js");
+	const storyMessage = {
+			type: MESSAGE_TYPE.CHAT_MSG,
+		}
+	conn.send(JSON.stringify(storyMessage))
 }
 
