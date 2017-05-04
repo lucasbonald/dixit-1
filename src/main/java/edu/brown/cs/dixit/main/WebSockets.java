@@ -129,8 +129,6 @@ public class WebSockets {
   			String prompt = payload.get("prompt").getAsString();
 
   			int cardId = payload.get("card_id").getAsInt();
-  			//assume it it exists
-  			String playerId = payload.get("player_id").getAsString();
   			String cardUrl = payload.get("card_url").getAsString();
 			JsonObject stMessage = new JsonObject();
 			stMessage.addProperty("type", MESSAGE_TYPE.ST_SUBMIT.ordinal());
@@ -142,22 +140,16 @@ public class WebSockets {
 			stMessage.add("payload", stSubmitPayload);
 		    System.out.println("curr:" + currGame);
 		    currRef = currGame.getRefree();
-		   
-		    /// need playerId from input
-			currRef.receiveStory(prompt, playerId, cardId);
-			currRef.setChosen(playerId, cardId);			
+			currRef.receiveStory(prompt, currGame.getST(), cardId);
+			currRef.setChosen(currGame.getST(), cardId);			
 			
-			//does GamePlayer need storyteller position?
-			//String stId = getSTId(currGame);
 			
-			// update status of guessers and storyteller
 			for (GamePlayer player : currGame.getPlayers()){
-				player.setStatus("Guessing");
+				currGame.addStatus(player.playerId(), "Voting");
 			}
-			//currGame.getPlayer(stId).setStatus("Waiting");
-			//sendMsgToGame(stMessage.toString());
-			
-  			//this.updateStatus(currGame);
+			currGame.addStatus(currGame.getST(), "Waiting");
+			sendMsgToGame(stMessage.toString());
+			updateStatus(currGame);
   		  
   			break;
   			
