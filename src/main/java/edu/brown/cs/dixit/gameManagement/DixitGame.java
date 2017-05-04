@@ -19,7 +19,6 @@ public class DixitGame {
 	private Map<String, GamePlayer> players;
 	private Referee referee;
 	private Map<String, String> playerStatus;
-	private GamePlayer storyTeller;
 	
 	//wrapper for all the information 
 	//needs to contain the players & deck & referee & turn
@@ -52,6 +51,7 @@ public class DixitGame {
 	public GamePlayer addPlayer(String id, String name) {
 	    GamePlayer new_player = new GamePlayer(id, name, deck);
 	    players.put(id, new_player);
+	    referee.getTurn().addPlayers(new_player);
 	    return new_player;
 	}
 	
