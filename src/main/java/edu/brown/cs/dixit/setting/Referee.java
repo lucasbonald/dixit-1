@@ -179,4 +179,9 @@ public class Referee {
   public Turn getTurn() {
     return gameTurn;
   }
+  
+  public void addBoard(String id, int defPoint) {
+    scoreBoard.put(id, defPoint);
+  }
+ 
 }

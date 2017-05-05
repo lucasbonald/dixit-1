@@ -10,7 +10,7 @@ const MESSAGE_TYPE = {
   VOTE: 8,
   STATUS: 9,
   MULTI_TAB: 10,
-  STORY: 11,
+  RESULTS: 11,
   CHAT_UPDATE: 12,
   CHAT_MSG: 13
 };
@@ -149,7 +149,9 @@ const setup_update = () => {
     	let messages = payload.messages;
     	console.log ("messages" + messages);
     	$(".chatList").append(messages);
-    	  
+    	
+      case MESSAGE_TYPE.RESULTS:
+      console.log(payload)  
     	  
     }
   };
