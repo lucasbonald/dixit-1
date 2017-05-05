@@ -1,7 +1,7 @@
 let currState = "Storytelling";
 
 $(document).ready(function(){
-  
+
   // selecting a card from the hand for storytelling/voting
   $(".hand-card").click(function(event) {
     
@@ -25,6 +25,7 @@ $(document).ready(function(){
 	  const time = new Date().getTime();
 	  sendChat(body, time);	  
 	  $("#messageForm")[0].reset();
+
   });
 
   // submitting a story, with its associated card

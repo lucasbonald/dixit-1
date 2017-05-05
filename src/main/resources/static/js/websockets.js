@@ -156,8 +156,9 @@ const setup_update = () => {
     	for (let i = 0; i < length ; i ++ ) {
         	//$(".chatList").prepend("<li> <span style=\"color: grey\">" + messages.username[length-i-1] + "</span> : " + messages.body[length-i-1]  + "</li>");
         	$(".chatList").append("<li> <span style=\"color: grey\">" + messages.username[i] + "</span> : " + messages.body[i]  + "</li>");
-
     	} 
+    	$(".chatList").scrollTop($(".chatList")[0].scrollHeight);
+
     }
   };
 }
