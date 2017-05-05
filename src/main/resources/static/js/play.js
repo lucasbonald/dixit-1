@@ -6,33 +6,15 @@ $(document).ready(function(){
   $(".hand-card").click(function(event) {
     
     const cardInfo = getCardInfo($(this).find("div"));
-
-<<<<<<< HEAD
-    console.log("card id of clicked " + cardInfo.id);
-    let myId = getElementFromCookies("userid");
-    if ((currState == "Storytelling" && myId == storyteller) || (currState == "Guessing" && myId != storyteller)) {
-      $(".picked").empty();
-     // $(".picked").append("<img id=\"" + card.attr('id') + "\" src=\"" + card.attr('src') + "\"></img>");
-      $(".picked").append("<div class = \"image bigimg\" id=\"" + cardInfo.id + "\" style = \"background-image: url(" + cardInfo.url + "); background-size: cover; background-repeat: no-repeat;\"></div>"
-)
-      
-    } 
-=======
-
-    console.log("clicked card url " + url);
-     
-    //     console.log("url is " + url);
-
-    console.log("card id of clicked " + card.attr('id'));
+    //console.log("card id of clicked " + card.attr('id'));
     let myId = getElementFromCookies("userid");
     if ((currState == "Storytelling" && myId == storyteller) || (currState == "Guessing" && myId != storyteller)) {
       $(".picked").empty();
       console.log("why is this not wokring dammit");
-      $(".picked").append("<div class = \"image bigimg\" id=\"" + card.attr('id') + "\" style = \"background-image: url(" + url + "); background-size: cover; background-repeat: no-repeat;\"></div>")
+      $(".picked").append("<div class = \"image bigimg\" id=\"" + cardInfo.id + "\" style = \"background-image: url(" + cardInfo.url + "); background-size: cover; background-repeat: no-repeat;\"></div>")
     } else {
     	console.log("myid is " + myId);
     }
->>>>>>> 965304a80031ea0f70c18a408b32b8d0e594c8cc
 
   });
   //submitting chatform when submitted
@@ -161,13 +143,13 @@ function sendVote(card_id) {
   conn.send(JSON.stringify(vote));
 }
 
-<<<<<<< HEAD
 function getCardInfo(card) {
   const id = card.attr("id");
   const img = card.attr("style");
   const url = img.replace(/.*\s?url\([\'\"]?/, '').replace(/[\'\"]?\).*/, '');
   return {id: id, url: url};
-=======
+}
+
 function sendChat(message, inputTime) {
   const chat= {
     type: MESSAGE_TYPE.CHAT_MSG,
@@ -177,5 +159,4 @@ function sendChat(message, inputTime) {
     }
   }
   conn.send(JSON.stringify(chat));
->>>>>>> 965304a80031ea0f70c18a408b32b8d0e594c8cc
 }

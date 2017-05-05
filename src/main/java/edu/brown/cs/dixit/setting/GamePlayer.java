@@ -52,10 +52,14 @@ public class GamePlayer implements Player {
   }
   
   // remove card after submitting
-  public Card removeCard(int ithCard) {
-    Card removed;
-    removed = playerDeck.remove(ithCard);
-    return removed;
+  public void removeCard(int cardId) {
+    Card removed = null;
+    for (Card c: playerDeck) {
+      if (c.getId() == cardId) {
+        removed = c;
+      }
+    }
+    playerDeck.remove(removed);
   }
   
   //when one card is used, automatically refill until
