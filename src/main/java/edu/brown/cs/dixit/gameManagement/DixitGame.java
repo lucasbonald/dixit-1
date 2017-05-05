@@ -52,6 +52,7 @@ public class DixitGame {
 	    GamePlayer new_player = new GamePlayer(id, name, deck);
 	    players.put(id, new_player);
 	    referee.getTurn().addPlayers(new_player);
+	    referee.addBoard(id, 0);
 	    return new_player;
 	}
 	

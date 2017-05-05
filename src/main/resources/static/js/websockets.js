@@ -9,11 +9,10 @@ const MESSAGE_TYPE = {
   ALL_GUESSES: 7,
   VOTE: 8,
   STATUS: 9,
-  RESULTS: 10,
-  MULTI_TAB: 11,
-  STORY: 12,
-  CHAT_UPDATE: 13,
-  CHAT_MSG: 14
+  MULTI_TAB: 10,
+  RESULTS: 11,
+  CHAT_UPDATE: 12,
+  CHAT_MSG: 13
 };
 
 let conn;
@@ -150,10 +149,17 @@ const setup_update = () => {
         let votedCardDiv = $("#" + imgId).parent().find(".voters");
         votedCardDiv.append("<span class=\"voter\">" + payload.user_name + "</span>");
         break;
+<<<<<<< HEAD
       
       case MESSAGE_TYPE.RESULTS:
         break;
         
+=======
+
+      case MESSAGE_TYPE.RESULTS:
+      console.log(payload)  
+    	  
+>>>>>>> b348fbaf573690be76025d5cf420fc99ae150869
       case MESSAGE_TYPE.CHAT_UPDATE:
     	let messages = JSON.parse(payload.messages);
     	let length = messages.username.length;

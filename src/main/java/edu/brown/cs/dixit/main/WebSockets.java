@@ -53,7 +53,7 @@ public class WebSockets {
     STATUS,
     RESULTS,
     MULTI_TAB,
-    STORY,
+    RESULTS,
     CHAT_UPDATE,
     CHAT_MSG
   }
@@ -280,6 +280,15 @@ public class WebSockets {
   			
   			if (currRef.getPickedSize() == currGame.getCapacity() - 1) {
   				System.out.println("all voting done!");
+  				Map<String, Integer> result = currRef.tallyScores();
+                JsonObject voteResult = new JsonObject();
+                voteResult.addProperty("type", MESSAGE_TYPE.RESULTS.ordinal());
+                JsonObject resultInfo = new JsonObject();
+  				for (String key: result.keySet()) {
+  				  resultInfo.addProperty(key, result.get(key));
+  				}
+  	            voteResult.add("payload", resultInfo);
+  				sendMsgToGame(voteResult.toString());
   			}
   			break;
   			
