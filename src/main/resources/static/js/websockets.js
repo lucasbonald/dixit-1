@@ -17,6 +17,7 @@ const MESSAGE_TYPE = {
 
 let conn;
 let storyteller = -1;
+let myId = -1;
 
 //set up socket connection and define types
 const setup_update = () => {
@@ -85,10 +86,13 @@ const setup_update = () => {
         }
 
         const players = payload.players;
+        console.log("players:");
+        console.log(players);
+        $("#scoreboard").empty();
         for (player of Object.keys(players)) {
           let player_name = players[player].user_name;
-          let player_id = players[player].user_id;
-          $("#scoreboard").append("<tr><td>" + player_name + "</td><td id=\"" + player_id.split("-").join("") + "status\"></td><td id=\"" + player_id.split("-").join("") + "points\">0</td></tr>");
+          let player_id = players[player].user_id;  
+          $("#scoreboard").append("<tr><td>" + player_name + "</td><td id=\"" + player_id + "status\"></td><td id=\"" + player_id + "points\">0</td></tr>");
         }
         
         setStoryTeller(payload.storyteller);
@@ -105,7 +109,7 @@ const setup_update = () => {
         let cardUrl = payload.card_url;
         $("#promptvalue").html("\"" + prompt + "\"" );
         setStatus("Guessing");
-        let myId = getElementFromCookies("userid");
+        myId = getElementFromCookies("userid");
         if (myId != storyteller) {
           startTimer(15);  
         }
@@ -124,7 +128,7 @@ const setup_update = () => {
         console.log(statuses);
 
     	  for (let i = 0; i < statuses.length; i ++) {
-    		  statusMap[playerIds[i].split("-").join("")] = statuses[i];
+    		  statusMap[playerIds[i]] = statuses[i];
     	  }
         updateStatus(statusMap);
         break;
@@ -141,6 +145,12 @@ const setup_update = () => {
 
         $(".picked-cards").append("<div class=\"card picked\"><div class = \"image bigimg\" id=\"" + answerCardId + "\" style = \"background-image: url(" + answerCardUrl + "); background-size: cover; background-repeat: no-repeat;\"></div><div class=\"voters\"></div></div>");
         $(".picked-cards").append("<div class=\"card picked\"><div class = \"image bigimg\" id=\"" + guessedCardId + "\" style = \"background-image: url(" + guessedCardUrl + "); background-size: cover; background-repeat: no-repeat;\"></div><div class=\"voters\"></div></div>");
+        
+        myId = getElementFromCookies("userid");
+        if (myId != storyteller) {
+          startTimer(30);  
+        }
+        
         break;
       
       case MESSAGE_TYPE.VOTE:
@@ -149,25 +159,20 @@ const setup_update = () => {
         let votedCardDiv = $("#" + imgId).parent().find(".voters");
         votedCardDiv.append("<span class=\"voter\">" + payload.user_name + "</span>");
         break;
-<<<<<<< HEAD
-      
-      case MESSAGE_TYPE.RESULTS:
-        break;
-        
-=======
 
       case MESSAGE_TYPE.RESULTS:
-      console.log(payload)  
-    	  
->>>>>>> b348fbaf573690be76025d5cf420fc99ae150869
+        console.log(payload);
+        updatePoints(payload);
+    	  break;
+      
       case MESSAGE_TYPE.CHAT_UPDATE:
-    	let messages = JSON.parse(payload.messages);
-    	let length = messages.username.length;
-    	$(".chatList").empty();
-    	for (let i = 0; i < Math.min(6, length) ; i ++ ) {
-        	$(".chatList").prepend("<li> <span style=\"color: grey\">" + messages.username[length-i-1] + "</span> : " + messages.body[length-i-1]  + "</li>");
-    	} 
-    }
+        let messages = JSON.parse(payload.messages);
+        let length = messages.username.length;
+        $(".chatList").empty();
+        for (let i = 0; i < Math.min(6, length) ; i ++ ) {
+            $(".chatList").prepend("<li> <span style=\"color: grey\">" + messages.username[length-i-1] + "</span> : " + messages.body[length-i-1]  + "</li>");
+        } 
+      }
   };
 }
 

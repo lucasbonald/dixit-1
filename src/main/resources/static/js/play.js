@@ -129,7 +129,10 @@ function sendGuess(card_id) {
   conn.send(JSON.stringify(guess));
   console.log("Parent: " + $(".hand").find("#" + card_id).parent());
   $(".hand").find("#" + card_id).parent().remove();
-  $("#guesser-button").val("Vote"); 
+  $("#guesser-button").val("Vote");
+  
+  clearInterval(timer);
+  $("#stopwatchvalue").html("Guessed!");
 }
 
 
@@ -142,6 +145,8 @@ function sendVote(card_id) {
     }
   }
   conn.send(JSON.stringify(vote));
+  clearInterval(timer);
+  $("#stopwatchvalue").html("Voted!");
 }
 
 function getCardInfo(card) {

@@ -2,14 +2,14 @@ $(document).ready(function() {
   
 });
 // seconds in the form 15
-counter = 1;
+let timer;
 function startTimer(seconds) {
-	$("#stopwatchvalue").html(seconds);
+//	$("#stopwatchvalue").html(seconds);
 	let time = seconds;
-	let timer = setInterval(function() {
+	timer = setInterval(function() {
 		if (time > 0) {
-			time -= 1;
-			$("#stopwatchvalue").html(time);
+			$("#stopwatchvalue").html(time >= 10 ? "00:" + time : "00:0" + time);
+      time -= 1;
 		} else {
 			$("#stopwatchvalue").html("<span style = \'font-size: 4vw; color: red;\'>Time's Up!</span>");
       

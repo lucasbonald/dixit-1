@@ -51,7 +51,6 @@ public class WebSockets {
     ALL_GUESSES,
     VOTE,
     STATUS,
-    RESULTS,
     MULTI_TAB,
     RESULTS,
     CHAT_UPDATE,
@@ -217,7 +216,7 @@ public class WebSockets {
 			
 			
 			for (GamePlayer player : currGame.getPlayers()){
-				currGame.addStatus(player.playerId(), "Voting");
+				currGame.addStatus(player.playerId(), "Guessing");
 			}
 			currGame.addStatus(currGame.getST(), "Waiting");
 			sendMsgToGame(stMessage.toString());
@@ -239,21 +238,21 @@ public class WebSockets {
 		    
 		    if (besRef.getChosenSize() == currGame.getCapacity()) {
 	    		System.out.println("all guesses received");
-	        JsonObject allGuessesMessage = new JsonObject();
-	        allGuessesMessage.addProperty("type", MESSAGE_TYPE.ALL_GUESSES.ordinal());        
-          JsonObject guessesPayload = new JsonObject();
-          guessesPayload.addProperty("answer", besRef.getAnswer());
-          guessesPayload.addProperty("guessed", besRef.getChosen(userId));
-          allGuessesMessage.add("payload", guessesPayload);
-          sendMsgToGame(allGuessesMessage.toString());
-          
-          for (GamePlayer player : currGame.getPlayers()) {
-          	if (player.playerId() != besRef.getStoryTeller()) {
-          		player.setStatus("Voting");
-          	}
-          }
-          
-          //updateStatus(currGame);
+		        JsonObject allGuessesMessage = new JsonObject();
+		        allGuessesMessage.addProperty("type", MESSAGE_TYPE.ALL_GUESSES.ordinal());        
+	          JsonObject guessesPayload = new JsonObject();
+	          guessesPayload.addProperty("answer", besRef.getAnswer());
+	          guessesPayload.addProperty("guessed", besRef.getChosen(userId));
+	          allGuessesMessage.add("payload", guessesPayload);
+	          sendMsgToGame(allGuessesMessage.toString());
+	          
+	          for (GamePlayer player : currGame.getPlayers()) {
+	          	if (player.playerId() != besRef.getStoryTeller()) {
+	          		player.setStatus("Voting");
+	          	}
+	          }
+	          
+	          updateStatus(currGame);
           
 		    }
 

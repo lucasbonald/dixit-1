@@ -46,27 +46,32 @@
 			</div>
 			<hr>
 			<div class = "statuselement">
-			STORYTELLER
+			<span class="statuselement-header">Storyteller</span>
 				<div>
 				<span id="st-identity">Player</span>
 				</div>
 			</div>
 			<hr>
 			<div class="statuselement">
-			PLAYER FEED
-				<table id="scoreboard">
-					<tr>
-						<th>Player</th>
-						<th>Status</th>
-						<th>Points</th>
-					</tr>
+			<span class="statuselement-header">Player Feed</span>
+				<br>
+				<table id="player-feed">
+					<thead>
+						<tr>
+							<th>Player</th>
+							<th>Status</th>
+							<th>Points</th>
+						</tr>
+					</thead>
+					<tbody id="scoreboard">
+					</tbody>
 				</table>
 			</div>
 			
 			
 			<hr>
 			<div class = "statuselement" id = "chatroom">
-			CHAT
+			<span class="statuselement-header">Chat</span>
 			<div class = "chatbox">
 				<ul class = "chatList">
 				</ul>
