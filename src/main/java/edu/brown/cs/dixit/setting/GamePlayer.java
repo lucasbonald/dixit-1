@@ -60,7 +60,7 @@ public class GamePlayer implements Player {
   
   //when one card is used, automatically refill until
   //none left in the deck
-  public Card refillCard() {
+  public List<Card> refillCard() {
     Random rand = new Random();
     Card newCard;
     if (globalDeck.getDeckSize() > 0) {
@@ -70,7 +70,7 @@ public class GamePlayer implements Player {
     } else {
       return null;
     }
-    return newCard;
+    return playerDeck;
   }
   
   public void setStatus(String status) {

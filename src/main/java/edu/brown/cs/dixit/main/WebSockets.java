@@ -54,7 +54,8 @@ public class WebSockets {
     MULTI_TAB,
     RESULTS,
     CHAT_UPDATE,
-    CHAT_MSG
+    CHAT_MSG,
+    END_OF_ROUND
   }
 
   public static void connectDB() throws ClassNotFoundException, SQLException {
@@ -216,7 +217,7 @@ public class WebSockets {
 			
 			
 			for (GamePlayer player : currGame.getPlayers()){
-				currGame.addStatus(player.playerId(), "Voting");
+				currGame.addStatus(player.playerId(), "Guessing");
 			}
 			currGame.addStatus(currGame.getST(), "Waiting");
 			sendMsgToGame(stMessage.toString());
@@ -229,33 +230,30 @@ public class WebSockets {
 		    System.out.println("Guess received");
 		    int guessedCard = payload.get("card_id").getAsInt();
 		    GamePlayer guesser = currGame.getPlayer(payload.get("user_id").getAsString());
-		    guesser.setStatus("Guessed");
-		    Referee besRef = currGame.getRefree();
-		    besRef.setChosen(userId, guessedCard);
+		    guesser.removeCard(guessedCard);
+		    currRef = currGame.getRefree();
+		    currRef.setChosen(userId, guessedCard);
 		    
-		    System.out.println("num guesses: " + besRef.getChosenSize());
+		    System.out.println("num guesses: " + currRef.getChosenSize());
 		    System.out.println("capacity: " + currGame.getCapacity());
 		    
-		    if (besRef.getChosenSize() == currGame.getCapacity()) {
+		    if (currRef.getChosenSize() == currGame.getCapacity()) {
 	    		System.out.println("all guesses received");
-	        JsonObject allGuessesMessage = new JsonObject();
-	        allGuessesMessage.addProperty("type", MESSAGE_TYPE.ALL_GUESSES.ordinal());        
-          JsonObject guessesPayload = new JsonObject();
-          guessesPayload.addProperty("answer", besRef.getAnswer());
-          guessesPayload.addProperty("guessed", besRef.getChosen(userId));
-          allGuessesMessage.add("payload", guessesPayload);
-          sendMsgToGame(allGuessesMessage.toString());
+    	        JsonObject allGuessesMessage = new JsonObject();
+    	        allGuessesMessage.addProperty("type", MESSAGE_TYPE.ALL_GUESSES.ordinal());        
+                JsonObject guessesPayload = new JsonObject();
+                guessesPayload.addProperty("answer", currRef.getAnswer());
+                guessesPayload.addProperty("guessed", currRef.getChosen(userId));
+                allGuessesMessage.add("payload", guessesPayload);
+                sendMsgToGame(allGuessesMessage.toString());
           
-          for (GamePlayer player : currGame.getPlayers()) {
-          	if (player.playerId() != besRef.getStoryTeller()) {
-          		player.setStatus("Voting");
-          	}
-          }
-          
-          //updateStatus(currGame);
-          
+                for (GamePlayer player : currGame.getPlayers()){
+                  currGame.addStatus(player.playerId(), "Voting");
+                }
+                currGame.addStatus(currGame.getST(), "Waiting");
+                sendMsgToGame(allGuessesMessage.toString());
+                updateStatus(currGame);
 		    }
-
   			break;
   			
   		case VOTE:
@@ -283,11 +281,24 @@ public class WebSockets {
                 JsonObject voteResult = new JsonObject();
                 voteResult.addProperty("type", MESSAGE_TYPE.RESULTS.ordinal());
                 JsonObject resultInfo = new JsonObject();
-  				for (String key: result.keySet()) {
+  				// new Storyteller
+                currGame.nextTurn();
+  				JsonObject stInfo = getSTdetails();
+                
+                for (String key: result.keySet()) {
   				  resultInfo.addProperty(key, result.get(key));
   				}
-  	            voteResult.add("payload", resultInfo);
-  				sendMsgToGame(voteResult.toString());
+  				for (String key: result.keySet()) {
+  				  resultInfo.add("storyteller", stInfo);
+  				  List<Card> personalDeck = currGame.getPlayer(key).refillCard();
+  				  JsonObject hand = new JsonObject();
+                  for (int i = 0; i < personalDeck.size(); i++) {
+                    hand.addProperty(String.valueOf(i), personalDeck.get(i).toString());
+                  }
+                  resultInfo.add("hand", hand);
+                  voteResult.add("payload", resultInfo);
+                  gt.getSession(key).getRemote().sendString(voteResult.toString());
+  				}	
   			}
   			break;
   			
@@ -297,7 +308,7 @@ public class WebSockets {
   			String game = this.getRoomId(session);
   			String username = this.getUsername(session);
   			this.saveMessage(game, username, body, time);
-  			this.getMessage(game);
+  			this.getMessage(game);  		    
   	}
   }
   
@@ -431,10 +442,7 @@ public class WebSockets {
                       hand.addProperty(String.valueOf(i), personalDeck.get(i).toString());
                     }
                     playerInfo.add("hand", hand);
-                    JsonObject stInfo = new JsonObject();
-                    GamePlayer st = currGame.getPlayer(currGame.getST());
-                    stInfo.addProperty("user_name", st.playerName());
-                    stInfo.addProperty("user_id", st.playerId());
+                    JsonObject stInfo = getSTdetails();
                     playerInfo.add("storyteller", stInfo);
                     try {
                       allJoinedMessage.add("payload", playerInfo);
@@ -450,6 +458,14 @@ public class WebSockets {
 		  System.out.println("Find how to refresh Browser");
 		  
 	  }
+  }
+  
+  private JsonObject getSTdetails() {
+    JsonObject stInfo = new JsonObject();
+    GamePlayer st = currGame.getPlayer(currGame.getST());
+    stInfo.addProperty("user_name", st.playerName());
+    stInfo.addProperty("user_id", st.playerId());
+    return stInfo;
   }
 
   private void assignRole(Session s, int num){
