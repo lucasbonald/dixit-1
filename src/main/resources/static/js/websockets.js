@@ -98,7 +98,11 @@ const setup_update = () => {
         let cardUrl = payload.card_url;
         $("#promptvalue").html("\"" + prompt + "\"" );
         setStatus("Guessing");
-        startTimer(15);
+        
+        let myId = getElementFromCookies("userid");
+        if (myId != storyteller) {
+          startTimer(15);  
+        }
         break;
       case MESSAGE_TYPE.GS_SUBMIT:
 //        let prompt = data.payload.prompt;

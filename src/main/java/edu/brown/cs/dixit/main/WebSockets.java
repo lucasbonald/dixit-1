@@ -161,6 +161,10 @@ public class WebSockets {
 		    guesser.setStatus("Guessed");
 		    Referee besRef = currGame.getRefree();
 		    besRef.setChosen(userId, guessedCard);
+		    
+		    System.out.println("num guesses: " + besRef.getChosenSize());
+		    System.out.println("capacity: " + currGame.getCapacity());
+		    
 		    if (besRef.getChosenSize() == currGame.getCapacity()) {
 	    		System.out.println("all guesses received");
 	        JsonObject allGuessesMessage = new JsonObject();
