@@ -162,7 +162,10 @@ const setup_update = () => {
 
       case MESSAGE_TYPE.RESULTS:
         console.log(payload);
-        updatePoints(payload);
+        updatePoints(payload.points);
+        displayPoints(payload.points);
+//        setTimeout(newRound, 5000);
+        
     	  break;
       
       case MESSAGE_TYPE.CHAT_UPDATE:

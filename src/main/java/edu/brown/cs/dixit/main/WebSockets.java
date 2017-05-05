@@ -285,9 +285,12 @@ public class WebSockets {
                 currGame.nextTurn();
   				JsonObject stInfo = getSTdetails();
                 
+  				JsonObject points = new JsonObject();
                 for (String key: result.keySet()) {
-  				  resultInfo.addProperty(key, result.get(key));
+  				  points.addProperty(key, result.get(key));
   				}
+                resultInfo.add("points", points);
+                
   				for (String key: result.keySet()) {
   				  resultInfo.add("storyteller", stInfo);
   				  List<Card> personalDeck = currGame.getPlayer(key).refillCard();

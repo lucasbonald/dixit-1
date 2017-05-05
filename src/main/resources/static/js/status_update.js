@@ -62,4 +62,14 @@ function updatePoints(points) {
   
 }
 
-
+function displayPoints(points) {
+  
+  for (id of Object.keys(points)) {
+    if (id == myId) {
+      $("#received-points").html(points[id]);
+    }
+  }
+  
+  $(".results-overlay").removeClass("hidden");
+  
+}

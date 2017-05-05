@@ -56,7 +56,7 @@
 			<span class="statuselement-header">Player Feed</span>
 				<br>
 				<table id="player-feed">
-					<thead>
+					<thead>	
 						<tr>
 							<th>Player</th>
 							<th>Status</th>
@@ -87,7 +87,9 @@
 		    </div>
 		</div>
 	</div>
-
+	<div class="results-overlay hidden">
+		<span id="results-message">You've received <span id="received-points"></span> points.</span>
+	</div>
 </div>
 
 
