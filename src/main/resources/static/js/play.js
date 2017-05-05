@@ -7,16 +7,15 @@ $(document).ready(function(){
     
     const cardInfo = getCardInfo($(this).find("div"));
 
-    console.log("card id of clicked " + cardInfo.id);
+    //console.log("card id of clicked " + card.attr('id'));
     let myId = getElementFromCookies("userid");
     if ((currState == "Storytelling" && myId == storyteller) || (currState == "Guessing" && myId != storyteller)) {
       $(".picked").empty();
-     // $(".picked").append("<img id=\"" + card.attr('id') + "\" src=\"" + card.attr('src') + "\"></img>");
-      $(".picked").append("<div class = \"image bigimg\" id=\"" + cardInfo.id + "\" style = \"background-image: url(" + cardInfo.url + "); background-size: cover; background-repeat: no-repeat;\"></div>"
-)
-      
-    } 
-
+      console.log("why is this not wokring dammit");
+      $(".picked").append("<div class = \"image bigimg\" id=\"" + cardInfo.id + "\" style = \"background-image: url(" + cardInfo.url + "); background-size: cover; background-repeat: no-repeat;\"></div>")
+    } else {
+    	console.log("myid is " + myId);
+    }
 
   });
   //submitting chatform when submitted
@@ -144,6 +143,8 @@ function sendVote(card_id) {
   }
   conn.send(JSON.stringify(vote));
 }
+
+
 function getCardInfo(card) {
   const id = card.attr("id");
   const img = card.attr("style");
@@ -151,7 +152,8 @@ function getCardInfo(card) {
   return {id: id, url: url};
 }
 
-  function sendChat(message, inputTime) {
+
+function sendChat(message, inputTime) {
   const chat= {
     type: MESSAGE_TYPE.CHAT_MSG,
     payload: {
