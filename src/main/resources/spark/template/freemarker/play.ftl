@@ -37,7 +37,7 @@
 			</div>
 
 		</div>
-		<ul class = "col-xs-3 statusbar" style= "border-color:  black; border-width: 5px; background-color: #f5e4e4;">
+		<div class = "col-xs-3 statusbar" style= "border-color:  black; border-width: 5px; background-color: #f5e4e4;">
 			<hr>
 			<div class = "statuselement" id = "stopwatch">
 			<div id = "stopwatchvalue">
@@ -52,17 +52,18 @@
 				</div>
 			</div>
 			<hr>
-			<div class = "statuselement" id = "statusfeed">
-			STATUS FEED
-			<div class = "feed">
-				<ul class = "feedList">
-					<li> <span style="color: transparent">ss</span> </li>
-					<li> <span style="color: transparent">ss</span></li>
-					<li> <span style="color: transparent">ss</span></li>
-					<li> <span style = "color: transparent" ss</span></li>
-				</ul>
+			<div class="statuselement">
+			PLAYER FEED
+				<table id="scoreboard">
+					<tr>
+						<th>Player</th>
+						<th>Status</th>
+						<th>Points</th>
+					</tr>
+				</table>
 			</div>
-			</div>
+			
+			
 			<hr>
 			<div class = "statuselement" id = "chatroom">
 			CHAT
@@ -79,7 +80,7 @@
 		      </form>
 		    </div>
 		    </div>
-		</ul>
+		</div>
 	</div>
 
 </div>

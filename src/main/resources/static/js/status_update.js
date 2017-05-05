@@ -39,15 +39,27 @@ function setStatus (status) {
   currState = status;
 	$("#status-indicator-text").html(status);
 }
+
 function updateStatus(statusMap) {
-	console.log("update status, at progress.js");
-	$(".feedList").empty();
+	console.log("statuses: ");
+  console.log(statusMap);
+//	$(".feedList").empty();
 	let players = Object.keys(statusMap);
-	for (let i = 0 ; i < players.length; i ++) {
-		$(".feedList").append("<li> <span style=\"color: grey\">" + players[i] + "</span> : " + statusMap[players[i]] + "</li>")
+	for (let i = 0; i < players.length; i ++) {
+    console.log($("#scoreboard").attr("id"));
+    $("#scoreboard").find("#" + players[i] + "status").html(statusMap[players[i]]);
+    
+    console.log($("#" + players[i] + "status"));
+    
+//		$(".feedList").append("<li> <span style=\"color: grey\">" + players[i] + "</span> : " + statusMap[players[i]] + "</li>")
 	}
 } 
 
-
+function updatePoints(points) {
+  for (player of Object.keys(points)) {
+    $("#" + player + "points").html(points[player]); 
+  }
+  
+}
 
 

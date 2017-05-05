@@ -352,6 +352,12 @@ html, body, .wrapper, .row, .screen, .board, .statusbar {
 	height: 100%;
 }
 
+.statusbar {
+  display:flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .vote-selected {
   border-color: #FFFF00;
 }

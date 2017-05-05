@@ -9,10 +9,11 @@ const MESSAGE_TYPE = {
   ALL_GUESSES: 7,
   VOTE: 8,
   STATUS: 9,
-  MULTI_TAB: 10,
-  STORY: 11,
-  CHAT_UPDATE: 12,
-  CHAT_MSG: 13
+  RESULTS: 10,
+  MULTI_TAB: 11,
+  STORY: 12,
+  CHAT_UPDATE: 13,
+  CHAT_MSG: 14
 };
 
 let conn;
@@ -69,12 +70,10 @@ const setup_update = () => {
       break;
       
       case MESSAGE_TYPE.ALL_JOINED:
-        console.log("all joined sent");
         const hand = payload.hand;
         console.log(payload.storyteller)
-        console.log("storyteller is " + payload.storyteller.user_id);
+        
         // change the img of each hand-card div
-
         for (card of Object.keys(hand)) {
           console.log("card number: " + card);
           let cardInfo = hand[card].split("url:");
@@ -86,12 +85,19 @@ const setup_update = () => {
           //$card.append("<img id=\"" + cardId + "\" src=\"" + url + "\"></img>");
         }
 
+        const players = payload.players;
+        for (player of Object.keys(players)) {
+          let player_name = players[player].user_name;
+          let player_id = players[player].user_id;
+          $("#scoreboard").append("<tr><td>" + player_name + "</td><td id=\"" + player_id.split("-").join("") + "status\"></td><td id=\"" + player_id.split("-").join("") + "points\">0</td></tr>");
+        }
+        
         setStoryTeller(payload.storyteller);
 
         // dialog box for each player's screen to see if their ready
         setStatus("Storytelling");
         $("#status-indicator-text").text("Storytelling");
-
+        
         break;
         
       case MESSAGE_TYPE.ST_SUBMIT:
@@ -114,15 +120,14 @@ const setup_update = () => {
     	  console.log("updating status, at websockets");
     	  let statusMap = {};
     	  let statuses = JSON.parse(data.payload.statuses);
-    	  let playernames = JSON.parse(data.payload.playernames);
-    	  console.log(playernames);
+    	  let playerIds = JSON.parse(data.payload.player_ids);
+    	  console.log(playerIds);
         console.log(statuses);
 
     	  for (let i = 0; i < statuses.length; i ++) {
-    		  statusMap[playernames[i]] = statuses[i];
-    		  console.log("player names" + playernames[i]);
+    		  statusMap[playerIds[i].split("-").join("")] = statuses[i];
     	  }
-    	  updateStatus(statusMap);
+        updateStatus(statusMap);
         break;
     	
       case MESSAGE_TYPE.ALL_GUESSES:
@@ -144,6 +149,9 @@ const setup_update = () => {
         let imgId = payload.card_id;
         let votedCardDiv = $("#" + imgId).parent().find(".voters");
         votedCardDiv.append("<span class=\"voter\">" + payload.user_name + "</span>");
+        break;
+      
+      case MESSAGE_TYPE.RESULTS:
         break;
         
       case MESSAGE_TYPE.CHAT_UPDATE:

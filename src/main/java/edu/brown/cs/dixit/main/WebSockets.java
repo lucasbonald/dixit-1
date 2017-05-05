@@ -51,6 +51,7 @@ public class WebSockets {
     ALL_GUESSES,
     VOTE,
     STATUS,
+    RESULTS,
     MULTI_TAB,
     STORY,
     CHAT_UPDATE,
@@ -190,7 +191,7 @@ public class WebSockets {
   			DixitGame join = gt.getGame(gameId);
   			GamePlayer joiner = createNewUser(session, join, user);
   			join.addStatus(joiner.playerId(), "Waiting");
-  			updateStatus(join);
+  			
   			
   			break;		
   			
@@ -370,16 +371,16 @@ public class WebSockets {
 	  JsonObject statusMessage = new JsonObject();
 	  JsonObject statusPayload = new JsonObject();
 	  statusMessage.addProperty("type", MESSAGE_TYPE.STATUS.ordinal());
-		List<String> playernames = new ArrayList<>();
+		List<String> playerIds = new ArrayList<>();
 		List<String> statuses = new ArrayList<>();
 
 		for (GamePlayer user : game.getPlayers()) {
 			  // need toString override method
-			playernames.add(user.playerName());
+			playerIds.add(user.playerId());
 			statuses.add(game.getStatus(user.playerId()));
 		}
 
-		statusPayload.addProperty("playernames", GSON.toJson(playernames));
+		statusPayload.addProperty("player_ids", GSON.toJson(playerIds));
 		statusPayload.addProperty("statuses", GSON.toJson(statuses));
 
 		statusMessage.add("payload", statusPayload);
@@ -410,23 +411,43 @@ public class WebSockets {
 		  
 		  	if(currGame.getPlayers().size() == currGame.getCapacity()){
 		  		Collection<GamePlayer> users = currGame.getPlayers();
-                //currGame.getRefree().getTurn().setPlayers(new ArrayList(users));               
+		  		
+		  		JsonObject players = new JsonObject();
+                int playerCount = 0;
+		  		for (GamePlayer user_temp : users) {
+		  			playerCount++;
+		  			JsonObject player = new JsonObject();
+		  			player.addProperty("user_name", user_temp.playerName());
+		  			player.addProperty("user_id", user_temp.playerId());
+		  			players.add(String.valueOf(playerCount), player);
+		  		}
+		  		
 		  		for(GamePlayer user:users) {
-                  	JsonObject allJoinedMessage = new JsonObject();
-                    JsonObject playerInfo = new JsonObject();
-                    allJoinedMessage.addProperty("type", MESSAGE_TYPE.ALL_JOINED.ordinal());
+		  			
+		  			// define new ALL_JOINED message object
+		  			JsonObject allJoinedMessage = new JsonObject();
+	                JsonObject playerInfo = new JsonObject();
+	                allJoinedMessage.addProperty("type", MESSAGE_TYPE.ALL_JOINED.ordinal());
+	                
+	                // add information about all players
+	                playerInfo.add("players", players);
+                  	
+	                // add hand information
                     List<Card> personalDeck = user.getFirstHand();
-                    
                     JsonObject hand = new JsonObject();
                     for (int i = 0; i < personalDeck.size(); i++){
                       hand.addProperty(String.valueOf(i), personalDeck.get(i).toString());
                     }
                     playerInfo.add("hand", hand);
+                    
+                    // add information about storyteller
                     JsonObject stInfo = new JsonObject();
                     GamePlayer st = currGame.getPlayer(currGame.getST());
                     stInfo.addProperty("user_name", st.playerName());
                     stInfo.addProperty("user_id", st.playerId());
                     playerInfo.add("storyteller", stInfo);
+                    
+                    // send message to all players
                     try {
                       allJoinedMessage.add("payload", playerInfo);
                       System.out.println("all messages sent");
@@ -435,6 +456,7 @@ public class WebSockets {
                       System.out.println(e);
                     }   
                   }
+		  		updateStatus(currGame);
 		  	}
 	  } catch (NullPointerException e) {
 			// TODO Auto-generated catch block
