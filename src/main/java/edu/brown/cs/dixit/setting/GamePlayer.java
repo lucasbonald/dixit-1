@@ -14,19 +14,6 @@ public class GamePlayer implements Player {
   private Deck globalDeck;
   private String status;
  
-  /*
-  public static enum STATUS_TYPE {
-		WAITING,
-		STORYTELLING,
-		GUESSING,
-		GUESSED,
-		VOTING,
-		VOTED
-	  }
-  */
-  
-  //Use ENUM for StoryTeller / Guesser
-  
   //Player needs to switch around his/her roles
   public GamePlayer(String id, String name, Deck deck) {
     playerId = id;

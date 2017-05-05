@@ -3,6 +3,12 @@ package edu.brown.cs.dixit.main;
 import java.io.IOException;
 import java.net.HttpCookie;
 import java.net.InetSocketAddress;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -33,7 +39,7 @@ public class WebSockets {
   private DixitGame currGame;
   private Referee currRef;
   private String userId;
-  
+  private static Connection conn = null;
   private static enum MESSAGE_TYPE {
     CONNECT,
     CREATE,
@@ -46,12 +52,77 @@ public class WebSockets {
     VOTE,
     STATUS,
     MULTI_TAB,
-    STORY
+    STORY,
+    CHAT_UPDATE,
+    CHAT_MSG
+  }
+
+  public static void connectDB() throws ClassNotFoundException, SQLException {
+      Class.forName("org.sqlite.JDBC");
+      String urlToDB = "jdbc:sqlite:" + "chatroom.sqlite3";
+      conn = DriverManager.getConnection(urlToDB);
+      Statement stat = conn.createStatement();
+      stat.executeUpdate("PRAGMA foreign_keys = ON;");
+      
+
+      PreparedStatement prep;
+      prep = conn.prepareStatement("CREATE TABLE IF NOT EXISTS messages("
+    		  + "id INTEGER PRIMARY KEY AUTOINCREMENT, game TEXT," +
+    				  "username TEXT, body TEXT, time INTEGER)");
+      prep.executeUpdate();
+      prep.close();
+      
   }
   
+  private void saveMessage(String game, String username, String body, Integer time) throws SQLException {
+	  PreparedStatement prep;
+      prep = conn.prepareStatement("INSERT INTO messages (game, username, body, time) VALUES (?, ?, ?, ?);");
+      prep.setString(1, game);
+      prep.setString(2, username);
+      prep.setString(3, body);
+      prep.setInt(4, time);
+      prep.executeUpdate();
+      prep.close();
+  }
+  
+  
+  private void getMessage(String game) throws SQLException {
+	  System.out.println("getmessage in java called with gameid " + game);
+	  ChatMessage message = new ChatMessage();
+	  PreparedStatement prep;
+      prep = conn.prepareStatement("SELECT game, username, body, time FROM messages WHERE game = ? ORDER BY time;");
+      prep.setString(1, game);
+      ResultSet rs = prep.executeQuery(); 
+      while (rs.next()) {
+    	  message.game.add(rs.getString(1));
+    	  message.username.add(rs.getString(2));
+    	  message.body.add(rs.getString(3));
+    	  message.time.add(rs.getInt(4));
+      }
+      prep.close();
+      
+	  JsonObject chatMessage = new JsonObject();
+	  JsonObject chatPayload = new JsonObject();
+	  System.out.println("message is" + message);
+	  chatMessage.addProperty("type", MESSAGE_TYPE.CHAT_UPDATE.ordinal());
+	  chatPayload.addProperty("messages", GSON.toJson(message));
+	  chatMessage.add("payload", chatPayload);
+	  
+		for (Session indivSession : allSessions) {
+			try {
+				indivSession.getRemote().sendString(chatMessage.toString());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}	
+	  
+  }
+
   @OnWebSocketConnect
-  public void connected(Session session) throws IOException {
-	//System.out.println("curr session hashcode: " + session.hashCode());
+  public void connected(Session session) throws IOException, ClassNotFoundException, SQLException {
+	System.out.println("curr session hashcode: " + session.hashCode());
+
 	allSessions.add(session);
   	List<HttpCookie> cookies = session.getUpgradeRequest().getCookies();
   	if (cookies == null) {
@@ -70,7 +141,7 @@ public class WebSockets {
   }
 
   @OnWebSocketMessage
-  public void message(Session session, String message) throws IOException {
+  public void message(Session session, String message) throws IOException, SQLException {
   	JsonObject received = GSON.fromJson(message, JsonObject.class);
   	JsonObject payload = received.getAsJsonObject("payload");
   	MESSAGE_TYPE messageType = MESSAGE_TYPE.values()[received.get("type").getAsInt()];
@@ -184,7 +255,7 @@ public class WebSockets {
           //updateStatus(currGame);
           
 		    }
-		    
+
   			break;
   			
   		case VOTE:
@@ -192,11 +263,12 @@ public class WebSockets {
   			int vote = payload.get("card_id").getAsInt();
   			String voterId = payload.get("user_id").getAsString();
   			GamePlayer voter = currGame.getPlayer(voterId);
-  			voter.setStatus("Voted");
-  			//updateStatus(currGame);
+  			currGame.addStatus(voterId, "Voted");
+  			updateStatus(currGame);
   			
-  			Referee toTallyVotes = currGame.getRefree();
-  			toTallyVotes.receiveVotes(voterId, vote);
+  			currRef = currGame.getRefree();
+  			currRef.receiveVotes(voterId, vote);
+  			
   			JsonObject voteUpdate = new JsonObject();
   			voteUpdate.addProperty("type", MESSAGE_TYPE.VOTE.ordinal());
   			JsonObject voteInfo = new JsonObject();
@@ -205,25 +277,50 @@ public class WebSockets {
   			voteUpdate.add("payload", voteInfo);
   			sendMsgToGame(voteUpdate.toString());
   			
-  			if (toTallyVotes.getPickedSize() == currGame.getCapacity() - 1) {
-  				
+  			if (currRef.getPickedSize() == currGame.getCapacity() - 1) {
+  				System.out.println("all voting done!");
   			}
+  			break;
   			
-  			// do something when all votes are received
-  			break;
-  	
-  		case STORY:
-  			JsonObject storyMessage = new JsonObject();
-  			JsonObject storyPayload = new JsonObject();
-  			storyMessage.addProperty("type", MESSAGE_TYPE.STORY.ordinal());
-  			//storyPayload.addProperty("storyteller", this.getSTName(currGame));
-  			for (Session indivSession : allSessions) {
-  				indivSession.getRemote().sendString(storyMessage.toString());
-  			}		
-  			break;
+  		case CHAT_MSG:
+  			String body = payload.get("body").getAsString();
+  			Integer time = payload.get("time").getAsInt();
+  			String game = this.getRoomId(session);
+  			String username = this.getUsername(session);
+  			this.saveMessage(game, username, body, time);
+  			this.getMessage(game);
   	}
-  		
   }
+  
+  
+ private String getRoomId(Session s) {
+	 List<HttpCookie> cookies = s.getUpgradeRequest().getCookies();
+	  for (HttpCookie crumb: cookies) {
+	  	  if (crumb.getName().equals("gameid")) {
+	  		  return crumb.getValue();
+	  	  } 
+	  }
+	  return null;
+ }
+ 
+ private String getUsername(Session s) {
+	 List<HttpCookie> cookies = s.getUpgradeRequest().getCookies(); 
+	 String username = "no player found";
+	  for (HttpCookie crumb: cookies) {
+	  	  if (crumb.getName().equals("gameid")) {
+	  	      currGame = gt.getGame(Integer.parseInt(crumb.getValue()));
+	  	  }
+	  	  if (crumb.getName().equals("userid")) {
+	            userId = crumb.getValue();
+	            username = currGame.getPlayer(userId).playerName();
+	      }
+	  	}
+	  return username;
+	 
+
+ }
+ 
+ 
  private String randomId(){
 	  return UUID.randomUUID().toString();
   }
@@ -313,7 +410,7 @@ public class WebSockets {
 		  
 		  	if(currGame.getPlayers().size() == currGame.getCapacity()){
 		  		Collection<GamePlayer> users = currGame.getPlayers();
-                currGame.getRefree().getTurn().setPlayers(new ArrayList(users));               
+                //currGame.getRefree().getTurn().setPlayers(new ArrayList(users));               
 		  		for(GamePlayer user:users) {
                   	JsonObject allJoinedMessage = new JsonObject();
                     JsonObject playerInfo = new JsonObject();

@@ -10,7 +10,9 @@ const MESSAGE_TYPE = {
   VOTE: 8,
   STATUS: 9,
   MULTI_TAB: 10,
-  STORY: 11
+  STORY: 11,
+  CHAT_UPDATE: 12,
+  CHAT_MSG: 13
 };
 
 let conn;
@@ -85,7 +87,7 @@ const setup_update = () => {
         }
 
         setStoryTeller(payload.storyteller);
-        
+
         // dialog box for each player's screen to see if their ready
         setStatus("Storytelling");
         $("#status-indicator-text").text("Storytelling");
@@ -98,7 +100,6 @@ const setup_update = () => {
         let cardUrl = payload.card_url;
         $("#promptvalue").html("\"" + prompt + "\"" );
         setStatus("Guessing");
-        
         let myId = getElementFromCookies("userid");
         if (myId != storyteller) {
           startTimer(15);  
@@ -143,7 +144,15 @@ const setup_update = () => {
         let imgId = payload.card_id;
         let votedCardDiv = $("#" + imgId).parent().find(".voters");
         votedCardDiv.append("<span class=\"voter\">" + payload.user_name + "</span>");
+        break;
         
+      case MESSAGE_TYPE.CHAT_UPDATE:
+    	let messages = JSON.parse(payload.messages);
+    	let length = messages.username.length;
+    	$(".chatList").empty();
+    	for (let i = 0; i < Math.min(6, length) ; i ++ ) {
+        	$(".chatList").prepend("<li> <span style=\"color: grey\">" + messages.username[length-i-1] + "</span> : " + messages.body[length-i-1]  + "</li>");
+    	} 
     }
   };
 }
