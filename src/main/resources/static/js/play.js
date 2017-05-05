@@ -6,17 +6,12 @@ $(document).ready(function(){
   $(".hand-card").click(function(event) {
     
     const cardInfo = getCardInfo($(this).find("div"));
-
-    console.log("card id of clicked " + cardInfo.id);
     let myId = getElementFromCookies("userid");
     if ((currState == "Storytelling" && myId == storyteller) || (currState == "Guessing" && myId != storyteller)) {
       $(".picked").empty();
-     // $(".picked").append("<img id=\"" + card.attr('id') + "\" src=\"" + card.attr('src') + "\"></img>");
-      $(".picked").append("<div class = \"image bigimg\" id=\"" + cardInfo.id + "\" style = \"background-image: url(" + cardInfo.url + "); background-size: cover; background-repeat: no-repeat;\"></div>"
-)
-      
-    } 
-    
+      console.log("why is this not wokring dammit");
+      $(".picked").append("<div class = \"image bigimg\" id=\"" + cardInfo.id + "\" style = \"background-image: url(" + cardInfo.url + "); background-size: cover; background-repeat: no-repeat;\"></div>")
+    }
   });
   //submitting chatform when submitted
   $("#messageForm").on('submit', function(e) {

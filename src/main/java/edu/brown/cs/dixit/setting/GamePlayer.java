@@ -52,15 +52,19 @@ public class GamePlayer implements Player {
   }
   
   // remove card after submitting
-  public Card removeCard(int ithCard) {
-    Card removed;
-    removed = playerDeck.remove(ithCard);
-    return removed;
+  public void removeCard(int cardId) {
+    Card removed = null;
+    for (Card c: playerDeck) {
+      if (c.getId() == cardId) {
+        removed = c;
+      }
+    }
+    playerDeck.remove(removed);
   }
   
   //when one card is used, automatically refill until
   //none left in the deck
-  public Card refillCard() {
+  public List<Card> refillCard() {
     Random rand = new Random();
     Card newCard;
     if (globalDeck.getDeckSize() > 0) {
@@ -70,7 +74,7 @@ public class GamePlayer implements Player {
     } else {
       return null;
     }
-    return newCard;
+    return playerDeck;
   }
   
   public void setStatus(String status) {
