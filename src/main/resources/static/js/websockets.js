@@ -87,7 +87,7 @@ const setup_update = () => {
         }
 
         setStoryTeller(payload.storyteller);
-        
+
         // dialog box for each player's screen to see if their ready
         setStatus("Storytelling");
         $("#status-indicator-text").text("Storytelling");
@@ -100,8 +100,10 @@ const setup_update = () => {
         let cardUrl = payload.card_url;
         $("#promptvalue").html("\"" + prompt + "\"" );
         setStatus("Guessing");
-        startTimer(15);
-        sendUpdate();
+        let myId = getElementFromCookies("userid");
+        if (myId != storyteller) {
+          startTimer(15);  
+        }
         break;
       case MESSAGE_TYPE.GS_SUBMIT:
 //        let prompt = data.payload.prompt;
@@ -143,16 +145,17 @@ const setup_update = () => {
         let votedCardDiv = $("#" + imgId).parent().find(".voters");
         votedCardDiv.append("<span class=\"voter\">" + payload.user_name + "</span>");
         break;
-        
-      case MESSAGE_TYPE.CHAT_UPATE:
-    	console.log("chat update");
-    	let messages = payload.messages;
-    	console.log ("messages" + messages);
-    	$(".chatList").append(messages);
-    	
+
       case MESSAGE_TYPE.RESULTS:
       console.log(payload)  
     	  
+      case MESSAGE_TYPE.CHAT_UPDATE:
+    	let messages = JSON.parse(payload.messages);
+    	let length = messages.username.length;
+    	$(".chatList").empty();
+    	for (let i = 0; i < Math.min(6, length) ; i ++ ) {
+        	$(".chatList").prepend("<li> <span style=\"color: grey\">" + messages.username[length-i-1] + "</span> : " + messages.body[length-i-1]  + "</li>");
+    	} 
     }
   };
 }
@@ -238,13 +241,5 @@ function setCookie(cookiename, cookievalue){
   const newcookie = cookiename + "="+cookievalue;
   //console.log(cookiename);
   document.cookie = newcookie;
-}
-
-function sendUpdate() {
-	console.log("sendupdate called from js");
-	const storyMessage = {
-			type: MESSAGE_TYPE.CHAT_MSG,
-		}
-	conn.send(JSON.stringify(storyMessage))
 }
 

@@ -2,7 +2,7 @@ $(document).ready(function() {
   
 });
 // seconds in the form 15
-
+counter = 1;
 function startTimer(seconds) {
 	$("#stopwatchvalue").html(seconds);
 	let time = seconds;
@@ -12,6 +12,19 @@ function startTimer(seconds) {
 			$("#stopwatchvalue").html(time);
 		} else {
 			$("#stopwatchvalue").html("<span style = \'font-size: 4vw; color: red;\'>Time's Up!</span>");
+      
+      if (currState == "Guessing") {
+        //send random guess
+        hand = [];
+        $(".hand-card").each(function() {
+          hand.push(getCardInfo($(this).find(".image")));
+        })
+        const randomCard = hand[Math.floor(Math.random()*hand.length)];
+        $(".picked").empty();
+        $(".picked").append("<div class = \"image bigimg\" id=\"" + randomCard.id + "\" style = \"background-image: url(" + randomCard.url + "); background-size: cover; background-repeat: no-repeat;\"></div>");
+        sendGuess(randomCard.id);
+      }
+      
 			clearInterval(timer);
 		}
 	}, 1000);
