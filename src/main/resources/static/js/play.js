@@ -7,16 +7,12 @@ $(document).ready(function(){
     
     const cardInfo = getCardInfo($(this).find("div"));
 
-    //console.log("card id of clicked " + card.attr('id'));
     let myId = getElementFromCookies("userid");
     if ((currState == "Storytelling" && myId == storyteller) || (currState == "Guessing" && myId != storyteller)) {
       $(".picked").empty();
       console.log("why is this not wokring dammit");
       $(".picked").append("<div class = \"image bigimg\" id=\"" + cardInfo.id + "\" style = \"background-image: url(" + cardInfo.url + "); background-size: cover; background-repeat: no-repeat;\"></div>")
-    } else {
-    	console.log("myid is " + myId);
     }
-
   });
   //submitting chatform when submitted
   $("#messageForm").on('submit', function(e) {
@@ -130,7 +126,10 @@ function sendGuess(card_id) {
   conn.send(JSON.stringify(guess));
   console.log("Parent: " + $(".hand").find("#" + card_id).parent());
   $(".hand").find("#" + card_id).parent().remove();
-  $("#guesser-button").val("Vote"); 
+  $("#guesser-button").val("Vote");
+  
+  clearInterval(timer);
+  $("#stopwatchvalue").html("Guessed!");
 }
 
 
@@ -143,6 +142,8 @@ function sendVote(card_id) {
     }
   }
   conn.send(JSON.stringify(vote));
+  clearInterval(timer);
+  $("#stopwatchvalue").html("Voted!");
 }
 
 

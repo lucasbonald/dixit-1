@@ -17,6 +17,7 @@ const MESSAGE_TYPE = {
 
 let conn;
 let storyteller = -1;
+let myId = -1;
 
 //set up socket connection and define types
 const setup_update = () => {
@@ -69,12 +70,10 @@ const setup_update = () => {
       break;
       
       case MESSAGE_TYPE.ALL_JOINED:
-        console.log("all joined sent");
         const hand = payload.hand;
         console.log(payload.storyteller)
-        console.log("storyteller is " + payload.storyteller.user_id);
+        
         // change the img of each hand-card div
-
         for (card of Object.keys(hand)) {
           console.log("card number: " + card);
           let cardInfo = hand[card].split("url:");
@@ -86,12 +85,22 @@ const setup_update = () => {
           //$card.append("<img id=\"" + cardId + "\" src=\"" + url + "\"></img>");
         }
 
+        const players = payload.players;
+        console.log("players:");
+        console.log(players);
+        $("#scoreboard").empty();
+        for (player of Object.keys(players)) {
+          let player_name = players[player].user_name;
+          let player_id = players[player].user_id;  
+          $("#scoreboard").append("<tr><td>" + player_name + "</td><td id=\"" + player_id + "status\"></td><td id=\"" + player_id + "points\">0</td></tr>");
+        }
+        
         setStoryTeller(payload.storyteller);
 
         // dialog box for each player's screen to see if their ready
         setStatus("Storytelling");
         $("#status-indicator-text").text("Storytelling");
-
+        
         break;
         
       case MESSAGE_TYPE.ST_SUBMIT:
@@ -100,7 +109,7 @@ const setup_update = () => {
         let cardUrl = payload.card_url;
         $("#promptvalue").html("\"" + prompt + "\"" );
         setStatus("Guessing");
-        let myId = getElementFromCookies("userid");
+        myId = getElementFromCookies("userid");
         if (myId != storyteller) {
           startTimer(15);  
         }
@@ -114,15 +123,14 @@ const setup_update = () => {
     	  console.log("updating status, at websockets");
     	  let statusMap = {};
     	  let statuses = JSON.parse(data.payload.statuses);
-    	  let playernames = JSON.parse(data.payload.playernames);
-    	  console.log(playernames);
+    	  let playerIds = JSON.parse(data.payload.player_ids);
+    	  console.log(playerIds);
         console.log(statuses);
 
     	  for (let i = 0; i < statuses.length; i ++) {
-    		  statusMap[playernames[i]] = statuses[i];
-    		  console.log("player names" + playernames[i]);
+    		  statusMap[playerIds[i]] = statuses[i];
     	  }
-    	  updateStatus(statusMap);
+        updateStatus(statusMap);
         break;
     	
       case MESSAGE_TYPE.ALL_GUESSES:
@@ -137,6 +145,12 @@ const setup_update = () => {
 
         $(".picked-cards").append("<div class=\"card picked\"><div class = \"image bigimg\" id=\"" + answerCardId + "\" style = \"background-image: url(" + answerCardUrl + "); background-size: cover; background-repeat: no-repeat;\"></div><div class=\"voters\"></div></div>");
         $(".picked-cards").append("<div class=\"card picked\"><div class = \"image bigimg\" id=\"" + guessedCardId + "\" style = \"background-image: url(" + guessedCardUrl + "); background-size: cover; background-repeat: no-repeat;\"></div><div class=\"voters\"></div></div>");
+        
+        myId = getElementFromCookies("userid");
+        if (myId != storyteller) {
+          startTimer(30);  
+        }
+        
         break;
       
       case MESSAGE_TYPE.VOTE:
@@ -147,8 +161,13 @@ const setup_update = () => {
         break;
 
       case MESSAGE_TYPE.RESULTS:
-      console.log(payload)  
-    	  
+        console.log(payload);
+        updatePoints(payload.points);
+        displayPoints(payload.points);
+//        setTimeout(newRound, 5000);
+        
+    	  break;
+      
       case MESSAGE_TYPE.CHAT_UPDATE:
     	let messages = JSON.parse(payload.messages);
     	let length = messages.username.length;
@@ -160,6 +179,7 @@ const setup_update = () => {
     	$(".chatList").scrollTop($(".chatList")[0].scrollHeight);
 
     }
+
   };
 }
 

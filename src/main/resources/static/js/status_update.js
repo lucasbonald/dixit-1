@@ -2,14 +2,14 @@ $(document).ready(function() {
   
 });
 // seconds in the form 15
-counter = 1;
+let timer;
 function startTimer(seconds) {
-	$("#stopwatchvalue").html(seconds);
+//	$("#stopwatchvalue").html(seconds);
 	let time = seconds;
-	let timer = setInterval(function() {
+	timer = setInterval(function() {
 		if (time > 0) {
-			time -= 1;
-			$("#stopwatchvalue").html(time);
+			$("#stopwatchvalue").html(time >= 10 ? "00:" + time : "00:0" + time);
+      time -= 1;
 		} else {
 			$("#stopwatchvalue").html("<span style = \'font-size: 4vw; color: red;\'>Time's Up!</span>");
       
@@ -39,15 +39,37 @@ function setStatus (status) {
   currState = status;
 	$("#status-indicator-text").html(status);
 }
+
 function updateStatus(statusMap) {
-	console.log("update status, at progress.js");
-	$(".feedList").empty();
+	console.log("statuses: ");
+  console.log(statusMap);
+//	$(".feedList").empty();
 	let players = Object.keys(statusMap);
-	for (let i = 0 ; i < players.length; i ++) {
-		$(".feedList").append("<li> <span style=\"color: grey\">" + players[i] + "</span> : " + statusMap[players[i]] + "</li>")
+	for (let i = 0; i < players.length; i ++) {
+    console.log($("#scoreboard").attr("id"));
+    $("#scoreboard").find("#" + players[i] + "status").html(statusMap[players[i]]);
+    
+    console.log($("#" + players[i] + "status"));
+    
+//		$(".feedList").append("<li> <span style=\"color: grey\">" + players[i] + "</span> : " + statusMap[players[i]] + "</li>")
 	}
 } 
 
+function updatePoints(points) {
+  for (player of Object.keys(points)) {
+    $("#" + player + "points").html(points[player]); 
+  }
+  
+}
 
-
-
+function displayPoints(points) {
+  
+  for (id of Object.keys(points)) {
+    if (id == myId) {
+      $("#received-points").html(points[id]);
+    }
+  }
+  
+  $(".results-overlay").removeClass("hidden");
+  
+}
