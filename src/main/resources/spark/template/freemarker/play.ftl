@@ -68,12 +68,6 @@
 			CHAT
 			<div class = "chatbox">
 				<ul class = "chatList">
-					<li>  <span style="color: grey">Player 1</span> : yoyo whatup </li>
-					<li>  <span style="color: grey">Player 2</span> : not much you? </li>
-					<li>  <span style="color: grey">Player 3</span> : playing dixit</li>
-					<li>  <span style="color: grey">Player 2</span> : cool how is it </li>
-					<li>  <span style="color: grey">Player 3</span> : not bad not bad </li>
-					<li>  <span style="color: #fb8383">Player 4</span> : alright cool </li>
 				</ul>
 			</div>
 		    <div id = "formWrapper">

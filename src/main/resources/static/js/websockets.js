@@ -144,13 +144,12 @@ const setup_update = () => {
         votedCardDiv.append("<span class=\"voter\">" + payload.user_name + "</span>");
         break;
         
-      case MESSAGE_TYPE.CHAT_MSG:
-    	console.log("chat update");
+      case MESSAGE_TYPE.CHAT_UPDATE:
     	let messages = JSON.parse(payload.messages);
-    	console.log(messages);
-    	console.log("usrname" + messages.username[0]);
-    	for (let i = 0; i < messages.username.length ; i ++ ) {
-        	$(".chatList").append("<li> <span style=\"color: grey\">" + messages.username[i] + "</span> : " + messages.body[i]  + "</li>");
+    	let length = messages.username.length;
+    	$(".chatList").empty();
+    	for (let i = 0; i < Math.min(6, length) ; i ++ ) {
+        	$(".chatList").prepend("<li> <span style=\"color: grey\">" + messages.username[length-i-1] + "</span> : " + messages.body[length-i-1]  + "</li>");
     	} 
     }
   };
@@ -237,13 +236,5 @@ function setCookie(cookiename, cookievalue){
   const newcookie = cookiename + "="+cookievalue;
   //console.log(cookiename);
   document.cookie = newcookie;
-}
-
-function sendUpdate() {
-	console.log("sendupdate called from js");
-	const storyMessage = {
-			type: MESSAGE_TYPE.CHAT_MSG,
-		}
-	conn.send(JSON.stringify(storyMessage))
 }
 

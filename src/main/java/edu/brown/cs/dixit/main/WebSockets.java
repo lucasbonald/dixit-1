@@ -104,7 +104,7 @@ public class WebSockets {
 	  JsonObject chatMessage = new JsonObject();
 	  JsonObject chatPayload = new JsonObject();
 	  System.out.println("message is" + message);
-	  chatMessage.addProperty("type", MESSAGE_TYPE.CHAT_MSG.ordinal());
+	  chatMessage.addProperty("type", MESSAGE_TYPE.CHAT_UPDATE.ordinal());
 	  chatPayload.addProperty("messages", GSON.toJson(message));
 	  chatMessage.add("payload", chatPayload);
 	  
@@ -279,11 +279,44 @@ public class WebSockets {
   			break;
   			
   		case CHAT_MSG:
-  			this.getMessage("gameid");
-
+  			String body = payload.get("body").getAsString();
+  			Integer time = payload.get("time").getAsInt();
+  			String game = this.getRoomId(session);
+  			String username = this.getUsername(session);
+  			this.saveMessage(game, username, body, time);
+  			this.getMessage(game);
   	}
   }
   
+  
+ private String getRoomId(Session s) {
+	 List<HttpCookie> cookies = s.getUpgradeRequest().getCookies();
+	  for (HttpCookie crumb: cookies) {
+	  	  if (crumb.getName().equals("gameid")) {
+	  		  return crumb.getValue();
+	  	  } 
+	  }
+	  return null;
+ }
+ 
+ private String getUsername(Session s) {
+	 List<HttpCookie> cookies = s.getUpgradeRequest().getCookies(); 
+	 String username = "no player found";
+	  for (HttpCookie crumb: cookies) {
+	  	  if (crumb.getName().equals("gameid")) {
+	  	      currGame = gt.getGame(Integer.parseInt(crumb.getValue()));
+	  	  }
+	  	  if (crumb.getName().equals("userid")) {
+	            userId = crumb.getValue();
+	            username = currGame.getPlayer(userId).playerName();
+	      }
+	  	}
+	  return username;
+	 
+
+ }
+ 
+ 
  private String randomId(){
 	  return UUID.randomUUID().toString();
   }
