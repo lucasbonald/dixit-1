@@ -1,4 +1,9 @@
 <#assign content>
+<script>
+	$(document).ready(function() {
+	  setup_update();
+	});
+</script>
 
 <div class = "wrapper">
 	<div class = "row screen">
@@ -10,10 +15,19 @@
 			<div id="board-error-message" style="float:left;">
 		  	</div>
 			<div class = "prompt" >
-			<i id = "promptvalue"></i>
+				<i id = "promptValue"></i>
 			</div>
 			
-			${board}
+			<div id="board">
+				<form id="playerInput">
+			      <input type="submit" class="formSubmit" value="Submit">
+			  </form>
+			  <div class="picked-cards">
+					<div class="card picked">
+			  			<div class = "image bigimg" style ="background-image: url(../img/blank.jpg)"></div>
+					</div>
+				</div>
+			</div>
 			
 			<div class="hand" style="text-align: center">
 				<div class="card hand-card" id="card0">
