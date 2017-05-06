@@ -39,6 +39,7 @@ public class WebSockets {
   private DixitGame currGame;
   private Referee currRef;
   private String userId;
+  private int round = 1;
   private static Connection conn = null;
   private static enum MESSAGE_TYPE {
     CONNECT,
@@ -251,7 +252,6 @@ public class WebSockets {
                   currGame.addStatus(player.playerId(), "Voting");
                 }
                 currGame.addStatus(currGame.getST(), "Waiting");
-                sendMsgToGame(allGuessesMessage.toString());
                 updateStatus(currGame);
 		    }
   			break;
@@ -293,7 +293,9 @@ public class WebSockets {
                 
   				for (String key: result.keySet()) {
   				  resultInfo.add("storyteller", stInfo);
-  				  List<Card> personalDeck = currGame.getPlayer(key).refillCard();
+  				  GamePlayer currPlayer = currGame.getPlayer(key);
+  				  
+  				  List<Card> personalDeck = currPlayer.refillCard();
   				  JsonObject hand = new JsonObject();
                   for (int i = 0; i < personalDeck.size(); i++) {
                     hand.addProperty(String.valueOf(i), personalDeck.get(i).toString());
@@ -301,7 +303,19 @@ public class WebSockets {
                   resultInfo.add("hand", hand);
                   voteResult.add("payload", resultInfo);
                   gt.getSession(key).getRemote().sendString(voteResult.toString());
-  				}	
+                  
+                  // update player statuses
+  				  String currPlayerId = currPlayer.playerId();
+  				  if (currPlayerId == stInfo.get("user_id").getAsString()) {
+  					  System.out.println(String.valueOf(currPlayer) + " now storytelling");
+  					  currGame.addStatus(currPlayerId, "Storytelling");
+  				  } else {
+  					System.out.println(String.valueOf(currPlayer) + " now waiting");
+  					  currGame.addStatus(currPlayerId, "Waiting");
+  				  }
+  				}
+  				
+  				updateStatus(currGame);
   			}
   			break;
   			
@@ -431,7 +445,11 @@ public class WebSockets {
 		      }
 		  	}
 		  
+		  	System.out.println("num players currently: " + currGame.getPlayers().size());
 		  	if(currGame.getPlayers().size() == currGame.getCapacity()){
+		  		
+		  		System.out.println("all joined");
+		  		
 		  		Collection<GamePlayer> users = currGame.getPlayers();
 		  		
 		  		JsonObject players = new JsonObject();
@@ -476,6 +494,7 @@ public class WebSockets {
                     }   
                   }
 		  		updateStatus(currGame);
+		  		round++;
 		  	}
 	  } catch (NullPointerException e) {
 			// TODO Auto-generated catch block

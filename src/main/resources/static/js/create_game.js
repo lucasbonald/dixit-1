@@ -70,7 +70,7 @@ $(document).ready(function(){
       } else {
         console.log(currSelected.attr('id'));
         
-        window.location = window.location.href + "guessing";
+        window.location = window.location.href + "play";
         const joinMessage = {
                 type: MESSAGE_TYPE.JOIN,
                 payload: {
