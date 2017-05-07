@@ -371,11 +371,13 @@ public class WebSockets {
   			
   		case RESTART:
   		    restartVote += 1;
+            System.out.println(restartVote);
   		    if (restartVote == currGame.getCapacity()) {
   		      currGame.resetGame();
+              allJoined(currGame.getPlayers());
+              updateStatus(currGame);
+              restartVote = 0;
   		    }
-  		    allJoined(currGame.getPlayers());
-  		    updateStatus(currGame);
   	}    
   }
   
