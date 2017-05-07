@@ -70,7 +70,8 @@ const setup_update = () => {
       
       case MESSAGE_TYPE.ALL_JOINED:
         const hand = payload.hand;
-        
+        console.log('------')
+        console.log(hand);
         // change the img of each hand-card div
         for (card of Object.keys(hand)) {
           let cardInfo = hand[card].split(":");
