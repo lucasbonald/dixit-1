@@ -12,7 +12,9 @@ const MESSAGE_TYPE = {
   MULTI_TAB: 10,
   RESULTS: 11,
   CHAT_UPDATE: 12,
-  CHAT_MSG: 13
+  CHAT_MSG: 13,
+  END_OF_ROUND: 14,
+  LOAD:15
 };
 
 let conn;
@@ -39,6 +41,12 @@ const setup_update = () => {
         updateCookie(payload.cookies[0].name, payload.cookies[0].value)
         updateCookie(payload.cookies[1].name, payload.cookies[1].value)
         break;
+      case MESSAGE_TYPE.LOAD:
+        for(let game in payload.gamearray){
+          console.log(payload.gamearray[game])
+          $("table.table-hover tbody").append("<tr><td id=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].name + "</td><td class=\"num_players\" id=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].player + "/" + payload.gamearray[game].capacity + "</td></tr>");
+        }
+        console.log(payload.gamearray.length)
       case MESSAGE_TYPE.NEW_GAME:
         if(payload.num_players == 1) {
           $("table.table-hover tbody").append("<tr><td id=\"" + payload.game_id + "\">" + payload.lobby_name + "</td><td class=\"num_players\" id=\"" + payload.game_id + "\">" + payload.num_players + "/" + payload.capacity + "</td></tr>");

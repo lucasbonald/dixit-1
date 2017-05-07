@@ -16,6 +16,7 @@ public class DixitGame {
 	private final int id;
 	private final int capacity;
 	private final Deck deck;
+	private final String name;
 	private Map<String, GamePlayer> players;
 	private Referee referee;
 	private Map<String, String> playerStatus;
@@ -23,8 +24,9 @@ public class DixitGame {
 	//wrapper for all the information 
 	//needs to contain the players & deck & referee & turn
 	
-	public DixitGame(int gameID, int cap, int victPoint) {
+	public DixitGame(int gameID, int cap, int victPoint, String gameName) {
 		id = gameID;
+		name = gameName;
 		capacity = cap;
 		deck = new Deck();
 		players = new HashMap<>();
@@ -86,5 +88,8 @@ public class DixitGame {
 	
 	public String getStatus(String id) {
 	  return playerStatus.get(id);
+	}
+	public String getName(){
+		return name;
 	}
 }
