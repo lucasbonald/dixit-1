@@ -24,7 +24,7 @@ let myId = -1;
 //set up socket connection and define types
 const setup_update = () => {
 	conn = new WebSocket("ws://localhost:4567/connect");
-//conn = new WebSocet("ws://104.196.191.156/connect");  
+//conn = new WebSocket("ws://104.196.191.156/connect");  
 	conn.onerror = err => {
     	console.log('Connection error:', err);
   };
@@ -44,27 +44,34 @@ const setup_update = () => {
         break;
       case MESSAGE_TYPE.LOAD:
         for(let game in payload.gamearray){
-          console.log(payload.gamearray[game])
-          $("table.table-hover tbody").append("<tr><td id=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].name + "</td><td class=\"num_players\" id=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].player + "/" + payload.gamearray[game].capacity + "</td></tr>");
+          let exist = false;
+          let cols = document.getElementById("lobbyt").getElementsByTagName('td'), colslen = cols.length, i = -1;
+          console.log(cols.length)
+          while(++i < colslen){
+            if(payload.gamearray[game].id == cols[i].id){
+              exist = true;
+            }
+            console.log(cols[i].id)
+          }
+          if(!exist){
+              $("table.table-hover tbody").append("<tr><td id=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].name + "</td><td class=\"num_players\" id=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].player + "/" + payload.gamearray[game].capacity + "</td></tr>");
+          }
         }
+        
         console.log(payload.gamearray.length)
+        break;
       case MESSAGE_TYPE.NEW_GAME:
+        console.log("lobby created!!!");
         let exist = false;
         const table = $("table.table-hover tbody");
-        for(let i=0;i<table.length;i++){
+        for(let i=1;i<table.length;i++){
           if(table[i].id == payload.game_id){
             exist = true;
           }
         }
         if(!exist){
-          if(payload.num_players == 1) {
           table.append("<tr><td id=\"" + payload.game_id + "\">" + payload.lobby_name + "</td><td class=\"num_players\" id=\"" + payload.game_id + "\">" + payload.num_players + "/" + payload.capacity + "</td></tr>");
-        } else if (payload.num_players > 1) {
-          table.find($(".num_players")).text(payload.num_players + "/" + payload.capacity);
         }
-        }
-        
-      
         break;
       
       case MESSAGE_TYPE.JOIN:
@@ -217,7 +224,9 @@ function deleteAllCookies() {
         let cookie = cookies[i];
         let eqPos = cookie.indexOf("=");
         let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        if(name!="userid"){
+          document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        }
     }
 }
 
