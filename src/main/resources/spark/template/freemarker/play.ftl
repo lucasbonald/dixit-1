@@ -24,29 +24,28 @@
 			  </form>
 			  <div class="picked-cards">
 					<div class="card picked">
-			  			<div class = "image bigimg" style ="background-image: url(../img/blank.jpg)"></div>
 					</div>
 				</div>
 			</div>
 			
 			<div class="hand" style="text-align: center">
-				<div class="card hand-card" id="card0">
-				  <img src="http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg">
+				<div class="card hand-card" id="card0" draggable = "true" ondragstart="drag(event)">
+					<div class="image" style="background-image: url(http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg)"></div>
 				</div>
-				<div class="card hand-card" id="card1">
-				  <img src="http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg">
+				<div class="card hand-card" id="card1" draggable = "true" ondragstart="drag(event)">
+					<div class="image" style="background-image: url(http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg)"></div>
 				</div>
-				<div class="card hand-card" id="card2">
-				  <img src="http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg">
+				<div class="card hand-card" id="card2" draggable = "true" ondragstart="drag(event)">
+					<div class="image" style="background-image: url(http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg)"></div>				
 				</div>
-				<div class="card hand-card" id="card3">
-				  <img src="http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg">
+				<div class="card hand-card" id="card3" draggable = "true" ondragstart="drag(event)">
+					<div class="image" style="background-image: url(http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg)"></div>				
 				</div>
-				<div class="card hand-card" id="card4">
-				  <img src="http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg">
+				<div class="card hand-card" id="card4" draggable = "true" ondragstart="drag(event)">
+					<div class="image" style="background-image: url(http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg)"></div>				
 				</div>
-				<div class="card hand-card" id="card5">
-				  <img src="http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg">
+				<div class="card hand-card" id="card5" draggable = "true" ondragstart="drag(event)">
+					<div class="image" style="background-image: url(http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg)"></div>
 				</div>
 			</div>
 

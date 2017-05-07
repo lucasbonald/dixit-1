@@ -8,7 +8,7 @@ public class Referee {
   private int winnerPoint;
   private int numPlayers;
   private int victoryPoint;
-  private boolean gameWon;
+  private String gameWon;
   private Map<String, Integer> chosen; 
   private Map<String, Integer> pickRecord; 
   private Map<String, Integer> result;
@@ -19,7 +19,7 @@ public class Referee {
     winnerPoint = -1;
     numPlayers = Setting.NUM_DEFAULT_PLAYERS;
     victoryPoint = Setting.NUM_DEFAULT_VICTORY_POINT;
-    gameWon = false;
+    gameWon = "";
     chosen = new HashMap<String, Integer>();
     pickRecord = new HashMap<String, Integer>();
     scoreBoard = new HashMap<String, Integer>();
@@ -29,7 +29,7 @@ public class Referee {
     winnerPoint = -1;
     numPlayers = cap;
     victoryPoint = victPoint;
-    gameWon = false;
+    gameWon = "";
     chosen = new HashMap<String, Integer>();
     pickRecord = new HashMap<String, Integer>();
     scoreBoard = new HashMap<String, Integer>();
@@ -52,27 +52,21 @@ public class Referee {
   public Map<String, Integer> tallyScores() {
     //reset result
     result = new HashMap<String, Integer>();
-    
+    System.out.println("result size: " + result.size());
     int count_answer = 0;
     //Points for other players
     for (String key: pickRecord.keySet()) {    
       int pickedCard = pickRecord.get(key);
       if (pickedCard == getAnswer()) {
-        
-        for (String keyTwo: chosen.keySet()) {
-          if (chosen.get(keyTwo) == pickedCard) {
-            if (result.containsKey(keyTwo)) {
-              result.put(keyTwo, result.get(keyTwo) + 3);
-            } else {
-              result.put(keyTwo, 3);
-            }
-          } 
+        if (result.containsKey(key)) {
+          result.put(key, result.get(key) + 3);
+        } else {
+          result.put(key, 3);
         }
-        count_answer += 1;
-        
+        count_answer += 1;  
       } else {
         for (String keyTwo: chosen.keySet()) {
-          if (chosen.get(keyTwo) == pickedCard) {
+          if (chosen.get(keyTwo) == pickedCard && !keyTwo.equals(key)) {
             if (result.containsKey(keyTwo)) {
               result.put(keyTwo, result.get(keyTwo) + 1);
             } else {
@@ -82,16 +76,28 @@ public class Referee {
         }
       }
     }
-    
+    System.out.println("result size before st: " + result.size());
     //Point for Story-teller
-    if ((count_answer == 0) || (count_answer == pickRecord.size())) {
+    
+    if (count_answer == pickRecord.size()) {
       result.put(gameTurn.getCurrTeller(), 0);
       for (String key: pickRecord.keySet()) {
         result.put(key, 2);
       }
+    } else if (count_answer == 0) {
+      result.put(gameTurn.getCurrTeller(), 0);
+      for (String key: pickRecord.keySet()) {
+        if (result.containsKey(key)) {
+          result.put(key,  result.get(key) + 2);
+        } else {
+          result.put(key, 2);
+        }
+      }
     } else {
       result.put(gameTurn.getCurrTeller(), 3);
     }
+    
+    System.out.println("result size after st: " + result.size());
     
     //reset 
     pickRecord = new HashMap<String, Integer>();
@@ -102,10 +108,9 @@ public class Referee {
       int newScore = scoreBoard.get(key) + result.get(key);
       scoreBoard.put(key, newScore);
       if (newScore >= victoryPoint) {
-        gameWon = true; // need who's winning as well
+        gameWon = key; // need who's winning as well
       }
     }
-    
     //need to check if all the card is used and manually finish the game
     
     return result;
@@ -181,6 +186,10 @@ public class Referee {
   
   public void addBoard(String id, int defPoint) {
     scoreBoard.put(id, defPoint);
+  }
+  
+  public String getWinner() {
+    return gameWon;
   }
  
 }

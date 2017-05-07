@@ -57,21 +57,10 @@ const setup_update = () => {
               $("table.table-hover tbody").append("<tr><td id=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].name + "</td><td class=\"num_players\" id=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].player + "/" + payload.gamearray[game].capacity + "</td></tr>");
           }
         }
-        
-        console.log(payload.gamearray.length)
         break;
       case MESSAGE_TYPE.NEW_GAME:
-        console.log("lobby created!!!");
-        let exist = false;
         const table = $("table.table-hover tbody");
-        for(let i=1;i<table.length;i++){
-          if(table[i].id == payload.game_id){
-            exist = true;
-          }
-        }
-        if(!exist){
-          table.append("<tr><td id=\"" + payload.game_id + "\">" + payload.lobby_name + "</td><td class=\"num_players\" id=\"" + payload.game_id + "\">" + payload.num_players + "/" + payload.capacity + "</td></tr>");
-        }
+        table.append("<tr><td id=\"" + payload.game_id + "\">" + payload.lobby_name + "</td><td class=\"num_players\" id=\"" + payload.game_id + "\">" + payload.num_players + "/" + payload.capacity + "</td></tr>");
         break;
       
       case MESSAGE_TYPE.JOIN:
@@ -173,18 +162,28 @@ const setup_update = () => {
       case MESSAGE_TYPE.RESULTS:
         updatePoints(payload.points);
         displayPoints(payload.points);
+        console.log(payload.winner);
+        if (payload.winner != "") {
+          console.log ("we have a winner")
+        } else {
+          console.log ("no winner")
+        }
         setTimeout(function() { newRound(payload); }, 5000);
         
     	  break;
       
       case MESSAGE_TYPE.CHAT_UPDATE:
-        let messages = JSON.parse(payload.messages);
-        let length = messages.username.length;
-        $(".chatList").empty();
-        for (let i = 0; i < Math.min(6, length) ; i ++ ) {
-            $(".chatList").prepend("<li> <span style=\"color: grey\">" + messages.username[length-i-1] + "</span> : " + messages.body[length-i-1]  + "</li>");
-        } 
-      }
+    	let messages = JSON.parse(payload.messages);
+    	let length = messages.username.length;
+    	$(".chatList").empty();
+    	for (let i = 0; i < length ; i ++ ) {
+        	//$(".chatList").prepend("<li> <span style=\"color: grey\">" + messages.username[length-i-1] + "</span> : " + messages.body[length-i-1]  + "</li>");
+        	$(".chatList").append("<li> <span style=\"color: grey\">" + messages.username[i] + "</span> : " + messages.body[i]  + "</li>");
+    	} 
+    	$(".chatList").scrollTop($(".chatList")[0].scrollHeight);
+
+    }
+
   };
 }
 

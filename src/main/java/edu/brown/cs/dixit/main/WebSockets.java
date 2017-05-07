@@ -286,6 +286,9 @@ public class WebSockets {
   			System.out.println("Vote received");
   			int vote = payload.get("card_id").getAsInt();
   			String voterId = payload.get("user_id").getAsString();
+  			System.out.println("voter Id: " + voterId);
+  			System.out.println("voted cardId: " + vote);
+  			System.out.println("curr Game id: " + currGame.getId());
   			GamePlayer voter = currGame.getPlayer(voterId);
   			currGame.addStatus(voterId, "Voted");
   			updateStatus(currGame);
@@ -316,7 +319,11 @@ public class WebSockets {
   				  points.addProperty(key, result.get(key));
   				}
                 resultInfo.add("points", points);
+                resultInfo.addProperty("winner", currRef.getWinner());
                 
+                System.out.println("number of chosen cards: " + currRef.getChosenSize());
+                System.out.println("pick record: " + currRef.getPickedSize());
+                System.out.println("result size: " + result.size());
   				for (String key: result.keySet()) {
   				  resultInfo.add("storyteller", stInfo);
   				  GamePlayer currPlayer = currGame.getPlayer(key);
