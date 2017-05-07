@@ -14,7 +14,8 @@ const MESSAGE_TYPE = {
   CHAT_UPDATE: 12,
   CHAT_MSG: 13,
   END_OF_ROUND: 14,
-  LOAD:15
+  LOAD:15,
+  RESTART: 16
 };
 
 let conn;
@@ -23,8 +24,8 @@ let myId = -1;
 
 //set up socket connection and define types
 const setup_update = () => {
-	conn = new WebSocket("ws://localhost:4567/connect");
-//conn = new WebSocet("ws://104.196.191.156/connect");  
+	//conn = new WebSocket("ws://localhost:4567/connect");
+  conn = new WebSocket("ws://104.196.191.156/connect");  
 	conn.onerror = err => {
     	console.log('Connection error:', err);
   };
@@ -44,37 +45,27 @@ const setup_update = () => {
         break;
       case MESSAGE_TYPE.LOAD:
         for(let game in payload.gamearray){
-          console.log(payload.gamearray[game])
-          $("table.table-hover tbody").append("<tr><td id=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].name + "</td><td class=\"num_players\" id=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].player + "/" + payload.gamearray[game].capacity + "</td></tr>");
-        }
-        console.log(payload.gamearray.length)
-      case MESSAGE_TYPE.NEW_GAME:
-        let exist = false;
-        const table = $("table.table-hover tbody");
-        console.log(table.length)
-        for(let i=0;i<table.length;i++){
-          if(table[i].id == payload.game_id){
-            exist = true;
+          let exist = false;
+          let cols = document.getElementById("lobbyt").getElementsByTagName('td'), colslen = cols.length, i = -1;
+          console.log(cols.length)
+          while(++i < colslen){
+            if(payload.gamearray[game].id == cols[i].id){
+              exist = true;
+            }
+            console.log(cols[i].id)
+          }
+          if(!exist){
+              $("table.table-hover tbody").append("<tr><td id=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].name + "</td><td class=\"num_players\" id=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].player + "/" + payload.gamearray[game].capacity + "</td></tr>");
           }
         }
-        if(!exist){
-          if(payload.num_players == 1) {
-          table.append("<tr><td id=\"" + payload.game_id + "\">" + payload.lobby_name + "</td><td class=\"num_players\" id=\"" + payload.game_id + "\">" + payload.num_players + "/" + payload.capacity + "</td></tr>");
-        } else if (payload.num_players > 1) {
-          table.find($(".num_players")).text(payload.num_players + "/" + payload.capacity);
-        }
-        }
-        
-      
+        break;
+      case MESSAGE_TYPE.NEW_GAME:
+        const table = $("table.table-hover tbody");
+        table.append("<tr><td id=\"" + payload.game_id + "\">" + payload.lobby_name + "</td><td class=\"num_players\" id=\"" + payload.game_id + "\">" + payload.num_players + "/" + payload.capacity + "</td></tr>");
         break;
       
       case MESSAGE_TYPE.JOIN:
         window.location = window.location.href + "play";
-//        if(payload.role == "teller"){
-//          window.location = window.location.href + "storytelling";
-//        } else if(payload.role == "guessor"){
-//            window.location = window.location.href + "guessing";
-//        }
       break;
       
       case MESSAGE_TYPE.ALL_JOINED:
@@ -88,15 +79,19 @@ const setup_update = () => {
           let $card = $("#card" + card);
           $card.empty();
           $card.append("<div class = \"image\" id=\"" + cardId + "\" style = \"background-image: url(" + url + ");\"></div>" );
-          //$card.append("<img id=\"" + cardId + "\" src=\"" + url + "\"></img>");
         }
 
         const players = payload.players;
         $("#scoreboard").empty();
         for (player of Object.keys(players)) {
           let player_name = players[player].user_name;
-          let player_id = players[player].user_id;  
+          let player_id = players[player].user_id;
           $("#scoreboard").append("<tr><td>" + player_name + "</td><td id=\"" + player_id + "status\"></td><td id=\"" + player_id + "points\">0</td></tr>");
+          
+          myId = getElementFromCookies("userid");
+          if (myId == player_id) {
+            $("#user-name").html(player_name);
+          }
         }
         
         setStoryTeller(payload.storyteller);
@@ -121,6 +116,7 @@ const setup_update = () => {
         setStatus("Guessing");
         myId = getElementFromCookies("userid");
         if (myId != storyteller) {
+          console.log("timer starting!")
           startTimer(15);  
         }
         break;
@@ -153,6 +149,7 @@ const setup_update = () => {
 
         myId = getElementFromCookies("userid");
         if (myId != storyteller) {
+          console.log("timer starting!")
           startTimer(30);  
         }
         
@@ -166,9 +163,18 @@ const setup_update = () => {
 
       case MESSAGE_TYPE.RESULTS:
         updatePoints(payload.points);
-        displayPoints(payload.points);
-        setTimeout(function() { newRound(payload); }, 5000);
         
+        console.log(payload.winner);
+        if (payload.winner.winner_id != "") {
+          console.log ("we have a winner");
+          displayWinner(payload.winner);
+        } else {
+          console.log ("no winner");
+          displayPoints(payload.points);
+          setTimeout(function() { newRound(payload); }, 5000);
+        }
+        
+        console.log(payload.hand);
     	  break;
       
       case MESSAGE_TYPE.CHAT_UPDATE:
@@ -222,7 +228,9 @@ function deleteAllCookies() {
         let cookie = cookies[i];
         let eqPos = cookie.indexOf("=");
         let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        if(name!="userid"){
+          document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        }
     }
 }
 

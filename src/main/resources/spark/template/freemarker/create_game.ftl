@@ -41,7 +41,7 @@
               </div>
               <div class="col-xs-3 form-element">
                 <p>Victory points</p>
-                <input type="number" class="form-control victory-points" min="20" max="80" value="20"></input>
+                <input type="number" class="form-control victory-points" min="6" max="80" value="20"></input>
               </div>
             </div>
           
@@ -86,7 +86,7 @@
           <div class="col-xs-10">
             <form id="join-form">
               <span class="glyphicon glyphicon-arrow-right form-title"></span><span class="form-title-text">Join game</span>
-              <table class="table table-hover">
+              <table class="table table-hover" id ="lobbyt">
                 <thead>
                   <tr>
                     <th>Lobby name</th>

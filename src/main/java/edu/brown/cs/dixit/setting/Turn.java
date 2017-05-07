@@ -10,22 +10,16 @@ public class Turn {
   private List<GamePlayer> players;
   private String prompt;
   private int answer;
-  private String currTeller;
   
   public Turn(int number) {
     numPlayer = number;
     currTurn = 0;
     players = new ArrayList<>();
     prompt = "";
-    currTeller = "";
   }
   
   public void addPlayers(GamePlayer user) {
     players.add(user);
-  }
-  
-  public void setCurrTeller(String id) {
-    currTeller = id;
   }
   
   public String getCurrTeller() {
@@ -54,5 +48,9 @@ public class Turn {
   
   public void setAnswer(int newAnswer) {
     answer = newAnswer;
+  }
+  
+  public void setTurn(int zero) {
+    currTurn = zero;
   }
 }

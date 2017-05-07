@@ -74,10 +74,6 @@ hr {
 	width: 100%;
 }
 
-#chatroom {
-	height: 40%;
-}
-
 .statuselement {
 	text-align: center;
 	font-size: 1vw;
@@ -87,6 +83,12 @@ hr {
 .statuselement-header {
   font-size: 2vw;
   margin-bottom: 10px;
+}
+
+#user-name {
+  margin-top: 3%;
+  font-size: 20px;
+  color:#aabfde;
 }
 
 #formWrapper {
@@ -153,7 +155,7 @@ hr {
 }
 
 .guesser_button {
-	backgrund-color: #9fd58f;
+	background-color: #9fd58f;
 	border-color: #9fd58f;
 }
 
@@ -176,12 +178,16 @@ hr {
 	margin: 2% 0;
 }
 
+#chatroom {
+	height: 40%;
+}
+
 .chatbox {
 	background-color: white;
 	border-radius: 8px;
 	width: 90%;
 	margin: auto;
-	height: 50%;
+	height: 70%;
 	margin-top: 3%;
 
 }
@@ -377,7 +383,7 @@ html, body, .wrapper, .row, .screen, .board, .statusbar {
 .statusbar {
   display:flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 .vote-selected {

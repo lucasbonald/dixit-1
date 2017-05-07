@@ -24,7 +24,6 @@ $(document).ready(function(){
       if($(".lobby-name").val() == "") {
         $(".create-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Please provide a lobby name.</p>")
       } else {
-
         let gameInit = {
           type: MESSAGE_TYPE.CREATE,
           payload: {
@@ -41,24 +40,23 @@ $(document).ready(function(){
             }
           }
         }
-
         // send new game information to backend
         conn.send(JSON.stringify(gameInit));
         newGameId++;
 
         // display new available game to allow joining
-        $('table.table-hover tbody').append("<tr><td id=\"" + gameInit.payload.game_id + "\">" + gameInit.payload.lobby_name + "</td><td id=\"" + gameInit.payload.game_id + "\">1/" + gameInit.payload.num_players + "</td></tr");
         //window.location = window.location.href + "storytelling";
       }
       
     });
 
     $('table.table-hover tbody').on('click', function() {
-//      console.log($(this));
-      currSelected = $(this).find('td');
-      currSelected.toggleClass('selected-row');
+      console.log(event.target);
+      currSelected = $(event.target);
+      currSelected.parent().toggleClass('selected-row');
+      console.log(currSelected.attr("id"));
       if (prevSelected != undefined) {
-        prevSelected.toggleClass('selected-row');
+        prevSelected.parent().toggleClass('selected-row');
       }
       prevSelected = currSelected;
     });
@@ -88,12 +86,12 @@ $(document).ready(function(){
 });
 
 function sendLoad(){
-  let gameInit = {
+  let gameLoad = {
           type: MESSAGE_TYPE.LOAD,
           payload: {
           }
       }
-  conn.send(JSON.stringify(gameInit));
+  conn.send(JSON.stringify(gameLoad));
 }
 
 

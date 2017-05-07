@@ -1,9 +1,7 @@
 package edu.brown.cs.dixit.gameManagement;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,7 +14,8 @@ public class DixitGame {
 
 	private final int id;
 	private final int capacity;
-	private final Deck deck;
+	private int restartVote;
+	private Deck deck;
 	private final String name;
 	private Map<String, GamePlayer> players;
 	private Referee referee;
@@ -75,10 +74,6 @@ public class DixitGame {
 	    return referee;
 	}
 	
-	public void setST(String id) {
-	  referee.setTeller(id);
-	}
-	
 	public String getST() {
 	  return referee.getStoryTeller();
 	}
@@ -94,7 +89,30 @@ public class DixitGame {
 	public String getStatus(String id) {
 	  return playerStatus.get(id);
 	}
+	
 	public String getName(){
 		return name;
+	}
+	
+	public void resetGame() {
+	  deck = new Deck();
+	  deck.initializeDeck("../img/img");
+	  for (GamePlayer user: getPlayers()) {
+	    user.resetHand(deck);	    
+	  }
+	  getRefree().getTurn().setTurn(0);
+	  resetStart();
+	}
+	
+	public int getRestart() {
+	  return restartVote;
+	}
+	
+	public void incrementRestart() {
+	  restartVote += 1;
+	}
+	
+	public void resetStart() {
+	  restartVote = 0;
 	}
 }
