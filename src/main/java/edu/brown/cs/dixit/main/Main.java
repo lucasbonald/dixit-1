@@ -62,12 +62,11 @@ public class Main {
     Spark.exception(Exception.class, new ExceptionPrinter());
     FreeMarkerEngine freeMarker = createEngine();
 
-    Spark.webSocket("/play", WebSockets.class);
-    //http://104.196.191.156/
+    Spark.webSocket("/connect", WebSockets.class);
     WebSockets.connectDB();
     Spark.get("/", new LogInHandler(), freeMarker);   
     Spark.get("/storytelling",new StoryHandler(), freeMarker);   
-    Spark.get("/voting",new VoteHandler(), freeMarker);   
+    Spark.get("/play",new PlayHandler(), freeMarker);   
     Spark.get("/guessing",new GuessHandler(), freeMarker);   
     Spark.get("/end",new EndHandler(), freeMarker);   
     Spark.get("/waiting",new WaitHandler(), freeMarker);   
@@ -77,7 +76,7 @@ public class Main {
   private static class LogInHandler implements TemplateViewRoute {
       @Override
       public ModelAndView handle(Request req, Response res) {
-          Map<String, Object> variables = ImmutableMap.of("title", "Dixit Online", "imageLink", "../img/img1.png", "board", "");
+          Map<String, Object> variables = ImmutableMap.of("title", "Dixit Online", "imageLink", "../img/img1.png");
           return new ModelAndView(variables, "create_game.ftl");
       }
      
@@ -92,11 +91,11 @@ public class Main {
       }
 }
 
-  private static class VoteHandler implements TemplateViewRoute {
+  private static class PlayHandler implements TemplateViewRoute {
       @Override
       public ModelAndView handle(Request req, Response res) {
-          Map<String, Object> variables = ImmutableMap.of("title", "Dixit Online", "imageLink", "../img/img1.png", "board", "whatever");
-          return new ModelAndView(variables, "voting.ftl");
+          Map<String, Object> variables = ImmutableMap.of("title", "Dixit Online", "imageLink", "../img/img1.png");
+          return new ModelAndView(variables, "play.ftl");
       }
 }
 

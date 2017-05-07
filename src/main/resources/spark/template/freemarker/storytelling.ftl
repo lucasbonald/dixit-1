@@ -1,5 +1,3 @@
-
-
 <#assign board>		
   <script>
 	$(document).ready(function() {
@@ -9,8 +7,6 @@
   	<div id="storyFormWrapper">
 	  <form id="promptForm">
 	      <input type="text" name="prompt" id="promptField" placeholder="Please enter your interesting story here" value="">
-	      <input type="hidden" name="nickname" id="nicknameField" value="">
-	      <input type="hidden" name="time" id="timeField" value="">
 	      <input type="submit" class="formSubmit" value="Done">
 	  </form>
 	</div>

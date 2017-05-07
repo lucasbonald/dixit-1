@@ -1,4 +1,9 @@
 <#assign content>
+<script>
+	$(document).ready(function() {
+	  setup_update();
+	});
+</script>
 
 <div class = "wrapper">
 	<div class = "row screen">
@@ -10,10 +15,19 @@
 			<div id="board-error-message" style="float:left;">
 		  	</div>
 			<div class = "prompt" >
-			<i id = "promptvalue"></i>
+				<i id = "promptValue"></i>
 			</div>
 			
-			${board}
+			<div id="board">
+				<form id="playerInput">
+			      <input type="submit" class="formSubmit" value="Submit">
+			  </form>
+			  <div class="picked-cards">
+					<div class="card picked">
+			  			<div class = "image bigimg" style ="background-image: url(../img/blank.jpg)"></div>
+					</div>
+				</div>
+			</div>
 			
 			<div class="hand" style="text-align: center">
 				<div class="card hand-card" id="card0">
@@ -37,7 +51,7 @@
 			</div>
 
 		</div>
-		<ul class = "col-xs-3 statusbar" style= "border-color:  black; border-width: 5px; background-color: #f5e4e4;">
+		<div class = "col-xs-3 statusbar" style= "border-color:  black; border-width: 5px; background-color: #f5e4e4;">
 			<hr>
 			<div class = "statuselement" id = "stopwatch">
 			<div id = "stopwatchvalue">
@@ -46,26 +60,32 @@
 			</div>
 			<hr>
 			<div class = "statuselement">
-			STORYTELLER
+			<span class="statuselement-header">Storyteller</span>
 				<div>
 				<span id="st-identity">Player</span>
 				</div>
 			</div>
 			<hr>
-			<div class = "statuselement" id = "statusfeed">
-			STATUS FEED
-			<div class = "feed">
-				<ul class = "feedList">
-					<li> <span style="color: transparent">ss</span> </li>
-					<li> <span style="color: transparent">ss</span></li>
-					<li> <span style="color: transparent">ss</span></li>
-					<li> <span style = "color: transparent" ss</span></li>
-				</ul>
+			<div class="statuselement">
+			<span class="statuselement-header">Player Feed</span>
+				<br>
+				<table id="player-feed">
+					<thead>	
+						<tr>
+							<th>Player</th>
+							<th>Status</th>
+							<th>Points</th>
+						</tr>
+					</thead>
+					<tbody id="scoreboard">
+					</tbody>
+				</table>
 			</div>
-			</div>
+			
+			
 			<hr>
 			<div class = "statuselement" id = "chatroom">
-			CHAT
+			<span class="statuselement-header">Chat</span>
 			<div class = "chatbox">
 				<ul class = "chatList">
 				</ul>
@@ -79,9 +99,11 @@
 		      </form>
 		    </div>
 		    </div>
-		</ul>
+		</div>
 	</div>
-
+	<div class="results-overlay hidden">
+		<span id="results-message">You've received <span id="received-points"></span> points.</span>
+	</div>
 </div>
 
 
