@@ -83,6 +83,7 @@ function displayPoints(points) {
   
   for (id of Object.keys(points)) {
     if (id == myId) {
+      console.log(id)
       $("#received-points").html(points[id]);
     }
   }

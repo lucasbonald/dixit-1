@@ -328,10 +328,12 @@ public class WebSockets {
                   resultInfo.add("hand", hand);
                   voteResult.add("payload", resultInfo);
                   gt.getSession(key).getRemote().sendString(voteResult.toString());
+                 
+                  System.out.println("userid from result: "+ key);
                   
                   // update player statuses
   				  String currPlayerId = currPlayer.playerId();
-  				  if (currPlayerId == stInfo.get("user_id").getAsString()) {
+  				  if (currPlayerId == currGame.getST()) {
   					  System.out.println(String.valueOf(currPlayer) + " now storytelling");
   					  currGame.addStatus(currPlayerId, "Storytelling");
   				  } else {
