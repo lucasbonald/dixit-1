@@ -96,7 +96,6 @@ public class Referee {
     //reset 
     pickRecord = new HashMap<String, Integer>();
     
-    //messages can be added later in the backend?
     //need to check if the game ended
     
     for (String key: result.keySet()) {
@@ -107,7 +106,7 @@ public class Referee {
       }
     }
     
-    //need to check if all the card is used and manually finish th game
+    //need to check if all the card is used and manually finish the game
     
     return result;
   }

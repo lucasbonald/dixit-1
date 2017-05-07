@@ -244,8 +244,18 @@ public class WebSockets {
   		  
 		    System.out.println("Guess received");
 		    int guessedCard = payload.get("card_id").getAsInt();
-		    GamePlayer guesser = currGame.getPlayer(payload.get("user_id").getAsString());
+		    String userId = payload.get("user_id").getAsString();
+		    GamePlayer guesser = currGame.getPlayer(userId);
+		    
+		    System.out.println("guessed card: " + guessedCard);
+		    System.out.println("guesser id: " + guesser.playerId());
+		    System.out.println("guesser name: " + guesser.playerName());
+		    
 		    guesser.removeCard(guessedCard);
+		    
+		    System.out.println("curr game id:" + currGame.getId());
+		    System.out.println("currRef: " + currRef.toString());
+		    
 		    currRef = currGame.getRefree();
 		    currRef.setChosen(userId, guessedCard);
 		    
