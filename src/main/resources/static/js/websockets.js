@@ -24,8 +24,8 @@ let myId = -1;
 
 //set up socket connection and define types
 const setup_update = () => {
-	conn = new WebSocket("ws://localhost:4567/connect");
-//conn = new WebSocket("ws://104.196.191.156/connect");  
+  //conn = new WebSocket("ws://localhost:4567/connect");
+  conn = new WebSocket("ws://104.196.191.156/connect");  
 	conn.onerror = err => {
     	console.log('Connection error:', err);
   };
@@ -33,6 +33,8 @@ const setup_update = () => {
   conn.onmessage = msg => {
     const data = JSON.parse(msg.data);
     const payload = data.payload;
+    console.log(data.type)
+    console.log(data.payload);
     switch (data.type) {
       default:
         console.log('Unknown message type!', data.type);
@@ -44,18 +46,10 @@ const setup_update = () => {
         updateCookie(payload.cookies[1].name, payload.cookies[1].value)
         break;
       case MESSAGE_TYPE.LOAD:
-        for(let game in payload.gamearray){
-          let exist = false;
-          let cols = document.getElementById("lobbyt").getElementsByTagName('td'), colslen = cols.length, i = -1;
-          console.log(cols.length)
-          while(++i < colslen){
-            if(payload.gamearray[game].id == cols[i].id){
-              exist = true;
-            }
-            console.log(cols[i].id)
-          }
-          if(!exist){
-              $("table.table-hover tbody").append("<tr><td id=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].name + "</td><td class=\"num_players\" id=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].player + "/" + payload.gamearray[game].capacity + "</td></tr>");
+        $("table.table-hover tbody").html("");
+        if(payload.gamearray != "none"){
+          for(let game in payload.gamearray){
+            $("table.table-hover tbody").append("<tr><td id=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].name + "</td><td class=\"num_players\" id=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].player + "/" + payload.gamearray[game].capacity + "</td></tr>");
           }
         }
         break;
@@ -63,14 +57,24 @@ const setup_update = () => {
         const table = $("table.table-hover tbody");
         table.append("<tr><td id=\"" + payload.game_id + "\">" + payload.lobby_name + "</td><td class=\"num_players\" id=\"" + payload.game_id + "\">" + payload.num_players + "/" + payload.capacity + "</td></tr>");
         break;
-      
+      case MESSAGE_TYPE.CONNECT:
+        let currurl = window.location.toString();
+        const urlMessage = {
+          type: MESSAGE_TYPE.CONNECT,
+          payload: {
+            url: currurl
+          }
+        }
+        conn.send(JSON.stringify(urlMessage));
+        break;
       case MESSAGE_TYPE.JOIN:
         window.location = window.location.href + "play";
-      break;
+        break;
       
       case MESSAGE_TYPE.ALL_JOINED:
         const hand = payload.hand;
-        
+        console.log('------')
+        console.log(hand);
         // change the img of each hand-card div
         for (card of Object.keys(hand)) {
           let cardInfo = hand[card].split(":");
@@ -141,10 +145,10 @@ const setup_update = () => {
         //const guessedCardUrl = "../img/img" + guessedCardId + ".jpg";
         let guessedCards = payload.guessed;
         $(".picked-cards").empty();
-          $(".picked-cards").append("<div class=\"card picked\"><div class = \"image bigimg\" id=\"" + answerCardId + "\" style = \"background-image: url(" + answerCardUrl + "); background-size: cover; background-repeat: no-repeat;\"></div><div class=\"voters\"></div></div>");
+          $(".picked-cards").append("<div class=\"card picked\"><div class = \"image bigimg\" id=\"" + answerCardId + "\" style = \"background-image: url(" + answerCardUrl + "); background-size: cover; background-repeat: no-repeat;\"></div><div class=\"voters\"></div></div>").hide().show('slow', 'swing');
         for (card in Object.keys(guessedCards)) {
           let cardId = guessedCards[card];
-          $(".picked-cards").append("<div class=\"card picked\"><div class = \"image bigimg\" id=\"" + cardId + "\" style = \"background-image: url(" + "../img/img"+cardId+".jpg"+ "); background-size: cover; background-repeat: no-repeat;\"></div><div class=\"voters\"></div></div>");
+          $(".picked-cards").append("<div class=\"card picked\"><div class = \"image bigimg\" id=\"" + cardId + "\" style = \"background-image: url(" + "../img/img"+cardId+".jpg"+ "); background-size: cover; background-repeat: no-repeat;\"></div><div class=\"voters\"></div></div>").hide().show('slow', 'swing');
         }
 
         myId = getElementFromCookies("userid");

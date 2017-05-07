@@ -65,6 +65,10 @@ public class GamePlayer implements Player {
     return playerDeck;
   }
   
+  public String getId(){
+	  return this.playerId;
+  }
+  
   public void resetHand(Deck deck) {
     globalDeck = deck;
   }

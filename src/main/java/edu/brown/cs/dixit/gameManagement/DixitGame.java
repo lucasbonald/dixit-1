@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import edu.brown.cs.dixit.setting.Deck;
 import edu.brown.cs.dixit.setting.GamePlayer;
@@ -14,6 +15,7 @@ public class DixitGame {
 
 	private final int id;
 	private final int capacity;
+	private int restartVote;
 	private Deck deck;
 	private final String name;
 	private Map<String, GamePlayer> players;
@@ -28,9 +30,9 @@ public class DixitGame {
 		name = gameName;
 		capacity = cap;
 		deck = new Deck();
-		players = new HashMap<>();
+		players = new ConcurrentHashMap<>();
 		referee = new Referee(cap, victPoint, new Turn(cap));
-		playerStatus = new HashMap<>();
+		playerStatus = new ConcurrentHashMap<>();
 	}
 	
 	public int getId() {
@@ -55,6 +57,13 @@ public class DixitGame {
 	    referee.getTurn().addPlayers(new_player);
 	    referee.addBoard(id, 0);
 	    return new_player;
+	}
+	
+	public void removePlayer(GamePlayer player){
+		players.remove(player.getId());
+		referee.getTurn().removePlayers(player);
+		referee.removeBoard(player.getId());
+		playerStatus.remove(player.getId());
 	}
 	
 	public GamePlayer getPlayer(String id) {
@@ -85,6 +94,7 @@ public class DixitGame {
 	  playerStatus.put(id, status);
 	}
 	
+	
 	public String getStatus(String id) {
 	  return playerStatus.get(id);
 	}
@@ -100,5 +110,18 @@ public class DixitGame {
 	    user.resetHand(deck);	    
 	  }
 	  getRefree().getTurn().setTurn(0);
+	  resetStart();
+	}
+	
+	public int getRestart() {
+	  return restartVote;
+	}
+	
+	public void incrementRestart() {
+	  restartVote += 1;
+	}
+	
+	public void resetStart() {
+	  restartVote = 0;
 	}
 }
