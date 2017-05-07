@@ -14,6 +14,7 @@ $(document).ready(function(){
         $("#username-form").toggleClass("hidden");
         $(".start-game").removeClass("hidden");
       }
+      sendLoad();
     });
   
     $("#create-form").on("submit", function(event) {
@@ -85,4 +86,14 @@ $(document).ready(function(){
     });
       
 });
+
+function sendLoad(){
+  let gameInit = {
+          type: MESSAGE_TYPE.LOAD,
+          payload: {
+          }
+      }
+  conn.send(JSON.stringify(gameInit));
+}
+
 

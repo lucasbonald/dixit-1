@@ -17,6 +17,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.UUID;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import edu.brown.cs.dixit.gameManagement.*;
@@ -53,7 +54,8 @@ public class WebSockets {
     RESULTS,
     CHAT_UPDATE,
     CHAT_MSG,
-    END_OF_ROUND
+    END_OF_ROUND,
+    LOAD
   }
 
   public static void connectDB() throws ClassNotFoundException, SQLException {
@@ -145,16 +147,37 @@ public class WebSockets {
   	JsonObject payload = received.getAsJsonObject("payload");
   	MESSAGE_TYPE messageType = MESSAGE_TYPE.values()[received.get("type").getAsInt()];
   	GamePlayer teller;
-  
   	switch (messageType) {
   		default:
   			System.out.println(messageType.toString() + ": Unknown message type!");
+  			break;
+  		case LOAD:
+  			JsonObject loadGameMessage = new JsonObject();
+  			loadGameMessage.addProperty("type", MESSAGE_TYPE.LOAD.ordinal());
+  			JsonObject loadGamePayload = new JsonObject();
+  			if(!gt.getAllGame().keySet().isEmpty()){
+  				JsonArray gameArray = new JsonArray();
+  				JsonObject gameJson = new JsonObject();
+  				for(int gameKey:gt.getAllGame().keySet()){
+  					DixitGame loadedGame = gt.getAllGame().get(gameKey);
+  					gameJson.addProperty("id", loadedGame.getId());
+  	  				gameJson.addProperty("name", loadedGame.getName());
+  	  				gameJson.addProperty("capacity", loadedGame.getCapacity());
+  	  				gameJson.addProperty("player", loadedGame.getNumPlayers());
+  	  			}
+  				gameArray.add(gameJson);
+  				loadGamePayload.add("gamearray",gameArray);
+  				loadGameMessage.add("payload", loadGamePayload);
+  	  			session.getRemote().sendString(loadGameMessage.toString());
+  			}
+  			
+  			
   			break;
   		case CREATE:
   			//game created
   			System.out.println("new game created!");
   			int newGameId = gt.createGameID();
-  			DixitGame newGame = new DixitGame(newGameId, payload.get("num_players").getAsInt(), payload.get("victory_pts").getAsInt());
+  			DixitGame newGame = new DixitGame(newGameId, payload.get("num_players").getAsInt(), payload.get("victory_pts").getAsInt(), payload.get("lobby_name").getAsString());
   			//need to initialize the game with additional features like more cards / input types
   			gt.addGame(newGame);
   			newGame.getDeck().initializeDeck("../img/img");
