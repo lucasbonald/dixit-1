@@ -113,6 +113,7 @@ public class WebSockets {
 
   @OnWebSocketConnect
   public void connected(Session session) throws IOException, ClassNotFoundException, SQLException {
+	 
 	System.out.println("curr session hashcode: " + session.hashCode());
 
 	allSessions.add(session);
@@ -557,4 +558,9 @@ public class WebSockets {
 			e.printStackTrace();
 		}
   }
+  
+  /*private void checkDuplicateTabs(Session s){
+	  
+	  gt.getSession(playerId)
+  }*/
 }
