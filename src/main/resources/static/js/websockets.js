@@ -12,7 +12,9 @@ const MESSAGE_TYPE = {
   MULTI_TAB: 10,
   RESULTS: 11,
   CHAT_UPDATE: 12,
-  CHAT_MSG: 13
+  CHAT_MSG: 13,
+  END_OF_ROUND: 14,
+  LOAD:15
 };
 
 let conn;
@@ -22,6 +24,7 @@ let myId = -1;
 //set up socket connection and define types
 const setup_update = () => {
 	conn = new WebSocket("ws://localhost:4567/connect");
+//conn = new WebSocet("ws://104.196.191.156/connect");  
 	conn.onerror = err => {
     	console.log('Connection error:', err);
   };
@@ -39,12 +42,28 @@ const setup_update = () => {
         updateCookie(payload.cookies[0].name, payload.cookies[0].value)
         updateCookie(payload.cookies[1].name, payload.cookies[1].value)
         break;
-      case MESSAGE_TYPE.NEW_GAME:
-        if(payload.num_players == 1) {
-          $("table.table-hover tbody").append("<tr><td id=\"" + payload.game_id + "\">" + payload.lobby_name + "</td><td class=\"num_players\" id=\"" + payload.game_id + "\">" + payload.num_players + "/" + payload.capacity + "</td></tr>");
-        } else if (payload.num_players > 1) {
-          $("table.table-hover tbody").find($(".num_players")).text(payload.num_players + "/" + payload.capacity);
+      case MESSAGE_TYPE.LOAD:
+        for(let game in payload.gamearray){
+          console.log(payload.gamearray[game])
+          $("table.table-hover tbody").append("<tr><td id=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].name + "</td><td class=\"num_players\" id=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].player + "/" + payload.gamearray[game].capacity + "</td></tr>");
         }
+        console.log(payload.gamearray.length)
+      case MESSAGE_TYPE.NEW_GAME:
+        let exist = false;
+        const table = $("table.table-hover tbody");
+        for(let i=0;i<table.length;i++){
+          if(table[i].id == payload.game_id){
+            exist = true;
+          }
+        }
+        if(!exist){
+          if(payload.num_players == 1) {
+          table.append("<tr><td id=\"" + payload.game_id + "\">" + payload.lobby_name + "</td><td class=\"num_players\" id=\"" + payload.game_id + "\">" + payload.num_players + "/" + payload.capacity + "</td></tr>");
+        } else if (payload.num_players > 1) {
+          table.find($(".num_players")).text(payload.num_players + "/" + payload.capacity);
+        }
+        }
+        
       
         break;
       
@@ -120,13 +139,17 @@ const setup_update = () => {
         console.log("all guesses received");
         setStatus("Voting");
     	  const answerCardId = payload.answer;
-        const guessedCardId = payload.guessed;
         const answerCardUrl = "../img/img" + answerCardId + ".jpg";
-        const guessedCardUrl = "../img/img" + guessedCardId + ".jpg";
+        //const guessedCardId = payload.guessed;
+        //const guessedCardUrl = "../img/img" + guessedCardId + ".jpg";
+        let guessedCards = payload.guessed;
         $(".picked-cards").empty();
-        $(".picked-cards").append("<div class=\"card picked\"><div class = \"image bigimg\" id=\"" + answerCardId + "\" style = \"background-image: url(" + answerCardUrl + "); background-size: cover; background-repeat: no-repeat;\"></div><div class=\"voters\"></div></div>");
-        $(".picked-cards").append("<div class=\"card picked\"><div class = \"image bigimg\" id=\"" + guessedCardId + "\" style = \"background-image: url(" + guessedCardUrl + "); background-size: cover; background-repeat: no-repeat;\"></div><div class=\"voters\"></div></div>");
-        
+          $(".picked-cards").append("<div class=\"card picked\"><div class = \"image bigimg\" id=\"" + answerCardId + "\" style = \"background-image: url(" + answerCardUrl + "); background-size: cover; background-repeat: no-repeat;\"></div><div class=\"voters\"></div></div>");
+        for (card in Object.keys(guessedCards)) {
+          let cardId = guessedCards[card];
+          $(".picked-cards").append("<div class=\"card picked\"><div class = \"image bigimg\" id=\"" + cardId + "\" style = \"background-image: url(" + "../img/img"+cardId+".jpg"+ "); background-size: cover; background-repeat: no-repeat;\"></div><div class=\"voters\"></div></div>");
+        }
+
         myId = getElementFromCookies("userid");
         if (myId != storyteller) {
           startTimer(30);  

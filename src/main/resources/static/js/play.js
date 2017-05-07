@@ -2,16 +2,16 @@ let currState = "Storytelling";
 
 $(document).ready(function(){
 
-  // selecting a card from the hand for storytelling/voting
-  $(".hand").on("click", "div.image", function(event) {
-    
-    const cardInfo = getCardInfo($(this));
-    let myId = getElementFromCookies("userid");
-//    if ((currState == "Storytelling" && myId == storyteller) || (currState == "Guessing" && myId != storyteller)) {
-//      $(".picked").empty();
-//      $(".picked").append("<div class = \"image bigimg\" id=\"" + cardInfo.id + "\" style = \"background-image: url(" + cardInfo.url + "); background-size: cover; background-repeat: no-repeat;\"></div>")
-//    }
-  });
+//  // selecting a card from the hand for storytelling/voting
+//  $(".hand").on("click", "div.image", function(event) {
+//    
+//    const cardInfo = getCardInfo($(this));
+//    let myId = getElementFromCookies("userid");
+////    if ((currState == "Storytelling" && myId == storyteller) || (currState == "Guessing" && myId != storyteller)) {
+////      $(".picked").empty();
+////      $(".picked").append("<div class = \"image bigimg\" id=\"" + cardInfo.id + "\" style = \"background-image: url(" + cardInfo.url + "); background-size: cover; background-repeat: no-repeat;\"></div>")
+////    }
+//  });
   
   //submitting chatform when submitted
   $("#messageForm").on('submit', function(e) {
@@ -61,7 +61,7 @@ $(document).ready(function(){
 	});
   
   $(".picked-cards").click(function(event) {
-    
+    console.log("clicking");
     let myId = getElementFromCookies("userid");
     if (currState == "Voting" && myId != storyteller ) {
       if($(event.target).attr("class") == undefined){
@@ -130,7 +130,10 @@ function sendVote(card_id) {
 
 function getCardInfo(card) {
   const id = card.attr("id");
+  console.log("card id is " + id);
   const img = card.attr("style");
+  console.log("card img is " + img);
+
   const url = img.replace(/.*\s?url\([\'\"]?/, '').replace(/[\'\"]?\).*/, '');
   return {id: id, url: url};
 }
