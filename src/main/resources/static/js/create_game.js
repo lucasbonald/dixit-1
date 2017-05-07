@@ -51,11 +51,12 @@ $(document).ready(function(){
     });
 
     $('table.table-hover tbody').on('click', function() {
-//      console.log($(this));
-      currSelected = $(this).find('td');
-      currSelected.toggleClass('selected-row');
+      console.log(event.target);
+      currSelected = $(event.target);
+      currSelected.parent().toggleClass('selected-row');
+      console.log(currSelected.attr("id"));
       if (prevSelected != undefined) {
-        prevSelected.toggleClass('selected-row');
+        prevSelected.parent().toggleClass('selected-row');
       }
       prevSelected = currSelected;
     });

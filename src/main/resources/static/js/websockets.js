@@ -14,7 +14,8 @@ const MESSAGE_TYPE = {
   CHAT_UPDATE: 12,
   CHAT_MSG: 13,
   END_OF_ROUND: 14,
-  LOAD:15
+  LOAD:15,
+  RESTART: 16
 };
 
 let conn;
@@ -23,8 +24,8 @@ let myId = -1;
 
 //set up socket connection and define types
 const setup_update = () => {
-	conn = new WebSocket("ws://localhost:4567/connect");
-//conn = new WebSocket("ws://104.196.191.156/connect");  
+	//conn = new WebSocket("ws://localhost:4567/connect");
+  conn = new WebSocket("ws://104.196.191.156/connect");  
 	conn.onerror = err => {
     	console.log('Connection error:', err);
   };
@@ -68,12 +69,12 @@ const setup_update = () => {
         break;
       case MESSAGE_TYPE.JOIN:
         window.location = window.location.href + "play";
-
-      break;
+        break;
       
       case MESSAGE_TYPE.ALL_JOINED:
         const hand = payload.hand;
-        
+        console.log('------')
+        console.log(hand);
         // change the img of each hand-card div
         for (card of Object.keys(hand)) {
           let cardInfo = hand[card].split(":");
@@ -82,15 +83,19 @@ const setup_update = () => {
           let $card = $("#card" + card);
           $card.empty();
           $card.append("<div class = \"image\" id=\"" + cardId + "\" style = \"background-image: url(" + url + ");\"></div>" );
-          //$card.append("<img id=\"" + cardId + "\" src=\"" + url + "\"></img>");
         }
 
         const players = payload.players;
         $("#scoreboard").empty();
         for (player of Object.keys(players)) {
           let player_name = players[player].user_name;
-          let player_id = players[player].user_id;  
+          let player_id = players[player].user_id;
           $("#scoreboard").append("<tr><td>" + player_name + "</td><td id=\"" + player_id + "status\"></td><td id=\"" + player_id + "points\">0</td></tr>");
+          
+          myId = getElementFromCookies("userid");
+          if (myId == player_id) {
+            $("#user-name").html(player_name);
+          }
         }
         
         setStoryTeller(payload.storyteller);
@@ -115,6 +120,7 @@ const setup_update = () => {
         setStatus("Guessing");
         myId = getElementFromCookies("userid");
         if (myId != storyteller) {
+          console.log("timer starting!")
           startTimer(15);  
         }
         break;
@@ -147,6 +153,7 @@ const setup_update = () => {
 
         myId = getElementFromCookies("userid");
         if (myId != storyteller) {
+          console.log("timer starting!")
           startTimer(30);  
         }
         
@@ -160,15 +167,18 @@ const setup_update = () => {
 
       case MESSAGE_TYPE.RESULTS:
         updatePoints(payload.points);
-        displayPoints(payload.points);
-        console.log(payload.winner);
-        if (payload.winner != "") {
-          console.log ("we have a winner")
-        } else {
-          console.log ("no winner")
-        }
-        setTimeout(function() { newRound(payload); }, 5000);
         
+        console.log(payload.winner);
+        if (payload.winner.winner_id != "") {
+          console.log ("we have a winner");
+          displayWinner(payload.winner);
+        } else {
+          console.log ("no winner");
+          displayPoints(payload.points);
+          setTimeout(function() { newRound(payload); }, 5000);
+        }
+        
+        console.log(payload.hand);
     	  break;
       
       case MESSAGE_TYPE.CHAT_UPDATE:
