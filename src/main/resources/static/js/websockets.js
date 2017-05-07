@@ -24,7 +24,7 @@ let myId = -1;
 //set up socket connection and define types
 const setup_update = () => {
 	conn = new WebSocket("ws://localhost:4567/connect");
-//conn = new WebSocet("ws://104.196.191.156/connect");  
+//conn = new WebSocket("ws://104.196.191.156/connect");  
 	conn.onerror = err => {
     	console.log('Connection error:', err);
   };
@@ -48,6 +48,7 @@ const setup_update = () => {
           $("table.table-hover tbody").append("<tr><td id=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].name + "</td><td class=\"num_players\" id=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].player + "/" + payload.gamearray[game].capacity + "</td></tr>");
         }
         console.log(payload.gamearray.length)
+
       case MESSAGE_TYPE.NEW_GAME:
         let exist = false;
         const table = $("table.table-hover tbody");

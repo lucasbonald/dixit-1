@@ -52,7 +52,7 @@ public class Referee {
   public Map<String, Integer> tallyScores() {
     //reset result
     result = new HashMap<String, Integer>();
-    
+    System.out.println("result size: " + result.size());
     int count_answer = 0;
     //Points for other players
     for (String key: pickRecord.keySet()) {    
@@ -76,8 +76,9 @@ public class Referee {
         }
       }
     }
-    
+    System.out.println("result size before st: " + result.size());
     //Point for Story-teller
+    
     if (count_answer == pickRecord.size()) {
       result.put(gameTurn.getCurrTeller(), 0);
       for (String key: pickRecord.keySet()) {
@@ -95,6 +96,8 @@ public class Referee {
     } else {
       result.put(gameTurn.getCurrTeller(), 3);
     }
+    
+    System.out.println("result size after st: " + result.size());
     
     //reset 
     pickRecord = new HashMap<String, Integer>();
