@@ -66,13 +66,11 @@ public class Referee {
         count_answer += 1;  
       } else {
         for (String keyTwo: chosen.keySet()) {
-          if (chosen.get(keyTwo) == pickedCard) {
+          if (chosen.get(keyTwo) == pickedCard && !keyTwo.equals(key)) {
             if (result.containsKey(keyTwo)) {
               result.put(keyTwo, result.get(keyTwo) + 1);
-              System.out.println("picking yourself?");
             } else {
               result.put(keyTwo, 1);
-              System.out.println("picking yourself3?");
             }
           } 
         }
@@ -84,14 +82,12 @@ public class Referee {
       result.put(gameTurn.getCurrTeller(), 0);
       for (String key: pickRecord.keySet()) {
         result.put(key, 2);
-        System.out.println("you are supposed to get two");
       }
     } else if (count_answer == 0) {
       result.put(gameTurn.getCurrTeller(), 0);
       for (String key: pickRecord.keySet()) {
         if (result.containsKey(key)) {
           result.put(key,  result.get(key) + 2);
-          System.out.println("pikcing yourself2?");
         } else {
           result.put(key, 2);
         }
