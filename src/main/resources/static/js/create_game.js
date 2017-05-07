@@ -24,7 +24,6 @@ $(document).ready(function(){
       if($(".lobby-name").val() == "") {
         $(".create-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Please provide a lobby name.</p>")
       } else {
-
         let gameInit = {
           type: MESSAGE_TYPE.CREATE,
           payload: {
@@ -41,13 +40,12 @@ $(document).ready(function(){
             }
           }
         }
-
+        console.log("whehfei")
         // send new game information to backend
         conn.send(JSON.stringify(gameInit));
         newGameId++;
 
         // display new available game to allow joining
-        $('table.table-hover tbody').append("<tr><td id=\"" + gameInit.payload.game_id + "\">" + gameInit.payload.lobby_name + "</td><td id=\"" + gameInit.payload.game_id + "\">1/" + gameInit.payload.num_players + "</td></tr");
         //window.location = window.location.href + "storytelling";
       }
       
@@ -88,12 +86,12 @@ $(document).ready(function(){
 });
 
 function sendLoad(){
-  let gameInit = {
+  let gameLoad = {
           type: MESSAGE_TYPE.LOAD,
           payload: {
           }
       }
-  conn.send(JSON.stringify(gameInit));
+  conn.send(JSON.stringify(gameLoad));
 }
 
 

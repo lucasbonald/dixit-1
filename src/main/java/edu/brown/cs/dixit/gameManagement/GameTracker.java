@@ -14,7 +14,7 @@ public class GameTracker {
   private Set<Integer> idset = new HashSet<Integer>();
 	
   public int createGameID(){
-	  for(int i = 0; i < 100; i++){
+	  for(int i = 1; i < 100; i++){
 		  if(!idset.contains(i)){
 			  idset.add(i);
 			  return i;

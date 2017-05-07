@@ -86,7 +86,7 @@
           <div class="col-xs-10">
             <form id="join-form">
               <span class="glyphicon glyphicon-arrow-right form-title"></span><span class="form-title-text">Join game</span>
-              <table class="table table-hover">
+              <table class="table table-hover" id ="lobbyt">
                 <thead>
                   <tr>
                     <th>Lobby name</th>

@@ -24,7 +24,7 @@ let myId = -1;
 //set up socket connection and define types
 const setup_update = () => {
 	conn = new WebSocket("ws://localhost:4567/connect");
-//conn = new WebSocet("ws://104.196.191.156/connect");  
+//conn = new WebSocket("ws://104.196.191.156/connect");  
 	conn.onerror = err => {
     	console.log('Connection error:', err);
   };
@@ -44,27 +44,23 @@ const setup_update = () => {
         break;
       case MESSAGE_TYPE.LOAD:
         for(let game in payload.gamearray){
-          console.log(payload.gamearray[game])
-          $("table.table-hover tbody").append("<tr><td id=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].name + "</td><td class=\"num_players\" id=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].player + "/" + payload.gamearray[game].capacity + "</td></tr>");
-        }
-        console.log(payload.gamearray.length)
-      case MESSAGE_TYPE.NEW_GAME:
-        let exist = false;
-        const table = $("table.table-hover tbody");
-        for(let i=0;i<table.length;i++){
-          if(table[i].id == payload.game_id){
-            exist = true;
+          let exist = false;
+          let cols = document.getElementById("lobbyt").getElementsByTagName('td'), colslen = cols.length, i = -1;
+          console.log(cols.length)
+          while(++i < colslen){
+            if(payload.gamearray[game].id == cols[i].id){
+              exist = true;
+            }
+            console.log(cols[i].id)
+          }
+          if(!exist){
+              $("table.table-hover tbody").append("<tr><td id=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].name + "</td><td class=\"num_players\" id=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].player + "/" + payload.gamearray[game].capacity + "</td></tr>");
           }
         }
-        if(!exist){
-          if(payload.num_players == 1) {
-          table.append("<tr><td id=\"" + payload.game_id + "\">" + payload.lobby_name + "</td><td class=\"num_players\" id=\"" + payload.game_id + "\">" + payload.num_players + "/" + payload.capacity + "</td></tr>");
-        } else if (payload.num_players > 1) {
-          table.find($(".num_players")).text(payload.num_players + "/" + payload.capacity);
-        }
-        }
-        
-      
+        break;
+      case MESSAGE_TYPE.NEW_GAME:
+        const table = $("table.table-hover tbody");
+        table.append("<tr><td id=\"" + payload.game_id + "\">" + payload.lobby_name + "</td><td class=\"num_players\" id=\"" + payload.game_id + "\">" + payload.num_players + "/" + payload.capacity + "</td></tr>");
         break;
       
       case MESSAGE_TYPE.JOIN:
@@ -166,18 +162,28 @@ const setup_update = () => {
       case MESSAGE_TYPE.RESULTS:
         updatePoints(payload.points);
         displayPoints(payload.points);
+        console.log(payload.winner);
+        if (payload.winner != "") {
+          console.log ("we have a winner")
+        } else {
+          console.log ("no winner")
+        }
         setTimeout(function() { newRound(payload); }, 5000);
         console.log(payload.hand);
     	  break;
       
       case MESSAGE_TYPE.CHAT_UPDATE:
-        let messages = JSON.parse(payload.messages);
-        let length = messages.username.length;
-        $(".chatList").empty();
-        for (let i = 0; i < Math.min(6, length) ; i ++ ) {
-            $(".chatList").prepend("<li> <span style=\"color: grey\">" + messages.username[length-i-1] + "</span> : " + messages.body[length-i-1]  + "</li>");
-        } 
-      }
+    	let messages = JSON.parse(payload.messages);
+    	let length = messages.username.length;
+    	$(".chatList").empty();
+    	for (let i = 0; i < length ; i ++ ) {
+        	//$(".chatList").prepend("<li> <span style=\"color: grey\">" + messages.username[length-i-1] + "</span> : " + messages.body[length-i-1]  + "</li>");
+        	$(".chatList").append("<li> <span style=\"color: grey\">" + messages.username[i] + "</span> : " + messages.body[i]  + "</li>");
+    	} 
+    	$(".chatList").scrollTop($(".chatList")[0].scrollHeight);
+
+    }
+
   };
 }
 
@@ -217,7 +223,9 @@ function deleteAllCookies() {
         let cookie = cookies[i];
         let eqPos = cookie.indexOf("=");
         let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        if(name!="userid"){
+          document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        }
     }
 }
 
