@@ -254,17 +254,8 @@ public class WebSockets {
 		    System.out.println("Guess received");
 		    int guessedCard = payload.get("card_id").getAsInt();
 		    String userId = payload.get("user_id").getAsString();
-		    GamePlayer guesser = currGame.getPlayer(userId);
-		    
-		    System.out.println("guessed card: " + guessedCard);
-		    System.out.println("guesser id: " + guesser.playerId());
-		    System.out.println("guesser name: " + guesser.playerName());
-		    
+		    GamePlayer guesser = currGame.getPlayer(userId); 
 		    guesser.removeCard(guessedCard);
-		    
-		    System.out.println("curr game id:" + currGame.getId());
-		    System.out.println("currRef: " + currRef.toString());
-		    
 		    currRef = currGame.getRefree();
 		    currRef.setChosen(userId, guessedCard);
 		    
@@ -276,8 +267,18 @@ public class WebSockets {
     	        JsonObject allGuessesMessage = new JsonObject();
     	        allGuessesMessage.addProperty("type", MESSAGE_TYPE.ALL_GUESSES.ordinal());        
                 JsonObject guessesPayload = new JsonObject();
+                JsonObject guessed = new JsonObject();
                 guessesPayload.addProperty("answer", currRef.getAnswer());
-                guessesPayload.addProperty("guessed", currRef.getChosen(userId));
+                
+                int temp = 0;
+                for (String whoGuessed: currGame.getPlayerNames()) {
+                  if (!whoGuessed.equals(currGame.getST())) {
+                   guessed.addProperty(String.valueOf(temp), currRef.getChosen(whoGuessed));
+                   temp += 1;
+                  }
+                }
+                
+                guessesPayload.add("guessed", guessed);
                 allGuessesMessage.add("payload", guessesPayload);
                 sendMsgToGame(allGuessesMessage.toString());
           

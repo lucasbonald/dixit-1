@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import edu.brown.cs.dixit.setting.Deck;
 import edu.brown.cs.dixit.setting.GamePlayer;
@@ -64,6 +65,10 @@ public class DixitGame {
 	
 	public Collection<GamePlayer> getPlayers() {
 		return players.values();
+	}
+	
+	public Set<String> getPlayerNames() {
+	  return players.keySet();
 	}
 	
 	public Referee getRefree() {

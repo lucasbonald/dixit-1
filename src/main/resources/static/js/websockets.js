@@ -128,13 +128,17 @@ const setup_update = () => {
         console.log("all guesses received");
         setStatus("Voting");
     	  const answerCardId = payload.answer;
-        const guessedCardId = payload.guessed;
         const answerCardUrl = "../img/img" + answerCardId + ".jpg";
-        const guessedCardUrl = "../img/img" + guessedCardId + ".jpg";
+        //const guessedCardId = payload.guessed;
+        //const guessedCardUrl = "../img/img" + guessedCardId + ".jpg";
+        let guessedCards = payload.guessed;
         $(".picked-cards").empty();
-        $(".picked-cards").append("<div class=\"card picked\"><div class = \"image bigimg\" id=\"" + answerCardId + "\" style = \"background-image: url(" + answerCardUrl + "); background-size: cover; background-repeat: no-repeat;\"></div><div class=\"voters\"></div></div>");
-        $(".picked-cards").append("<div class=\"card picked\"><div class = \"image bigimg\" id=\"" + guessedCardId + "\" style = \"background-image: url(" + guessedCardUrl + "); background-size: cover; background-repeat: no-repeat;\"></div><div class=\"voters\"></div></div>");
-        
+          $(".picked-cards").append("<div class=\"card picked\"><div class = \"image bigimg\" id=\"" + answerCardId + "\" style = \"background-image: url(" + answerCardUrl + "); background-size: cover; background-repeat: no-repeat;\"></div><div class=\"voters\"></div></div>");
+        for (card in Object.keys(guessedCards)) {
+          let cardId = guessedCards[card];
+          $(".picked-cards").append("<div class=\"card picked\"><div class = \"image bigimg\" id=\"" + cardId + "\" style = \"background-image: url(" + "../img/img"+cardId+".jpg"+ "); background-size: cover; background-repeat: no-repeat;\"></div><div class=\"voters\"></div></div>");
+        }
+
         myId = getElementFromCookies("userid");
         if (myId != storyteller) {
           startTimer(30);  
