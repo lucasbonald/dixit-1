@@ -73,6 +73,7 @@ function displayPoints(points) {
   
   for (id of Object.keys(points)) {
     if (id == myId) {
+      console.log(id)
       $("#received-points").html(points[id]);
     }
   }
@@ -91,8 +92,12 @@ function newRound(details) {
   // if you're now the new storyteller
   } else if (myId == details.storyteller.user_id) {
     initStorytellerBoard();
+<<<<<<< HEAD
   } 
 
+=======
+  }
+>>>>>>> 4d527ef22d97d4a99314e5abec0e5e06918aa319
   // clear stopwatch, prompt and picked cards
   $(".picked-cards").html("<div class=\"card picked\"><div class=\"image bigimg\" style=\"background-image: url(../img/blank.jpg)\"></div></div>");
   $("#promptValue").empty();
