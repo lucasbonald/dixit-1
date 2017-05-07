@@ -40,7 +40,6 @@ $(document).ready(function(){
             }
           }
         }
-        console.log("whehfei")
         // send new game information to backend
         conn.send(JSON.stringify(gameInit));
         newGameId++;
@@ -52,8 +51,9 @@ $(document).ready(function(){
     });
 
     $('table.table-hover tbody').on('click', function() {
-      currSelected = $(event.target);
-      currSelected.parent().toggleClass('selected-row');
+      console.log(event.target);
+      currSelected = $(event.target).parent();
+      currSelected.toggleClass('selected-row');
       console.log(currSelected.attr("id"));
       if (prevSelected != undefined) {
         prevSelected.toggleClass('selected-row');
