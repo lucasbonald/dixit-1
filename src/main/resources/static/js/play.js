@@ -78,7 +78,7 @@ $(document).ready(function(){
     } 
   });
   
-   $("#play-again").click(function(event) {
+   $("#play-again-button").click(function(event) {
      sendRestartIntent();
    });
   
