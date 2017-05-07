@@ -14,6 +14,7 @@ public class DixitGame {
 
 	private final int id;
 	private final int capacity;
+	private int restartVote;
 	private Deck deck;
 	private final String name;
 	private Map<String, GamePlayer> players;
@@ -100,5 +101,18 @@ public class DixitGame {
 	    user.resetHand(deck);	    
 	  }
 	  getRefree().getTurn().setTurn(0);
+	  resetStart();
+	}
+	
+	public int getRestart() {
+	  return restartVote;
+	}
+	
+	public void incrementRestart() {
+	  restartVote += 1;
+	}
+	
+	public void resetStart() {
+	  restartVote = 0;
 	}
 }

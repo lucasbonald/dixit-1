@@ -139,7 +139,6 @@ public class WebSockets {
   	JsonObject payload = received.getAsJsonObject("payload");
   	MESSAGE_TYPE messageType = MESSAGE_TYPE.values()[received.get("type").getAsInt()];
   	GamePlayer teller;
-  	int restartVote = 0;
   	switch (messageType) {
   		default:
   			System.out.println(messageType.toString() + ": Unknown message type!");
@@ -370,13 +369,12 @@ public class WebSockets {
   			this.getMessage(game);  	
   			
   		case RESTART:
-  		    restartVote += 1;
-            System.out.println(restartVote);
-  		    if (restartVote == currGame.getCapacity()) {
+  		    currGame.incrementRestart();
+            System.out.println(currGame.getRestart());
+  		    if (currGame.getRestart() == currGame.getCapacity()) {
   		      currGame.resetGame();
               allJoined(currGame.getPlayers());
               updateStatus(currGame);
-              restartVote = 0;
   		    }
   	}    
   }
