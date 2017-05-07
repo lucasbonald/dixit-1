@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Deck {
   // default deck of 40 cards
-  private int SIZE = 41;
+  private int SIZE = 84;
   private List<Card> deck;
   
   public Deck () {
@@ -14,7 +14,7 @@ public class Deck {
   
   public void initializeDeck(String imgLink) {
     // need to call the imgLink for every card
-    for (int i = 1; i < SIZE; i++) {
+    for (int i = 1; i < SIZE + 1; i++) {
       String eachLink = imgLink + String.valueOf(i) + ".jpg";
       Card temp = new Card(i, eachLink);
       deck.add(temp);

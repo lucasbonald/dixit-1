@@ -285,6 +285,9 @@ public class WebSockets {
   			System.out.println("Vote received");
   			int vote = payload.get("card_id").getAsInt();
   			String voterId = payload.get("user_id").getAsString();
+  			System.out.println("voter Id: " + voterId);
+  			System.out.println("voted cardId: " + vote);
+  			System.out.println("curr Game id: " + currGame.getId());
   			GamePlayer voter = currGame.getPlayer(voterId);
   			currGame.addStatus(voterId, "Voted");
   			updateStatus(currGame);

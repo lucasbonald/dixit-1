@@ -58,25 +58,21 @@ public class Referee {
     for (String key: pickRecord.keySet()) {    
       int pickedCard = pickRecord.get(key);
       if (pickedCard == getAnswer()) {
-        
-        for (String keyTwo: chosen.keySet()) {
-          if (chosen.get(keyTwo) == pickedCard) {
-            if (result.containsKey(keyTwo)) {
-              result.put(keyTwo, result.get(keyTwo) + 3);
-            } else {
-              result.put(keyTwo, 3);
-            }
-          } 
+        if (result.containsKey(key)) {
+          result.put(key, result.get(key) + 3);
+        } else {
+          result.put(key, 3);
         }
-        count_answer += 1;
-        
+        count_answer += 1;  
       } else {
         for (String keyTwo: chosen.keySet()) {
           if (chosen.get(keyTwo) == pickedCard) {
             if (result.containsKey(keyTwo)) {
               result.put(keyTwo, result.get(keyTwo) + 1);
+              System.out.println("picking yourself?");
             } else {
               result.put(keyTwo, 1);
+              System.out.println("picking yourself3?");
             }
           } 
         }
@@ -84,10 +80,21 @@ public class Referee {
     }
     
     //Point for Story-teller
-    if ((count_answer == 0) || (count_answer == pickRecord.size())) {
+    if (count_answer == pickRecord.size()) {
       result.put(gameTurn.getCurrTeller(), 0);
       for (String key: pickRecord.keySet()) {
         result.put(key, 2);
+        System.out.println("you are supposed to get two");
+      }
+    } else if (count_answer == 0) {
+      result.put(gameTurn.getCurrTeller(), 0);
+      for (String key: pickRecord.keySet()) {
+        if (result.containsKey(key)) {
+          result.put(key,  result.get(key) + 2);
+          System.out.println("pikcing yourself2?");
+        } else {
+          result.put(key, 2);
+        }
       }
     } else {
       result.put(gameTurn.getCurrTeller(), 3);
