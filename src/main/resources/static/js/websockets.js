@@ -144,7 +144,7 @@ const setup_update = () => {
         updatePoints(payload.points);
         displayPoints(payload.points);
         setTimeout(function() { newRound(payload); }, 5000);
-        
+        console.log(payload.hand);
     	  break;
       
       case MESSAGE_TYPE.CHAT_UPDATE:
