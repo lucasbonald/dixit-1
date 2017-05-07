@@ -102,10 +102,10 @@ public class Referee {
       int newScore = scoreBoard.get(key) + result.get(key);
       scoreBoard.put(key, newScore);
       if (newScore >= victoryPoint) {
+        
         gameWon = true; // need who's winning as well
       }
     }
-    
     //need to check if all the card is used and manually finish the game
     
     return result;

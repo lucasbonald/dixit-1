@@ -4,22 +4,13 @@ function initStorytellerBoard(board) {
   }
   $("#board") .find(".formSubmit").val("Submit"); 
   $("#playerInput").removeClass("hidden");
-  
-  // clear prompt and picked cards
-  $(".picked-cards").html("<div class=\"card picked\"><div class=\"image bigimg\" style=\"background-image: url(../img/blank.jpg)\"></div></div>");
-  $("#promptValue").empty();
-  $("#stopwatchvalue").empty();
 }
 
 function initGuesserBoard() {
   $("#promptField").remove();
   $("#board").find(".formSubmit").val("Guess");
   $("#playerInput").removeClass("hidden");
-  
-  // clear stopwatch, prompt and picked cards
-  $(".picked-cards").html("<div class=\"card picked\"><div class=\"image bigimg\" style=\"background-image: url(../img/blank.jpg)\"></div></div>");
-  $("#promptValue").empty();
-  $("#stopwatchvalue").empty();
+
 }
 
 let timer = 0;
@@ -103,7 +94,11 @@ function newRound(details) {
   } else if (myId == details.storyteller.user_id) {
     initStorytellerBoard();
   }
-
+  // clear stopwatch, prompt and picked cards
+  $(".picked-cards").html("<div class=\"card picked\"><div class=\"image bigimg\" style=\"background-image: url(../img/blank.jpg)\"></div></div>");
+  $("#promptValue").empty();
+  $("#stopwatchvalue").empty();
+  
   // set new storyteller
   setStoryTeller(details.storyteller);
   setStatus("Storytelling");
