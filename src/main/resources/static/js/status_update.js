@@ -18,39 +18,6 @@ function initGuesserBoard() {
 
 }
 
-
-function allowDrop(event) {
-	event.preventDefault();
-}
-
-function drag(event) {
-	console.log("dragging");
-	console.log($(event.target));
-	let cardInfo = null;
-	if ($(event.target).attr('class') == "image") {
-		cardInfo = getCardInfo($(event.target));
-	} else {
-		cardInfo = getCardInfo($(event.target).find("div"));
-	}
-    event.dataTransfer.setData("text", cardInfo.id);
-
-}
-
-function drop(event) {
-    event.preventDefault();
-    const id = event.dataTransfer.getData("text");
-    const url = "../img/img" +id + ".jpg";
-    
-    let myId = getElementFromCookies("userid");
-    //console.log("drop event id + url " + id + url);
-    if ((currState == "Storytelling" && myId == storyteller) || (currState == "Guessing" && myId != storyteller)) {
-      $(".picked").empty();
-      $(".picked").append("<div class = \"image bigimg\" id=\"" + id + "\" style = \"background-image: url(" + url + "); background-size: cover; background-repeat: no-repeat;\"></div>") ;
-    }
-}
-
-
-
 let timer = 0;
 
 function startTimer(seconds) {
@@ -120,15 +87,30 @@ function updatePoints(points) {
 
 
 function displayPoints(points) {
-  
   for (id of Object.keys(points)) {
     if (id == myId) {
       console.log(id)
-      $("#received-points").html(points[id]);
+      $("#results-message").html("You received " + points[id] + " points!");
     }
   }
   $(".results-overlay").removeClass("hidden");
   
+}
+
+function displayWinner(winner){
+  $("#results-message").html(winner.winner_name + " won, with " + $("#" + winner.winner_id + "points").html() + " points!");
+  $(".results-overlay").removeClass("hidden");
+  $("#play-again-button").removeClass("hidden");
+}
+
+function sendRestartIntent() {
+  const restartIntent = {
+    type: MESSAGE_TYPE.RESTART,
+    payload: {
+      game_id: getElementFromCookies("gameid")
+    }
+  }
+  conn.send(JSON.stringify(restartIntent));
 }
 
 function newRound(details) {

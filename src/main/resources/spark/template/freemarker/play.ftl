@@ -48,23 +48,21 @@
 					<div class="image" style="background-image: url(http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg)"></div>
 				</div>
 			</div>
-
 		</div>
 		<div class = "col-xs-3 statusbar" style= "border-color:  black; border-width: 5px; background-color: #f5e4e4;">
-			<hr>
+			<div class = "statuselement" id="user-name">
+			</div>
 			<div class = "statuselement" id = "stopwatch">
 			<div id = "stopwatchvalue">
 			     <span style = "color: transparent;"> -sfwe </white>
 			</div>
 			</div>
-			<hr>
 			<div class = "statuselement">
 			<span class="statuselement-header">Storyteller</span>
 				<div>
 				<span id="st-identity">Player</span>
 				</div>
 			</div>
-			<hr>
 			<div class="statuselement">
 			<span class="statuselement-header">Player Feed</span>
 				<br>
@@ -80,9 +78,6 @@
 					</tbody>
 				</table>
 			</div>
-			
-			
-			<hr>
 			<div class = "statuselement" id = "chatroom">
 			<span class="statuselement-header">Chat</span>
 			<div class = "chatbox">
@@ -101,7 +96,8 @@
 		</div>
 	</div>
 	<div class="results-overlay hidden">
-		<span id="results-message">You've received <span id="received-points"></span> points.</span>
+		<span id="results-message"></span>
+		<button type="button" class="btn btn-primary hidden" id="play-again-button">Play again</button>
 	</div>
 </div>
 

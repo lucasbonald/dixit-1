@@ -14,7 +14,8 @@ const MESSAGE_TYPE = {
   CHAT_UPDATE: 12,
   CHAT_MSG: 13,
   END_OF_ROUND: 14,
-  LOAD:15
+  LOAD:15,
+  RESTART: 16
 };
 
 let conn;
@@ -65,11 +66,6 @@ const setup_update = () => {
       
       case MESSAGE_TYPE.JOIN:
         window.location = window.location.href + "play";
-//        if(payload.role == "teller"){
-//          window.location = window.location.href + "storytelling";
-//        } else if(payload.role == "guessor"){
-//            window.location = window.location.href + "guessing";
-//        }
       break;
       
       case MESSAGE_TYPE.ALL_JOINED:
@@ -83,15 +79,19 @@ const setup_update = () => {
           let $card = $("#card" + card);
           $card.empty();
           $card.append("<div class = \"image\" id=\"" + cardId + "\" style = \"background-image: url(" + url + ");\"></div>" );
-          //$card.append("<img id=\"" + cardId + "\" src=\"" + url + "\"></img>");
         }
 
         const players = payload.players;
         $("#scoreboard").empty();
         for (player of Object.keys(players)) {
           let player_name = players[player].user_name;
-          let player_id = players[player].user_id;  
+          let player_id = players[player].user_id;
           $("#scoreboard").append("<tr><td>" + player_name + "</td><td id=\"" + player_id + "status\"></td><td id=\"" + player_id + "points\">0</td></tr>");
+          
+          myId = getElementFromCookies("userid");
+          if (myId == player_id) {
+            $("#user-name").html(player_name);
+          }
         }
         
         setStoryTeller(payload.storyteller);
@@ -115,9 +115,10 @@ const setup_update = () => {
         $("#promptValue").html("\"" + prompt + "\"" );
         setStatus("Guessing");
         myId = getElementFromCookies("userid");
-//        if (myId != storyteller) {
-//          startTimer(15);  
-//        }
+        if (myId != storyteller) {
+          console.log("timer starting!")
+          startTimer(15);  
+        }
         break;
         
       case MESSAGE_TYPE.STATUS:
@@ -147,9 +148,10 @@ const setup_update = () => {
         }
 
         myId = getElementFromCookies("userid");
-//        if (myId != storyteller) {
-//          startTimer(30);  
-//        }
+        if (myId != storyteller) {
+          console.log("timer starting!")
+          startTimer(30);  
+        }
         
         break;
       
@@ -161,14 +163,17 @@ const setup_update = () => {
 
       case MESSAGE_TYPE.RESULTS:
         updatePoints(payload.points);
-        displayPoints(payload.points);
+        
         console.log(payload.winner);
-        if (payload.winner != "") {
-          console.log ("we have a winner")
+        if (payload.winner.winner_id != "") {
+          console.log ("we have a winner");
+          displayWinner(payload.winner);
         } else {
-          console.log ("no winner")
+          console.log ("no winner");
+          displayPoints(payload.points);
+          setTimeout(function() { newRound(payload); }, 5000);
         }
-        setTimeout(function() { newRound(payload); }, 5000);
+        
         console.log(payload.hand);
     	  break;
       
