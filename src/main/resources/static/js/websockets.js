@@ -119,9 +119,9 @@ const setup_update = () => {
         $("#promptValue").html("\"" + prompt + "\"" );
         setStatus("Guessing");
         myId = getElementFromCookies("userid");
-        if (myId != storyteller) {
-          startTimer(15);  
-        }
+//        if (myId != storyteller) {
+//          startTimer(15);  
+//        }
         break;
         
       case MESSAGE_TYPE.STATUS:
@@ -151,9 +151,9 @@ const setup_update = () => {
         }
 
         myId = getElementFromCookies("userid");
-        if (myId != storyteller) {
-          startTimer(30);  
-        }
+//        if (myId != storyteller) {
+//          startTimer(30);  
+//        }
         
         break;
       
