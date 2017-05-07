@@ -2,7 +2,6 @@ package edu.brown.cs.dixit.main;
 
 import java.io.IOException;
 import java.net.HttpCookie;
-import java.net.InetSocketAddress;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,8 +13,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.UUID;
 
@@ -149,6 +146,7 @@ public class WebSockets {
   	JsonObject received = GSON.fromJson(message, JsonObject.class);
   	JsonObject payload = received.getAsJsonObject("payload");
   	MESSAGE_TYPE messageType = MESSAGE_TYPE.values()[received.get("type").getAsInt()];
+  	GamePlayer teller;
   	switch (messageType) {
   		default:
   			System.out.println(messageType.toString() + ": Unknown message type!");
@@ -184,7 +182,7 @@ public class WebSockets {
   			gt.addGame(newGame);
   			newGame.getDeck().initializeDeck("../img/img");
   			//set Storyteller
-  			GamePlayer teller = createNewUser(session, newGame, payload.get("user_name").getAsString());
+  			teller = createNewUser(session, newGame, payload.get("user_name").getAsString());
   			newGame.setST(teller.playerId());
   			newGame.addStatus(teller.playerId(), "Storytelling");
   			//send message
@@ -237,8 +235,10 @@ public class WebSockets {
 		    System.out.println("curr:" + currGame);
 		    currRef = currGame.getRefree();
 			currRef.receiveStory(prompt, currGame.getST(), cardId);
-			currRef.setChosen(currGame.getST(), cardId);			
+			currRef.setChosen(currGame.getST(), cardId);	
 			
+			teller  = currGame.getPlayer(currGame.getST());
+			teller.removeCard(cardId);
 			
 			for (GamePlayer player : currGame.getPlayers()){
 				currGame.addStatus(player.playerId(), "Guessing");
