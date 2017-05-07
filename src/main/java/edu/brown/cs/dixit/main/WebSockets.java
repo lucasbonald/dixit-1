@@ -9,10 +9,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.UUID;
 
@@ -24,6 +26,7 @@ import edu.brown.cs.dixit.gameManagement.*;
 import edu.brown.cs.dixit.setting.*;
 
 import org.eclipse.jetty.websocket.api.Session;
+import org.eclipse.jetty.websocket.api.WebSocketException;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
@@ -112,30 +115,51 @@ public class WebSockets {
 	}
 
   @OnWebSocketConnect
-  public void connected(Session session) throws IOException, ClassNotFoundException, SQLException {
-	 
-	System.out.println("curr session hashcode: " + session.hashCode());
-
+  public void connected(Session session) throws IOException, ClassNotFoundException, SQLException{
 	allSessions.add(session);
-  	List<HttpCookie> cookies = session.getUpgradeRequest().getCookies();
+	System.out.print(session.hashCode());
+	System.out.println("");
+	List<HttpCookie> cookies = session.getUpgradeRequest().getCookies();
   	if (cookies == null) {
   		System.out.println("cookie is null, should be redirected to beginning page");
   	} else {
     	this.updateCookies(session, cookies);
-    	System.out.println("no. of sessions " + allSessions.size());
+    }
+  	JsonObject connectMessage = new JsonObject();
+  	connectMessage.addProperty("type", MESSAGE_TYPE.CONNECT.ordinal());
+  	try{
+  		session.getRemote().sendString(connectMessage.toString());
+  	}catch(WebSocketException e){
+  		System.out.println("remote can't be found");
   	}
-  }
+  	}
 
   @OnWebSocketClose
   public void closed(Session session, int statusCode, String reason) {
 	//don't we have to remove session in the hashmap as well?
     System.out.println("session closed");
-	allSessions.remove(session);  
+		boolean removed = false;
+			List<HttpCookie> cookies = session.getUpgradeRequest().getCookies();
+			if(cookies!=null){
+				for(HttpCookie cookie:cookies){
+					if(cookie.getName().equals("userid")){
+						removed = checkGame(cookie.getValue());
+					}
+				}
+			}
+			if(removed){
+				loadLobbies(allSessions);
+			}
+	System.out.print(session.hashCode());
+	System.out.println("");
+			
+
+    allSessions.remove(session);  
   }
 
   @OnWebSocketMessage
   public void message(Session session, String message) throws IOException, SQLException {
-  	JsonObject received = GSON.fromJson(message, JsonObject.class);
+	JsonObject received = GSON.fromJson(message, JsonObject.class);
   	JsonObject payload = received.getAsJsonObject("payload");
   	MESSAGE_TYPE messageType = MESSAGE_TYPE.values()[received.get("type").getAsInt()];
   	GamePlayer teller;
@@ -143,31 +167,31 @@ public class WebSockets {
   		default:
   			System.out.println(messageType.toString() + ": Unknown message type!");
   			break;
-  		case LOAD:
-  			JsonObject loadGameMessage = new JsonObject();
-  			loadGameMessage.addProperty("type", MESSAGE_TYPE.LOAD.ordinal());
-  			JsonObject loadGamePayload = new JsonObject();
-  			if(!gt.getAllGame().keySet().isEmpty()){
-  				JsonArray gameArray = new JsonArray();
-  				JsonObject gameJson = new JsonObject();
-  				for(int gameKey:gt.getAllGame().keySet()){
-  					DixitGame loadedGame = gt.getAllGame().get(gameKey);
-  					gameJson.addProperty("id", loadedGame.getId());
-  	  				gameJson.addProperty("name", loadedGame.getName());
-  	  				gameJson.addProperty("capacity", loadedGame.getCapacity());
-  	  				gameJson.addProperty("player", loadedGame.getNumPlayers());
-  	  			}
-  				gameArray.add(gameJson);
-  				loadGamePayload.add("gamearray",gameArray);
-  				loadGameMessage.add("payload", loadGamePayload);
-  	  			session.getRemote().sendString(loadGameMessage.toString());
+  		case CONNECT:
+  			String url = payload.get("url").getAsString();
+  			if(url.equals("http://localhost:4567/")){
+  				boolean removed = false;
+  				List<HttpCookie> cookies = session.getUpgradeRequest().getCookies();
+  				if(cookies!=null){
+  					for(HttpCookie cookie:cookies){
+  	  					if(cookie.getName().equals("userid")){
+  	  						removed = checkGame(cookie.getValue());
+  	  					}
+  	  				}
+  				}
+  				
+  				if(removed){
+  					loadLobbies(allSessions);
+  				}
   			}
-  			
-  			
+  			break;
+  		case LOAD:
+  			Queue<Session> q = new ConcurrentLinkedDeque<Session>();
+  			q.add(session);
+  			loadLobbies(q);
   			break;
   		case CREATE:
   			//game created
-  			System.out.println("new game created!");
   			int newGameId = gt.createGameID();
   			DixitGame newGame = new DixitGame(newGameId, payload.get("num_players").getAsInt(), payload.get("victory_pts").getAsInt(), payload.get("lobby_name").getAsString());
   			//need to initialize the game with additional features like more cards / input types
@@ -189,15 +213,17 @@ public class WebSockets {
   			
   			//need db to keep track of all the lobbies
   			for (Session indivSession : allSessions) {
-  				indivSession.getRemote().sendString(newGameMessage.toString());
+  				try{
+  					indivSession.getRemote().sendString(newGameMessage.toString());
+  	  			}catch(WebSocketException e){
+  	  				System.out.println("skip to next session plz");
+  	  			}
   			}
   			
   			creatorJoin(session);
   			break;
 
   		case JOIN:
-  			
-		    System.out.println("joined!");
   			int gameId = payload.get("game_id").getAsInt();
   			String user = payload.get("user_name").getAsString();
   			DixitGame join = gt.getGame(gameId);
@@ -209,8 +235,7 @@ public class WebSockets {
   			
   		case ST_SUBMIT:
   			//get the variables
-		    System.out.println("Story received");
-  			String prompt = payload.get("prompt").getAsString();
+		    String prompt = payload.get("prompt").getAsString();
 
   			int cardId = payload.get("card_id").getAsInt();
   			String cardUrl = payload.get("card_url").getAsString();
@@ -341,8 +366,12 @@ public class WebSockets {
                   }
                   resultInfo.add("hand", hand);
                   voteResult.add("payload", resultInfo);
-                  gt.getSession(key).getRemote().sendString(voteResult.toString());
-                 
+                  try{
+                	  gt.getSession(key).getRemote().sendString(voteResult.toString());
+                  }
+                  catch(WebSocketException e){
+    	  				System.out.println("skip to next session plz");
+    	  			}
                   System.out.println("userid from result: "+ key);
                   
                   // update player statuses
@@ -430,11 +459,10 @@ public class WebSockets {
 	  for (GamePlayer player: currGame.getPlayers()) {
           try {
 			gt.getSession(player.playerId()).getRemote().sendString(message);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-      }   
+		} catch(WebSocketException | IOException e){
+			System.out.println("skip to next session plz");
+		} 
+	  }
   }
   
   private void sendCookie(Session s, List<HttpCookie> cookies){
@@ -447,7 +475,7 @@ public class WebSockets {
 		  //System.out.println("cookies?");
 		  //System.out.print(json);
 		  s.getRemote().sendString(json.toString());
-		} catch (IOException e) {
+		} catch (IOException | WebSocketException e) {
 			System.out.println("Found IOException while sending cookie");
 		}
 	  
@@ -514,12 +542,64 @@ public class WebSockets {
 		joinGameMessage.addProperty("type", MESSAGE_TYPE.JOIN.ordinal());
 		try {
 			s.getRemote().sendString(joinGameMessage.toString());
-		} catch (IOException e) {
+		} catch (WebSocketException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
   }
   
+private boolean checkGame(String userid){
+	  boolean removed = false;
+	  for(int gameKey:gt.getAllGame().keySet()){
+		  DixitGame game = gt.getGame(gameKey);
+		  for(GamePlayer player:game.getPlayers()){
+			  if(player.getId().equals(userid)){
+				  game.removePlayer(player);
+				  if(game.getNumPlayers()==0){
+					  removed = true;
+					  System.out.println("gt remove game!!!");
+					  gt.getAllGame().remove(game.getId());
+				  }
+			  }
+		  }  
+	  }
+	  return removed;
+
+}
+  
+  private void loadLobbies(Queue<Session> sessions){
+	  JsonObject loadGameMessage = new JsonObject();
+			loadGameMessage.addProperty("type", MESSAGE_TYPE.LOAD.ordinal());
+			JsonObject loadGamePayload = new JsonObject();
+			if(!gt.getAllGame().keySet().isEmpty()){
+				JsonArray gameArray = new JsonArray();
+				JsonObject gameJson = new JsonObject();
+				for(int gameKey:gt.getAllGame().keySet()){
+					DixitGame loadedGame = gt.getAllGame().get(gameKey);
+					gameJson.addProperty("id", loadedGame.getId());
+					gameJson.addProperty("name", loadedGame.getName());
+					gameJson.addProperty("capacity", loadedGame.getCapacity());
+					gameJson.addProperty("player", loadedGame.getNumPlayers());
+					System.out.printf("id: %d, numplayers : %d, name : %s \n", loadedGame.getId(), loadedGame.getNumPlayers(), loadedGame.getName());
+				}
+				gameArray.add(gameJson);
+				loadGamePayload.add("gamearray",gameArray);
+				loadGameMessage.add("payload", loadGamePayload);
+				
+	  		}
+			else{
+				loadGamePayload.addProperty("gamearray", "none");
+				loadGameMessage.add("payload", loadGamePayload);
+			}
+			for(Session indivSession : sessions){
+				try {
+					indivSession.getRemote().sendString(loadGameMessage.toString());
+					} catch (WebSocketException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+	}
   private void allJoined(Collection<GamePlayer> users) {
     System.out.println("all joined called!!!!!!!");
     
@@ -568,9 +648,4 @@ public class WebSockets {
       }   
     }
   }
-  
-  /*private void checkDuplicateTabs(Session s){
-	  
-	  gt.getSession(playerId)
-  }*/
 }

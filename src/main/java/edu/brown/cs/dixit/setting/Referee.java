@@ -186,6 +186,10 @@ public class Referee {
     scoreBoard.put(id, defPoint);
   }
   
+  public void removeBoard(String id){
+	  scoreBoard.remove(id);
+  }
+  
   public String getWinner() {
     return gameWon;
   }
