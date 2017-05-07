@@ -237,7 +237,7 @@ public class WebSockets {
 			currRef.receiveStory(prompt, currGame.getST(), cardId);
 			currRef.setChosen(currGame.getST(), cardId);	
 			
-			teller  = currGame.getPlayer(currGame.getST());
+			teller = currGame.getPlayer(currGame.getST());
 			teller.removeCard(cardId);
 			
 			for (GamePlayer player : currGame.getPlayers()){
