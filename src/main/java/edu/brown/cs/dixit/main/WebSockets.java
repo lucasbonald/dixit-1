@@ -108,17 +108,8 @@ public class WebSockets {
 	  chatMessage.addProperty("type", MESSAGE_TYPE.CHAT_UPDATE.ordinal());
 	  chatPayload.addProperty("messages", GSON.toJson(message));
 	  chatMessage.add("payload", chatPayload);
-	  
-		for (Session indivSession : allSessions) {
-			try {
-				indivSession.getRemote().sendString(chatMessage.toString());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}	
-	  
-  }
+	  sendMsgToGame(chatMessage.toString());
+	}
 
   @OnWebSocketConnect
   public void connected(Session session) throws IOException, ClassNotFoundException, SQLException {
@@ -454,16 +445,8 @@ public class WebSockets {
 		statusPayload.addProperty("statuses", GSON.toJson(statuses));
 
 		statusMessage.add("payload", statusPayload);
-		for (Session indivSession : allSessions) {
-			try {
-				indivSession.getRemote().sendString(statusMessage.toString());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}	
-			  
-  }
+		sendMsgToGame(statusMessage.toString());
+	}
  
   
   private void updateCookies(Session session, List<HttpCookie> cookies){
