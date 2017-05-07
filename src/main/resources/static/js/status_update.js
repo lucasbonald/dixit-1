@@ -100,6 +100,17 @@ function displayPoints(points) {
 function displayWinner(winner){
   $("#results-message").html(winner.winner_name + " won, with " + $("#" + winner.winner_id + "points").html() + " points!");
   $(".results-overlay").removeClass("hidden");
+  $("#play-again-button").removeClass("hidden");
+}
+
+function sendRestartIntent() {
+  const restartIntent = {
+    type: MESSAGE_TYPE.RESTART,
+    payload: {
+      game_id: getElementFromCookies("gameid")
+    }
+  }
+  conn.send(JSON.stringify(restartIntent));
 }
 
 function newRound(details) {

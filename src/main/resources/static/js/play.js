@@ -78,6 +78,11 @@ $(document).ready(function(){
     } 
   });
   
+   $("#play-again").click(function(event) {
+     sendRestartIntent();
+   });
+  
+  
 //  $(document).click(function (){
 //    console.log("me: " + myId + "; st: " + storyteller + "; current state: " + currState);
 //  })
@@ -154,6 +159,7 @@ function sendVote(card_id) {
   }
   conn.send(JSON.stringify(vote));
   stopTimer();
+  $(".formSubmit").val("Guess");
   $("#stopwatchvalue").html("Voted!");
 }
 

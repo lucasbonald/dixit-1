@@ -48,7 +48,6 @@
 					<div class="image" style="background-image: url(http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg)"></div>
 				</div>
 			</div>
-
 		</div>
 		<div class = "col-xs-3 statusbar" style= "border-color:  black; border-width: 5px; background-color: #f5e4e4;">
 			<div class = "statuselement" id="user-name">
@@ -98,6 +97,7 @@
 	</div>
 	<div class="results-overlay hidden">
 		<span id="results-message"></span>
+		<button type="button" class="btn btn-primary hidden" id="play-again-button">Play again</button>
 	</div>
 </div>
 
