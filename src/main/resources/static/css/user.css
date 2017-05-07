@@ -433,3 +433,43 @@ html, body, .wrapper, .row, .screen, .board, .statusbar {
   vertical-align: middle;
   opacity:1.0;  
 }
+
+.mag {
+	height: 35vw;
+	width: 25vw;
+}
+
+.modal-body {
+	height: 40vw;
+	background-color: white;
+	padding: 8%;
+}
+
+
+.modal-dialog {
+	width: 30vw;
+	margin:auto;
+	text-align: center;
+	
+}
+
+.modal-content {
+	background-color: #f5e4e4;
+}
+
+.modal-title {
+	font-size: 2.3vw;
+	font-weight: 600;
+}
+
+.modal-header {
+	background-color: transparent;
+}
+
+.modal-footer {
+	padding: 1.8vw;
+}
+#myModal {
+	margin-top: 3%;
+}
+

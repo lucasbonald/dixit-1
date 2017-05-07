@@ -29,22 +29,22 @@
 			</div>
 			
 			<div class="hand" style="text-align: center">
-				<div class="card hand-card" id="card0" draggable = "true" ondragstart="drag(event)">
+				<div class="card hand-card" id="card0" draggable = "true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal">
 					<div class="image" style="background-image: url(http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg)"></div>
 				</div>
-				<div class="card hand-card" id="card1" draggable = "true" ondragstart="drag(event)">
+				<div class="card hand-card" id="card1" draggable = "true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal">
 					<div class="image" style="background-image: url(http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg)"></div>
 				</div>
-				<div class="card hand-card" id="card2" draggable = "true" ondragstart="drag(event)">
+				<div class="card hand-card" id="card2" draggable = "true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal">
 					<div class="image" style="background-image: url(http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg)"></div>				
 				</div>
-				<div class="card hand-card" id="card3" draggable = "true" ondragstart="drag(event)">
+				<div class="card hand-card" id="card3" draggable = "true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal">
 					<div class="image" style="background-image: url(http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg)"></div>				
 				</div>
-				<div class="card hand-card" id="card4" draggable = "true" ondragstart="drag(event)">
+				<div class="card hand-card" id="card4" draggable = "true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal">
 					<div class="image" style="background-image: url(http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg)"></div>				
 				</div>
-				<div class="card hand-card" id="card5" draggable = "true" ondragstart="drag(event)">
+				<div class="card hand-card" id="card5" draggable = "true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal">
 					<div class="image" style="background-image: url(http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg)"></div>
 				</div>
 			</div>
@@ -90,7 +90,7 @@
 				</ul>
 			</div>
 		    <div id = "formWrapper">
-		      <form method="POST" action="/whatever" id="messageForm">
+		      <form id="messageForm">
 		          <input type="text" name="message"   id="messageField">
 		          <input type="hidden" name="nickname" id="nicknameField" value="">
 		          <input type="hidden" name="time" id="timeField" value="">
@@ -105,6 +105,22 @@
 	</div>
 </div>
 
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <div class="modal-title">Detailed Card View</div>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+
+  </div>
+</div>
 
 </#assign>
 <#include "main.ftl">

@@ -159,7 +159,7 @@ function newRound(details) {
     let cardId = cardDetails[1];
     let cardUrl = cardDetails[3]
     if ($(".hand").find("#" + cardId).attr("id") == undefined) {
-      let newCard = ["<div class=\"card hand-card\" draggable = \"true\" ondragstart=\"drag(event)\"><div class=\"image\" id=\"", cardId, "\" style=\"background-image:url(", cardUrl, ");\"></div></div>"]
+      let newCard = ["<div class=\"card hand-card\" draggable = \"true\" ondragstart=\"drag(event)\" data-toggle=\"modal\" data-target=\"#myModal\"><div class=\"image\" id=\"", cardId, "\" style=\"background-image:url(", cardUrl, ");\"></div></div>"]
       $(".hand").append(newCard.join(""));
     }
   }
