@@ -24,8 +24,8 @@ let myId = -1;
 
 //set up socket connection and define types
 const setup_update = () => {
-	//conn = new WebSocket("ws://localhost:4567/connect");
-  conn = new WebSocket("ws://104.196.191.156/connect");  
+  conn = new WebSocket("ws://localhost:4567/connect");
+//  conn = new WebSocket("ws://104.196.191.156/connect");  
 	conn.onerror = err => {
     	console.log('Connection error:', err);
   };
