@@ -22,7 +22,7 @@ let storyteller = -1;
 const setup_update = () => {
 	console.log("setup update called")
 	conn = new WebSocket("ws://localhost:4567/play");
-
+  //conn = new WebSocket("ws://104.196.191.156/play");
   console.log(conn);
 	conn.onerror = err => {
     	console.log('Connection error:', err);

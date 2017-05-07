@@ -63,6 +63,7 @@ public class Main {
     FreeMarkerEngine freeMarker = createEngine();
 
     Spark.webSocket("/play", WebSockets.class);
+    //http://104.196.191.156/
     WebSockets.connectDB();
     Spark.get("/", new LogInHandler(), freeMarker);   
     Spark.get("/storytelling",new StoryHandler(), freeMarker);   

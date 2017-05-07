@@ -215,7 +215,6 @@ public class WebSockets {
 			currRef.receiveStory(prompt, currGame.getST(), cardId);
 			currRef.setChosen(currGame.getST(), cardId);			
 			
-			
 			for (GamePlayer player : currGame.getPlayers()){
 				currGame.addStatus(player.playerId(), "Guessing");
 			}
@@ -245,7 +244,7 @@ public class WebSockets {
                 guessesPayload.addProperty("answer", currRef.getAnswer());
                 guessesPayload.addProperty("guessed", currRef.getChosen(userId));
                 allGuessesMessage.add("payload", guessesPayload);
-                sendMsgToGame(allGuessesMessage.toString());
+                //sendMsgToGame(allGuessesMessage.toString());
           
                 for (GamePlayer player : currGame.getPlayers()){
                   currGame.addStatus(player.playerId(), "Voting");
