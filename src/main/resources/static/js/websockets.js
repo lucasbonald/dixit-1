@@ -115,9 +115,9 @@ const setup_update = () => {
         $("#promptValue").html("\"" + prompt + "\"" );
         setStatus("Guessing");
         myId = getElementFromCookies("userid");
-        if (myId != storyteller) {
-          startTimer(15);  
-        }
+//        if (myId != storyteller) {
+//          startTimer(15);  
+//        }
         break;
         
       case MESSAGE_TYPE.STATUS:
@@ -147,9 +147,9 @@ const setup_update = () => {
         }
 
         myId = getElementFromCookies("userid");
-        if (myId != storyteller) {
-          startTimer(30);  
-        }
+//        if (myId != storyteller) {
+//          startTimer(30);  
+//        }
         
         break;
       
@@ -169,7 +169,7 @@ const setup_update = () => {
           console.log ("no winner")
         }
         setTimeout(function() { newRound(payload); }, 5000);
-        
+        console.log(payload.hand);
     	  break;
       
       case MESSAGE_TYPE.CHAT_UPDATE:

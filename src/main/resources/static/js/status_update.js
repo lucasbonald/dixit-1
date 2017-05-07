@@ -12,6 +12,7 @@ function initGuesserBoard() {
   $("#promptField").remove();
   $("#board").find(".formSubmit").val("Guess");
   $("#playerInput").removeClass("hidden");
+
   $(".picked-cards").html("<div class=\"card picked\" ondrop =\"drop(event)\" ondragover=\"allowDrop(event)\"><div class=\"image bigimg\" style=\"background-image: url(../img/blank.jpg)\"></div></div>");
 
 
@@ -33,8 +34,6 @@ function drag(event) {
 	}
     event.dataTransfer.setData("text", cardInfo.id);
 
-    
-    //get id of the target
 }
 
 function drop(event) {
@@ -143,7 +142,8 @@ function newRound(details) {
   // if you're now the new storyteller
   } else if (myId == details.storyteller.user_id) {
     initStorytellerBoard();
-  }
+  } 
+
   // clear stopwatch, prompt and picked cards
   $(".picked-cards").html("<div class=\"card picked\" ondrop =\"drop(event)\" ondragover=\"allowDrop(event)\"><div class=\"image bigimg\" style=\"background-image: url(../img/blank.jpg)\"></div></div>");
   $("#promptValue").empty();
