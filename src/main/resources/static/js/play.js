@@ -78,9 +78,9 @@ $(document).ready(function(){
     } 
   });
   
-  $(document).click(function (){
-    console.log("me: " + myId + "; st: " + storyteller + "; current state: " + currState);
-  })
+//  $(document).click(function (){
+//    console.log("me: " + myId + "; st: " + storyteller + "; current state: " + currState);
+//  })
     
 });
 
@@ -130,9 +130,8 @@ function sendVote(card_id) {
 
 function getCardInfo(card) {
   const id = card.attr("id");
-  console.log("card id is " + id);
+  console.log("card id");
   const img = card.attr("style");
-  console.log("card img is " + img);
 
   const url = img.replace(/.*\s?url\([\'\"]?/, '').replace(/[\'\"]?\).*/, '');
   return {id: id, url: url};
