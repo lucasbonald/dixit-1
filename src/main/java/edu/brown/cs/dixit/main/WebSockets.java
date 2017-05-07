@@ -319,8 +319,16 @@ public class WebSockets {
   				  points.addProperty(key, result.get(key));
   				}
                 resultInfo.add("points", points);
-                resultInfo.addProperty("winner", currRef.getWinner());
+                JsonObject winner = new JsonObject();
+                String winnerId = currRef.getWinner();
+                winner.addProperty("winner_id", winnerId);
                 
+                if (winnerId.equals("")) {
+                  winner.addProperty("winner_name", "");
+                } else {
+                  winner.addProperty("winner_name", currGame.getPlayer(winnerId).playerName());
+                }
+                resultInfo.add("winner", winner);
                 System.out.println("number of chosen cards: " + currRef.getChosenSize());
                 System.out.println("pick record: " + currRef.getPickedSize());
                 System.out.println("result size: " + result.size());
