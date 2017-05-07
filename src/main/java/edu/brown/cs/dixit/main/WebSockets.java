@@ -521,6 +521,7 @@ public class WebSockets {
   }
   
   private void allJoined(Collection<GamePlayer> users) {
+    System.out.println("all joined called!!!!!!!");
     
     JsonObject players = new JsonObject();
     
