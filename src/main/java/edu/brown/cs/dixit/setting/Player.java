@@ -4,6 +4,5 @@ public interface Player {
   
   String playerId();
   String playerName();
-  int point();
   
 }

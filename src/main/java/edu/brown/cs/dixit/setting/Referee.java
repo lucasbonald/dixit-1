@@ -5,7 +5,6 @@ import java.util.Map;
 
 public class Referee {
   
-  private int winnerPoint;
   private int numPlayers;
   private int victoryPoint;
   private String gameWon;
@@ -16,7 +15,6 @@ public class Referee {
   private Turn gameTurn;
   
   public Referee() {
-    winnerPoint = -1;
     numPlayers = Setting.NUM_DEFAULT_PLAYERS;
     victoryPoint = Setting.NUM_DEFAULT_VICTORY_POINT;
     gameWon = "";
@@ -26,7 +24,6 @@ public class Referee {
   }
   
   public Referee(int cap, int victPoint, Turn turn) {
-    winnerPoint = -1;
     numPlayers = cap;
     victoryPoint = victPoint;
     gameWon = "";
@@ -39,7 +36,6 @@ public class Referee {
   // receive submissions
   public void receiveStory(String prompt, String playerId, int cardId) {
     setPrompt(prompt);
-    setTeller(playerId);
     setAnswer(cardId);
   }
   
@@ -117,7 +113,8 @@ public class Referee {
       int newScore = scoreBoard.get(key) + result.get(key);
       scoreBoard.put(key, newScore);
       if (newScore >= victoryPoint) {
-        gameWon = key; // need who's winning as well
+        gameWon = key;
+        scoreBoard = new HashMap<String, Integer>(); // reset scoreboard
       }
     }
     //need to check if all the card is used and manually finish the game
@@ -125,10 +122,6 @@ public class Referee {
     return result;
   }
  
-  public int getWinnerPoint() {
-    return winnerPoint;
-  }
-
   public int getAnswer() {
     return gameTurn.getAnswer();
   }
@@ -141,17 +134,9 @@ public class Referee {
     return gameTurn.getCurrTeller();
   }
   
-  public void setTeller(String id) {
-    gameTurn.setCurrTeller(id);
-  }
-  
   public void incrementTurn() {
     gameTurn.incrementTurn();
   }
-  
-  public int getNumPlayers() {
-    return numPlayers;
-  }  
   
   public int getVictoryPoint() {
     return victoryPoint;
