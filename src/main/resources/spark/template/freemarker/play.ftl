@@ -51,20 +51,19 @@
 
 		</div>
 		<div class = "col-xs-3 statusbar" style= "border-color:  black; border-width: 5px; background-color: #f5e4e4;">
-			<hr>
+			<div class = "statuselement" id="user-name">
+			</div>
 			<div class = "statuselement" id = "stopwatch">
 			<div id = "stopwatchvalue">
 			     <span style = "color: transparent;"> -sfwe </white>
 			</div>
 			</div>
-			<hr>
 			<div class = "statuselement">
 			<span class="statuselement-header">Storyteller</span>
 				<div>
 				<span id="st-identity">Player</span>
 				</div>
 			</div>
-			<hr>
 			<div class="statuselement">
 			<span class="statuselement-header">Player Feed</span>
 				<br>
@@ -80,9 +79,6 @@
 					</tbody>
 				</table>
 			</div>
-			
-			
-			<hr>
 			<div class = "statuselement" id = "chatroom">
 			<span class="statuselement-header">Chat</span>
 			<div class = "chatbox">

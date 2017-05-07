@@ -87,11 +87,10 @@ function updatePoints(points) {
 
 
 function displayPoints(points) {
-  
   for (id of Object.keys(points)) {
     if (id == myId) {
       console.log(id)
-      $("#received-message").html("You received " + points[id] + "points!");
+      $("#results-message").html("You received " + points[id] + " points!");
     }
   }
   $(".results-overlay").removeClass("hidden");
@@ -99,12 +98,7 @@ function displayPoints(points) {
 }
 
 function displayWinner(winner){
-  for (id of Object.keys(points)) {
-    if (id == myId) {
-      console.log(id)
-      $("#received-message").html(winner.winner_name + " won, with " + $("#" + winner.winner_id + "points").html() + " points!");
-    }
-  }
+  $("#results-message").html(winner.winner_name + " won, with " + $("#" + winner.winner_id + "points").html() + " points!");
   $(".results-overlay").removeClass("hidden");
 }
 

@@ -37,7 +37,6 @@ public class WebSockets {
   private DixitGame currGame;
   private Referee currRef;
   private String userId;
-  private int round = 1;
   private static Connection conn = null;
   private static enum MESSAGE_TYPE {
     CONNECT,
@@ -529,7 +528,6 @@ public class WebSockets {
                     }   
                   }
 		  		updateStatus(currGame);
-		  		round++;
 		  	}
 	  } catch (NullPointerException e) {
 			// TODO Auto-generated catch block
