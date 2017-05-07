@@ -24,6 +24,7 @@ let myId = -1;
 //set up socket connection and define types
 const setup_update = () => {
 	conn = new WebSocket("ws://localhost:4567/connect");
+//conn = new WebSocet("ws://104.196.191.156/connect");  
 	conn.onerror = err => {
     	console.log('Connection error:', err);
   };
@@ -48,11 +49,21 @@ const setup_update = () => {
         }
         console.log(payload.gamearray.length)
       case MESSAGE_TYPE.NEW_GAME:
-        if(payload.num_players == 1) {
-          $("table.table-hover tbody").append("<tr><td id=\"" + payload.game_id + "\">" + payload.lobby_name + "</td><td class=\"num_players\" id=\"" + payload.game_id + "\">" + payload.num_players + "/" + payload.capacity + "</td></tr>");
-        } else if (payload.num_players > 1) {
-          $("table.table-hover tbody").find($(".num_players")).text(payload.num_players + "/" + payload.capacity);
+        let exist = false;
+        const table = $("table.table-hover tbody");
+        for(let i=0;i<table.length;i++){
+          if(table[i].id == payload.game_id){
+            exist = true;
+          }
         }
+        if(!exist){
+          if(payload.num_players == 1) {
+          table.append("<tr><td id=\"" + payload.game_id + "\">" + payload.lobby_name + "</td><td class=\"num_players\" id=\"" + payload.game_id + "\">" + payload.num_players + "/" + payload.capacity + "</td></tr>");
+        } else if (payload.num_players > 1) {
+          table.find($(".num_players")).text(payload.num_players + "/" + payload.capacity);
+        }
+        }
+        
       
         break;
       
