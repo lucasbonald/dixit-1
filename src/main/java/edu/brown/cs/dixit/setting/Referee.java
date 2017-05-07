@@ -110,13 +110,17 @@ public class Referee {
     //need to check if the game ended
     
     for (String key: result.keySet()) {
+      System.out.println("scoreBoard:" +scoreBoard.get(key));
+      System.out.println("result" + result.get(key));
       int newScore = scoreBoard.get(key) + result.get(key);
       scoreBoard.put(key, newScore);
       if (newScore >= victoryPoint) {
         gameWon = key;
-        scoreBoard = new HashMap<String, Integer>(); // reset scoreboard
+        scoreBoard = new HashMap<String, Integer>();
+        break;
       }
     }
+
     //need to check if all the card is used and manually finish the game
     
     return result;
