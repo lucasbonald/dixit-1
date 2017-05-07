@@ -109,6 +109,7 @@ public class Referee {
     
     //reset 
     pickRecord = new HashMap<String, Integer>();
+    chosen = new HashMap<String, Integer>();
     
     //need to check if the game ended
     
