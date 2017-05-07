@@ -8,7 +8,7 @@ public class Referee {
   private int winnerPoint;
   private int numPlayers;
   private int victoryPoint;
-  private boolean gameWon;
+  private String gameWon;
   private Map<String, Integer> chosen; 
   private Map<String, Integer> pickRecord; 
   private Map<String, Integer> result;
@@ -19,7 +19,7 @@ public class Referee {
     winnerPoint = -1;
     numPlayers = Setting.NUM_DEFAULT_PLAYERS;
     victoryPoint = Setting.NUM_DEFAULT_VICTORY_POINT;
-    gameWon = false;
+    gameWon = "";
     chosen = new HashMap<String, Integer>();
     pickRecord = new HashMap<String, Integer>();
     scoreBoard = new HashMap<String, Integer>();
@@ -29,7 +29,7 @@ public class Referee {
     winnerPoint = -1;
     numPlayers = cap;
     victoryPoint = victPoint;
-    gameWon = false;
+    gameWon = "";
     chosen = new HashMap<String, Integer>();
     pickRecord = new HashMap<String, Integer>();
     scoreBoard = new HashMap<String, Integer>();
@@ -108,8 +108,7 @@ public class Referee {
       int newScore = scoreBoard.get(key) + result.get(key);
       scoreBoard.put(key, newScore);
       if (newScore >= victoryPoint) {
-        
-        gameWon = true; // need who's winning as well
+        gameWon = key; // need who's winning as well
       }
     }
     //need to check if all the card is used and manually finish the game
@@ -187,6 +186,10 @@ public class Referee {
   
   public void addBoard(String id, int defPoint) {
     scoreBoard.put(id, defPoint);
+  }
+  
+  public String getWinner() {
+    return gameWon;
   }
  
 }

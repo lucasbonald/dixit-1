@@ -168,6 +168,12 @@ const setup_update = () => {
       case MESSAGE_TYPE.RESULTS:
         updatePoints(payload.points);
         displayPoints(payload.points);
+        console.log(payload.winner);
+        if (payload.winner != "") {
+          console.log ("we have a winner")
+        } else {
+          console.log ("no winner")
+        }
         setTimeout(function() { newRound(payload); }, 5000);
         
     	  break;

@@ -318,6 +318,8 @@ public class WebSockets {
   				  points.addProperty(key, result.get(key));
   				}
                 resultInfo.add("points", points);
+                resultInfo.addProperty("winner", currRef.getWinner());
+                
                 System.out.println("number of chosen cards: " + currRef.getChosenSize());
                 System.out.println("pick record: " + currRef.getPickedSize());
                 System.out.println("result size: " + result.size());
