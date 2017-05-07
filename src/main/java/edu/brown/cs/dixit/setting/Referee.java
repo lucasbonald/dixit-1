@@ -54,9 +54,12 @@ public class Referee {
     result = new HashMap<String, Integer>();
     System.out.println("result size: " + result.size());
     int count_answer = 0;
+    int pickedCard = 0;
     //Points for other players
+    System.out.println("pick record size: " + pickRecord.size());
     for (String key: pickRecord.keySet()) {    
-      int pickedCard = pickRecord.get(key);
+      System.out.println("user id: " + key);
+      pickedCard = pickRecord.get(key);
       if (pickedCard == getAnswer()) {
         if (result.containsKey(key)) {
           result.put(key, result.get(key) + 3);
@@ -65,6 +68,11 @@ public class Referee {
         }
         count_answer += 1;  
       } else {
+        result.put(key, 0);
+      }
+    }
+    
+    for (String key: pickRecord.keySet()) {
         for (String keyTwo: chosen.keySet()) {
           if (chosen.get(keyTwo) == pickedCard && !keyTwo.equals(key)) {
             if (result.containsKey(keyTwo)) {
@@ -72,10 +80,10 @@ public class Referee {
             } else {
               result.put(keyTwo, 1);
             }
-          } 
+          }
         }
-      }
     }
+    
     System.out.println("result size before st: " + result.size());
     //Point for Story-teller
     
