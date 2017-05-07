@@ -51,6 +51,7 @@ const setup_update = () => {
       case MESSAGE_TYPE.NEW_GAME:
         let exist = false;
         const table = $("table.table-hover tbody");
+        console.log(table.length)
         for(let i=0;i<table.length;i++){
           if(table[i].id == payload.game_id){
             exist = true;
