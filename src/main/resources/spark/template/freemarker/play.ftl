@@ -101,7 +101,7 @@
 		</div>
 	</div>
 	<div class="results-overlay hidden">
-		<span id="results-message">You've received <span id="received-points"></span> points.</span>
+		<span id="results-message"></span>
 	</div>
 </div>
 

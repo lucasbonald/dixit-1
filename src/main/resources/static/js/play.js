@@ -84,6 +84,36 @@ $(document).ready(function(){
     
 });
 
+function allowDrop(event) {
+	event.preventDefault();
+}
+
+function drag(event) {
+	console.log("dragging");
+	console.log($(event.target));
+	let cardInfo = null;
+	if ($(event.target).attr('class') == "image") {
+		cardInfo = getCardInfo($(event.target));
+	} else {
+		cardInfo = getCardInfo($(event.target).find("div"));
+	}
+    event.dataTransfer.setData("text", cardInfo.id);
+
+}
+
+function drop(event) {
+    event.preventDefault();
+    const id = event.dataTransfer.getData("text");
+    const url = "../img/img" +id + ".jpg";
+    
+    let myId = getElementFromCookies("userid");
+    //console.log("drop event id + url " + id + url);
+    if ((currState == "Storytelling" && myId == storyteller) || (currState == "Guessing" && myId != storyteller)) {
+      $(".picked").empty();
+      $(".picked").append("<div class = \"image bigimg\" id=\"" + id + "\" style = \"background-image: url(" + url + "); background-size: cover; background-repeat: no-repeat;\"></div>") ;
+    }
+}
+
 
 function submitPrompt(inputPrompt, card_id, card_url) {
 	const promptMessage = {
