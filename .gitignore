@@ -71,3 +71,10 @@ local.properties
 ########
 
 .DS_Store
+
+
+########
+# DATA #
+########
+*.sqlite3
+*.sqlite
