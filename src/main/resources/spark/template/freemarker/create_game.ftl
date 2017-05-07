@@ -41,7 +41,7 @@
               </div>
               <div class="col-xs-3 form-element">
                 <p>Victory points</p>
-                <input type="number" class="form-control victory-points" min="6" max="80" value="20"></input>
+                <input type="number" class="form-control victory-points" min="2" max="80" value="20"></input>
               </div>
             </div>
           
