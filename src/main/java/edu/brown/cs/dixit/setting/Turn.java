@@ -24,6 +24,10 @@ public class Turn {
     players.add(user);
   }
   
+  public void removePlayers(GamePlayer player){
+	  players.remove(player);
+  }
+  
   public void setCurrTeller(String id) {
     currTeller = id;
   }

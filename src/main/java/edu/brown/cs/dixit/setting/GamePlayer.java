@@ -85,6 +85,9 @@ public class GamePlayer implements Player {
 	  return this.status;
   }
   
+  public String getId(){
+	  return this.playerId;
+  }
   /*
   public void setGuesser(String input) {
 	  isGuesser = input;

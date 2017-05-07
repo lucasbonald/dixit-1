@@ -40,7 +40,6 @@ $(document).ready(function(){
             }
           }
         }
-        console.log("whehfei")
         // send new game information to backend
         conn.send(JSON.stringify(gameInit));
         newGameId++;
