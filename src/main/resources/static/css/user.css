@@ -177,11 +177,6 @@ hr {
 .chatList > li {
 	margin: 2% 0;
 }
-
-#chatroom {
-	height: 40%;
-}
-
 .chatbox {
 	background-color: white;
 	border-radius: 8px;
@@ -376,7 +371,7 @@ img {
 	width: 100%;
 }
 
-html, body, .wrapper, .row, .screen, .board, .statusbar {
+html, body, .wrapper, .row, .screen, .board, .statusbar, .tab-content {
 	height: 100%;
 }
 
@@ -384,6 +379,9 @@ html, body, .wrapper, .row, .screen, .board, .statusbar {
   display:flex;
   flex-direction: column;
   justify-content: space-around;
+  border-color:white; 
+  border-width:5px; 
+  background-color:#F8A500;
 }
 
 .vote-selected {

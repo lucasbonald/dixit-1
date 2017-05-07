@@ -97,4 +97,11 @@ p {
 
 }
 
+.tab-pane {
+  height: 100%;
+  background-color:#F8A500;
+}
 
+.nav-tabs .active {
+  color:#F8A500;
+}
