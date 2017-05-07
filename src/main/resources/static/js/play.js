@@ -7,10 +7,10 @@ $(document).ready(function(){
     
     const cardInfo = getCardInfo($(this));
     let myId = getElementFromCookies("userid");
-    if ((currState == "Storytelling" && myId == storyteller) || (currState == "Guessing" && myId != storyteller)) {
-      $(".picked").empty();
-      $(".picked").append("<div class = \"image bigimg\" id=\"" + cardInfo.id + "\" style = \"background-image: url(" + cardInfo.url + "); background-size: cover; background-repeat: no-repeat;\"></div>")
-    }
+//    if ((currState == "Storytelling" && myId == storyteller) || (currState == "Guessing" && myId != storyteller)) {
+//      $(".picked").empty();
+//      $(".picked").append("<div class = \"image bigimg\" id=\"" + cardInfo.id + "\" style = \"background-image: url(" + cardInfo.url + "); background-size: cover; background-repeat: no-repeat;\"></div>")
+//    }
   });
   
   //submitting chatform when submitted

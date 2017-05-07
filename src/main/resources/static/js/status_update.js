@@ -6,7 +6,8 @@ function initStorytellerBoard(board) {
   $("#playerInput").removeClass("hidden");
   
   // clear prompt and picked cards
-  $(".picked-cards").html("<div class=\"card picked\"><div class=\"image bigimg\" style=\"background-image: url(../img/blank.jpg)\"></div></div>");
+ 
+  $(".picked-cards").html("<div class=\"card picked\" ondrop =\"drop(event)\" ondragover=\"allowDrop(event)\"><div class=\"image bigimg\" style=\"background-image: url(../img/blank.jpg)\"></div></div>");
   $("#promptValue").empty();
   $("#stopwatchvalue").empty();
 }
@@ -17,10 +18,38 @@ function initGuesserBoard() {
   $("#playerInput").removeClass("hidden");
   
   // clear stopwatch, prompt and picked cards
-  $(".picked-cards").html("<div class=\"card picked\"><div class=\"image bigimg\" style=\"background-image: url(../img/blank.jpg)\"></div></div>");
+  $(".picked-cards").html("<div class=\"card picked\" ondrop =\"drop(event)\" ondragover=\"allowDrop(event)\"><div class=\"image bigimg\" style=\"background-image: url(../img/blank.jpg)\"></div></div>");
   $("#promptValue").empty();
   $("#stopwatchvalue").empty();
 }
+
+
+function allowDrop(event) {
+	event.preventDefault();
+}
+
+function drag(event) {
+	const cardInfo = getCardInfo($(event.target).find("div"));
+    event.dataTransfer.setData("text", cardInfo.id);
+
+    
+    //get id of the target
+}
+
+function drop(event) {
+    event.preventDefault();
+    const id = event.dataTransfer.getData("text");
+    const url = "../img/img" +id + ".jpg";
+    
+    let myId = getElementFromCookies("userid");
+    console.log("current state is " + currState);
+    if ((currState == "Storytelling" && myId == storyteller) || (currState == "Guessing" && myId != storyteller)) {
+      $(".picked").empty();
+      $(".picked").append("<div class = \"image bigimg\" id=\"" + id + "\" style = \"background-image: url(" + url + "); background-size: cover; background-repeat: no-repeat;\"></div>") ;
+    }
+}
+
+
 
 let timer = 0;
 
@@ -45,6 +74,15 @@ function startTimer(seconds) {
         $(".picked").empty();
         $(".picked").append("<div class = \"image bigimg\" id=\"" + randomCard.id + "\" style = \"background-image: url(" + randomCard.url + "); background-size: cover; background-repeat: no-repeat;\"></div>");
         sendGuess(randomCard.id);
+      }
+      
+      if (currState == "Voting") {
+    	  hand = [];
+          $(".hand-card").each(function() {
+            hand.push(getCardInfo($(this).find(".image")));
+          })
+          const randomCard = hand[Math.floor(Math.random()*hand.length)];
+          sendVote(randomCard.id);
       }
 		}
 	}, 1000);
@@ -78,6 +116,8 @@ function updatePoints(points) {
   }
   
 }
+
+
 
 function displayPoints(points) {
   
