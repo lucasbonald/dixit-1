@@ -44,7 +44,7 @@ const setup_update = () => {
       case MESSAGE_TYPE.UPDATE_LOBBY:
         let updateid = payload.id
         let updatenum = payload.players
-        let cols = document.getElementById('lobbyt').getElementsByTagName('td'), $
+        let cols = document.getElementById('lobbyt').getElementsByTagName('td'), colslen = cols.length, i = 1;
         while(i < colslen){
           console.log("test");
           i+=2
