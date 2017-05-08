@@ -55,8 +55,8 @@ $(document).ready(function(){
     $('table.table-hover tbody').on('click', function() {
       console.log($(event.target).parent().find("#num_players").html());
       
-      // FOR KWON:
-      console.log("Capacity: " + $(event.target).parent().find("#num_players").html().split("/")[1]);
+      currPlayer = $(event.target).parent().find("#num_players").html().split("/")[0];
+      capacity = $(event.target).parent().find("#num_players").html().split("/")[1];
             
       currSelected = $(event.target);
       currSelected.parent().toggleClass('selected-row');
@@ -73,17 +73,8 @@ $(document).ready(function(){
       if(currSelected == undefined ) {
         $(".join-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Please select an available lobby.</p>");
       } else {
-        console.log(currSelected.attr('id'));
-        console.log(currSelected);
-        let id = currSelected.attr('id');
         //let avail = document.get
-        let avail = currSelected.text().split("/");
-        console.log(avail)
-        console.log(avail[0], avail[1]);
-        if(avail[1] == null){
-            $(".join-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Click the Lobby again or refresh.</p>")
-        }else{
-            if(avail[0] >= avail[1]){
+        if(currPlayer >= capacity){
               $(".join-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Lobby is full! Select other lobby.</p>")
             }else{
               window.location = window.location.href + "play";
@@ -97,10 +88,9 @@ $(document).ready(function(){
             conn.send(JSON.stringify(joinMessage));
           }
         }
-      }
-    });
+      })
+  });
       
-});
 
 function sendLoad(){
   let gameLoad = {
