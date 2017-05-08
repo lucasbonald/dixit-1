@@ -76,6 +76,19 @@ $(document).ready(function(){
     } 
   });
   
+  $("#leave-button").on("click", function(event) {
+	    $("#exit-message-self").modal({
+	      backdrop: 'static', 
+	      keyboard: false
+	    });
+	  });
+	  
+	  $("#leave-button-actual").on("click", function(event) {
+	    console.log("leaving");
+	    sendLeaveIntent();
+	    window.location.href = "/";
+	  });
+  
    $("#play-again-button").click(function(event) {
      $("#wait-leave").find(".modal-title").html("Play again");
      $("#wait-leave").find(".modal-body").html("Please wait for the rest of the room to be ready to start again.");

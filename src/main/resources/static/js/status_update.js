@@ -118,6 +118,18 @@ function displayWinner(winner){
   $("#play-again-button").removeClass("hidden");
 }
 
+function sendLeaveIntent() {
+  
+  const leaveIntent = {
+    type: MESSAGE_TYPE.EXIT,
+    payload: {
+      user_id: getElementFromCookies("userid") 
+    }
+  }
+  conn.send(JSON.stringify(leaveIntent));
+  console.log("leave sent");
+}
+
 function sendRestartIntent() {
 
   $(".results-overlay").toggleClass("hidden");

@@ -52,7 +52,7 @@ $(document).ready(function(){
       
     });
 
-    $('table.table-hover tbody').on('click', function() {
+    $('#lobbyt tbody').on('click', function() {
       console.log($(event.target).parent().find("#num_players").html());
       
       currPlayer = $(event.target).parent().find("#num_players").html().split("/")[0];
@@ -100,5 +100,4 @@ function sendLoad(){
       }
   conn.send(JSON.stringify(gameLoad));
 }
-
 
