@@ -7,102 +7,104 @@
 
 <div class = "wrapper">
 	<div class = "row screen">
-		<div class = "col-xs-9 board" style="background-color:#50B5D6;">
-			<div class = "status-indicator" style="float:left;">
-				  <div id = "status-indicator-text">
-				  </div>
-			</div>
+		<div class = "col-xs-9 board">
 			<div id="board-error-message" style="float:left;">
-		  	</div>
-			<div class = "prompt" >
-				<i id = "promptValue"></i>
+      </div>
+			<div id="board">
+				<div class="board-item promptField-container">
+				</div>
+				<div class="board-item prompt">
+					<i id ="promptValue"></i>
+				</div>
+				<div class="board-item picked-cards-container">
+					<div class="picked-cards">
+						<div class="card">
+							<div class="image bigimg" ondrop ="drop(event)" ondragover="allowDrop(event)" style ="background-image: url(../img/blank.jpg)"></div>
+						</div>
+					</div>
+				</div>
+				<div class="board-item player-submit-container">
+		      		<button type="button" class="btn" id="player-submit">Submit</button>
+	      		</div>
 			</div>
 			
-			<div id="board">
-				<form id="playerInput">
-			      <input type="submit" class="formSubmit" value="Submit">
-			  </form>
-			  <div class="picked-cards">
-					<div class="card picked">
+			<div class="hand-container" style="text-align: center">
+				<div class="hand">
+					<div class="card hand-card" id="card0" draggable = "true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal">
+						<div class="image" style="background-color:white;"></div>
+					</div>
+					<div class="card hand-card" id="card1" draggable = "true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal">
+						<div class="image" style="background-color:white;"></div>
+					</div>
+					<div class="card hand-card" id="card2" draggable = "true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal">
+						<div class="image" style="background-color:white;"></div>				
+					</div>
+					<div class="card hand-card" id="card3" draggable = "true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal">
+						<div class="image" style="background-color:white;"></div>				
+					</div>
+					<div class="card hand-card" id="card4" draggable = "true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal">
+						<div class="image" style="background-color:white;"></div>				
+					</div>
+					<div class="card hand-card" id="card5" draggable = "true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal">
+						<div class="image" style="background-color:white;"></div>
 					</div>
 				</div>
 			</div>
-			
-			<div class="hand" style="text-align: center">
-				<div class="card hand-card" id="card0" draggable = "true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal">
-					<div class="image" style="background-image: url(http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg)"></div>
-				</div>
-				<div class="card hand-card" id="card1" draggable = "true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal">
-					<div class="image" style="background-image: url(http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg)"></div>
-				</div>
-				<div class="card hand-card" id="card2" draggable = "true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal">
-					<div class="image" style="background-image: url(http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg)"></div>				
-				</div>
-				<div class="card hand-card" id="card3" draggable = "true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal">
-					<div class="image" style="background-image: url(http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg)"></div>				
-				</div>
-				<div class="card hand-card" id="card4" draggable = "true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal">
-					<div class="image" style="background-image: url(http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg)"></div>				
-				</div>
-				<div class="card hand-card" id="card5" draggable = "true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal">
-					<div class="image" style="background-image: url(http://www.dungeoncrawl.com.au/assets/thumbL/18041.jpg)"></div>
-				</div>
-			</div>
 		</div>
-		<div class = "col-xs-3 statusbar">
+		<div class = "col-xs-3 text-center statusbar">
       <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#player-feed">Player</a></li>
         <li><a data-toggle="tab" href="#chatroom">Chat</a></li>
       </ul>
       <div class="tab-content">
-        <div id="player-feed" class="tab-pane fade in active">
-          <div class="statuselement" id="user-name">
+        <div class=" tab-pane fade in active">
+        	<div id="player-feed">
+	            <div id="user-name">
+	            </div>
+	            <div id="stopwatch">
+	              <span id="stopwatchvalue"></span>
+	            </div>
+	            <div id="status-indicator">
+	              <span id="status-indicator-text"></span>
+	            </div>
+	            <div id="st-identity-container">
+	              <p class="statuselement-header">Storyteller</p>
+	              <p id="st-identity">Player</p>
+	            </div>
+	            <div id="player-information">
+	              <span class="statuselement-header">Player Feed</span>
+	              <br>
+	              <table class="table" id="scoreboard">
+	                <thead>	
+	                  <tr>
+	                    <th>Player</th>
+	                    <th>Status</th>
+	                    <th>Points</th>
+	                  </tr>
+	                </thead>
+	                <tbody id="scoreboard-body">
+	                </tbody>
+	              </table>
+	            </div>
+            </div>
         </div>
-        <div class = "statuselement" id = "stopwatch">
-        <div id = "stopwatchvalue">
-             <span style = "color: transparent;"> -sfwe </white>
-        </div>
-        </div>
-        <div class = "statuselement">
-        <span class="statuselement-header">Storyteller</span>
-          <div>
-          <span id="st-identity">Player</span>
-          </div>
-        </div>
-        <div class="statuselement">
-        <span class="statuselement-header">Player Feed</span>
-          <br>
-          <table id="player-feed">
-            <thead>	
-              <tr>
-                <th>Player</th>
-                <th>Status</th>
-                <th>Points</th>
-              </tr>
-            </thead>
-            <tbody id="scoreboard">
-            </tbody>
-          </table>
-        </div>
-        </div>
+
         <div id="chatroom" class="tab-pane fade">
           <div class = "chatbox">
-				    <ul class = "chatList">
-				    </ul>
+		    <ul class = "chatList">
+		    </ul>
           </div>
-          <div id = "formWrapper">
+          <div id="chat-input">
             <form method="POST" action="/whatever" id="messageForm">
                 <input type="text" name="message"   id="messageField">
                 <input type="hidden" name="nickname" id="nicknameField" value="">
                 <input type="hidden" name="time" id="timeField" value="">
-                <input id="chat-submit" type="submit" value="Send">
+                <input class="btn btn-secondary" id="chat-submit" type="submit" value="Send">
             </form>
           </div>
         </div>
         
       </div>
-			
-		  
 		    </div>
 		</div>
 	</div>

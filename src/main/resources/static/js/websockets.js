@@ -24,8 +24,8 @@ let myId = -1;
 
 //set up socket connection and define types
 const setup_update = () => {
-  //conn = new WebSocket("ws://localhost:4567/connect");
-  conn = new WebSocket("ws://104.196.191.156/connect");  
+  conn = new WebSocket("ws://localhost:4567/connect");
+//  conn = new WebSocket("ws://104.196.191.156/connect");  
 	conn.onerror = err => {
     	console.log('Connection error:', err);
   };
@@ -86,11 +86,11 @@ const setup_update = () => {
         }
 
         const players = payload.players;
-        $("#scoreboard").empty();
+        $("#scoreboard-body").empty();
         for (player of Object.keys(players)) {
           let player_name = players[player].user_name;
           let player_id = players[player].user_id;
-          $("#scoreboard").append("<tr><td>" + player_name + "</td><td id=\"" + player_id + "status\"></td><td id=\"" + player_id + "points\">0</td></tr>");
+          $("#scoreboard-body").append("<tr><td>" + player_name + "</td><td id=\"" + player_id + "status\"></td><td id=\"" + player_id + "points\">0</td></tr>");
           
           myId = getElementFromCookies("userid");
           if (myId == player_id) {
@@ -143,12 +143,11 @@ const setup_update = () => {
         const answerCardUrl = "../img/img" + answerCardId + ".jpg";
         //const guessedCardId = payload.guessed;
         //const guessedCardUrl = "../img/img" + guessedCardId + ".jpg";
+          $(".picked-cards").html("<div class=\"card\"><div class = \"image bigimg\" id=\"" + answerCardId + "\" style = \"background-image: url(" + answerCardUrl + "); background-size: cover; background-repeat: no-repeat;\"></div><div class=\"voters\"></div></div>").hide().show('slow', 'swing');
         let guessedCards = payload.guessed;
-        $(".picked-cards").empty();
-          $(".picked-cards").append("<div class=\"card picked\"><div class = \"image bigimg\" id=\"" + answerCardId + "\" style = \"background-image: url(" + answerCardUrl + "); background-size: cover; background-repeat: no-repeat;\"></div><div class=\"voters\"></div></div>").hide().show('slow', 'swing');
         for (card in Object.keys(guessedCards)) {
           let cardId = guessedCards[card];
-          $(".picked-cards").append("<div class=\"card picked\"><div class = \"image bigimg\" id=\"" + cardId + "\" style = \"background-image: url(" + "../img/img"+cardId+".jpg"+ "); background-size: cover; background-repeat: no-repeat;\"></div><div class=\"voters\"></div></div>").hide().show('slow', 'swing');
+          $(".picked-cards").append("<div class=\"card\"><div class = \"image bigimg\" id=\"" + cardId + "\" style = \"background-image: url(" + "../img/img"+cardId+".jpg"+ "); background-size: cover; background-repeat: no-repeat;\"></div><div class=\"voters\"></div></div>").hide().show('slow', 'swing');
         }
 
         myId = getElementFromCookies("userid");
@@ -186,7 +185,6 @@ const setup_update = () => {
     	let length = messages.username.length;
     	$(".chatList").empty();
     	for (let i = 0; i < length ; i ++ ) {
-        	//$(".chatList").prepend("<li> <span style=\"color: grey\">" + messages.username[length-i-1] + "</span> : " + messages.body[length-i-1]  + "</li>");
         	$(".chatList").append("<li> <span style=\"color: grey\">" + messages.username[i] + "</span> : " + messages.body[i]  + "</li>");
     	} 
     	$(".chatList").scrollTop($(".chatList")[0].scrollHeight);
