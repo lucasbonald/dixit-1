@@ -135,7 +135,8 @@
         <div class="modal-title">Are you sure?</div>
       </div>
       <div class="modal-body">
-      <p>You're about to leave the game. Click below to return to lobby.</p>
+      	<p>You're about to leave the game. Click Leave to return to the lobby, or Stay to cancel.</p>
+      	<br>
          <button type="button" class="btn btn-danger" id="leave-button-actual">Leave</button>
          <button type="button" class="btn btn-secondary" data-dismiss="modal">Stay</button>
       </div>
@@ -149,11 +150,12 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <div class="modal-title">Exit</div>
+        <div class="modal-title">A player has left!</div>
       </div>
       <div class="modal-body">
-      <p>A user has exited the game. Click below to return to lobby.</p>
-         <button type="button" class="btn btn-default" onclick="location.href = '/'">Exit</button>
+      	<p>A player has exited the game. Click below to return to lobby.</p>
+      	<br>
+         <button type="button" class="btn btn-danger" onclick="location.href = '/'">Leave</button>
       </div>
       <div class="modal-footer">
       </div>
