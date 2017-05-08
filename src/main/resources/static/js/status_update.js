@@ -1,10 +1,9 @@
 function initStorytellerBoard(board) {
   if($("#board").find("#promptField").attr("id") == undefined) {
-    $("#board").find("#playerInput").prepend("<input type=\"text\" name=\"prompt\" id=\"promptField\" placeholder=\"Please enter your interesting story here\">");
+    $(".promptField-container").prepend("<input type=\"text\" name=\"prompt\" id=\"promptField\" placeholder=\"Enter a story\">");
   }
-  $(".picked-cards").html("<div class=\"card picked\" ondrop =\"drop(event)\" ondragover=\"allowDrop(event)\"><div class=\"image bigimg\" style=\"background-image: url(../img/blank.jpg)\"></div></div>");
-  $("#board") .find(".formSubmit").val("Submit"); 
-  $("#playerInput").removeClass("hidden");
+  $("#board") .find("#player-submit").val("Submit"); 
+  $("#promptField").removeClass("hidden")
 
 }
 
@@ -12,10 +11,16 @@ function initGuesserBoard() {
   $("#promptField").remove();
   $("#board").find(".formSubmit").val("Guess");
   $("#playerInput").removeClass("hidden");
+}
 
-  $(".picked-cards").html("<div class=\"card picked\" ondrop =\"drop(event)\" ondragover=\"allowDrop(event)\"><div class=\"image bigimg\" style=\"background-image: url(../img/blank.jpg)\"></div></div>");
-
-
+function initHand(hand){
+  for (card of Object.keys(hand)) {
+    let cardInfo = hand[card].split(":");
+    let url = cardInfo[3];
+    let cardId = cardInfo[1];
+    
+    $(".hand").append("<div class=\"card hand-card\" draggable=\"true\" ondragstart=\"drag(event)\" data-toggle=\"modal\" data-target=\"#myModal\"><div class=\"image\" id=\"" + cardId + "\" style=\"background-image:url(../img/img" + cardId + ".jpg);\"></div></div>");
+  }
 }
 
 let timer = 0;
@@ -25,9 +30,12 @@ function startTimer(seconds) {
   console.log(timer);
 	let time = seconds;
 	timer = setInterval(function() {
-		if (time > 0) {
+    if (time > 0) {
 			$("#stopwatchvalue").html(time >= 10 ? "00:" + time : "00:0" + time);
       time -= 1;
+      if (time <= 5) {
+        $("#stopwatchvalue").append("<br><span style=\"font-size:1vw;color:red;\">A decision is going to be made for you in " + time + "...</span>");
+      }
 		} else {
 			$("#stopwatchvalue").html("<span style = \'font-size: 4vw; color: red;\'>Time's Up!</span>");
       
@@ -38,8 +46,6 @@ function startTimer(seconds) {
           hand.push(getCardInfo($(this).find(".image")));
         })
         const randomCard = hand[Math.floor(Math.random()*hand.length)];
-        $(".picked").empty();
-        $(".picked").append("<div class = \"image bigimg\" id=\"" + randomCard.id + "\" style = \"background-image: url(" + randomCard.url + "); background-size: cover; background-repeat: no-repeat;\"></div>");
         sendGuess(randomCard.id);
       }
       
@@ -64,9 +70,18 @@ function setStoryTeller (st) {
 	$("#st-identity").html(st.user_name);
 }
 
+
 function setStatus (status) {
   currState = status;
 	$("#status-indicator-text").html(status);
+  if (status == "Storytelling") {
+    $("#status-indicator").css("background-color", "#FFDF3C");
+  } else if (status == "Guessing") {
+    $("#status-indicator").css("background-color", "#16C69E");
+  } else if (status == "Voting") {
+    $("#status-indicator").css("background-color", "#FF9494");
+  }
+  
 }
 
 function updateStatus(statusMap) {
@@ -104,6 +119,10 @@ function displayWinner(winner){
 }
 
 function sendRestartIntent() {
+
+  $(".results-overlay").toggleClass("hidden");
+  $("#play-again-button").toggleClass("hidden");
+  
   const restartIntent = {
     type: MESSAGE_TYPE.RESTART,
     payload: {
@@ -114,7 +133,7 @@ function sendRestartIntent() {
 }
 
 function newRound(details) {
-  $(".results-overlay").toggleClass("hidden");
+  $(".results-overlay").removeClass("hidden");
   let newHand = details.hand;
   let oldHand = $(".hand").html();
   
@@ -127,7 +146,7 @@ function newRound(details) {
   } 
 
   // clear stopwatch, prompt and picked cards
-  $(".picked-cards").html("<div class=\"card picked\" ondrop =\"drop(event)\" ondragover=\"allowDrop(event)\"><div class=\"image bigimg\" style=\"background-image: url(../img/blank.jpg)\"></div></div>");
+  $(".picked-cards").html("<div class=\"card\"><div class=\"image bigimg\" ondrop =\"drop(event)\" ondragover=\"allowDrop(event)\" style=\"background-image: url(../img/blank.jpg)\"></div></div></div>");
   $("#promptValue").empty();
   $("#stopwatchvalue").empty();
   
@@ -145,5 +164,16 @@ function newRound(details) {
       $(".hand").append(newCard.join(""));
     }
   }
+  
+}
+
+function prepareBoard() {
+  
+  $(".hand").empty();
+  $(".picked-cards").html("<div class=\"card\"><div class=\"image bigimg\" ondrop =\"drop(event)\" ondragover=\"allowDrop(event)\" style=\"background-image: url(../img/blank.jpg)\"></div></div>")
+  $("#stopwatchvalue").empty();
+  $("#promptValue").empty();
+  $("#wait-leave").modal("hide");
+  $(".results-overlay").addClass("hidden");
   
 }

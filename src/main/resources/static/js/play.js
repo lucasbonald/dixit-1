@@ -7,7 +7,8 @@ $(document).ready(function(){
     
     const cardInfo = getCardInfo($(this));
     let myId = getElementFromCookies("userid");
-      $(".modal-body").append("<div class = \"image bigimg mag\" id=\"" + cardInfo.id + "\" style = \"background-image: url(" + cardInfo.url + "); background-size: cover; background-repeat: no-repeat;\"></div>")
+      $("#picture-zoom").find(".modal-body").html("<div class = \"image bigimg mag\" id=\"" + cardInfo.id + "\" style = \"background-image: url(" + cardInfo.url + "); background-size: cover; background-repeat: no-repeat;\"></div>");
+      $("#picture-zoom").modal("show");
   });
   
   //submitting chatform when submitted
@@ -21,11 +22,11 @@ $(document).ready(function(){
   });
 
   // submitting a story, with its associated card
-	$('#playerInput').on('submit', function(e) {
+	$('#player-submit').on('click', function(e) {
     e.preventDefault();
     myId = getElementFromCookies("userid");
     if (currState == "Storytelling" && myId == storyteller) {
-      const cardInfo = getCardInfo($(".picked").find("div"));
+      const cardInfo = getCardInfo($(".picked-cards").find(".bigimg"));
       const pickedId = cardInfo.id;
       const prompt = $("#promptField").val();
       if(pickedId == undefined) {
@@ -38,11 +39,11 @@ $(document).ready(function(){
         // remove the selected card
         $(".hand").find("#" + pickedId).parent().remove();
         $("#board-error-message").text("");
-        $("#playerInput").toggleClass("hidden");
+        $("#promptField").toggleClass("hidden");
       } 
 
     } else if (currState == "Guessing") {
-      const pickedId = $(".picked").find("div").attr("id");
+      const pickedId = $(".picked-cards").find(".bigimg").attr("id");
       if (pickedId != undefined) {
         sendGuess(pickedId);
       }
@@ -76,6 +77,9 @@ $(document).ready(function(){
   });
   
    $("#play-again-button").click(function(event) {
+     $("#wait-leave").find(".modal-title").html("Play again");
+     $("#wait-leave").find(".modal-body").html("Please wait for the rest of the room to be ready to start again.");
+     $("#wait-leave").modal("show");
      sendRestartIntent();
    });
   
@@ -109,10 +113,9 @@ function drop(event) {
     const url = "../img/img" +id + ".jpg";
     
     let myId = getElementFromCookies("userid");
-    //console.log("drop event id + url " + id + url);
+    console.log("drop event id + url " + id + url);
     if ((currState == "Storytelling" && myId == storyteller) || (currState == "Guessing" && myId != storyteller)) {
-      $(".picked").empty();
-      $(".picked").append("<div class = \"image bigimg\" id=\"" + id + "\" style = \"background-image: url(" + url + "); background-size: cover; background-repeat: no-repeat;\"></div>") ;
+      $(".picked-cards").html("<div class=\"card\"><div class = \"image bigimg\" id=\"" + id + "\" style = \"background-image: url(" + url + "); background-size: cover; background-repeat: no-repeat;\" ondrop =\"drop(event)\" ondragover=\"allowDrop(event)\"></div></div>") ;
     }
 }
 

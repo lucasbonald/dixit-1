@@ -53,11 +53,13 @@ $(document).ready(function(){
     });
 
     $('table.table-hover tbody').on('click', function() {
-      console.log(event.target);
+      console.log($(event.target).parent().find("#num_players").html());
+      
+      // FOR KWON:
+      console.log("Capacity: " + $(event.target).parent().find("#num_players").html().split("/")[1]);
+            
       currSelected = $(event.target);
       currSelected.parent().toggleClass('selected-row');
-      console.log(currSelected.attr("id"));
-      
       if (prevSelected != undefined) {
         prevSelected.parent().toggleClass('selected-row');
       }
@@ -89,7 +91,7 @@ $(document).ready(function(){
                 type: MESSAGE_TYPE.JOIN,
                 payload: {
                   user_name: $(".username").val(),
-                  game_id: currSelected.attr('id')  
+                  game_id: currSelected.attr('class')  
                 }
               }
             conn.send(JSON.stringify(joinMessage));
