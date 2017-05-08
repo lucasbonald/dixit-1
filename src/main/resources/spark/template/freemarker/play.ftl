@@ -35,11 +35,11 @@
 		</div>
 		<div class = "col-xs-3 text-center statusbar">
       <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#player-feed">Player</a></li>
+        <li class="active"><a data-toggle="tab" href="#player-dashboard">Player</a></li>
         <li><a data-toggle="tab" href="#chatroom">Chat</a></li>
       </ul>
       <div class="tab-content">
-        <div class=" tab-pane fade in active">
+        <div class="tab-pane fade in active" id="player-dashboard">
         	<div id="player-feed">
 	            <div id="user-name">
 	            </div>
@@ -67,6 +67,9 @@
 	                <tbody id="scoreboard-body">
 	                </tbody>
 	              </table>
+	            </div>
+	            <div id="leave-button-container">
+	            	<button type="button" class="btn btn-danger" id="leave-button">Leave game</button>
 	            </div>
             </div>
         </div>
@@ -118,6 +121,39 @@
         <div class="modal-title"></div>
       </div>
       <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="exit-message-self" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Are you sure?</div>
+      </div>
+      <div class="modal-body">
+      <p>You're about to leave the game. Click below to return to lobby.</p>
+         <button type="button" class="btn btn-danger" id="leave-button-actual">Leave</button>
+         <button type="button" class="btn btn-secondary" data-dismiss="modal">Stay</button>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="exit-message" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Exit</div>
+      </div>
+      <div class="modal-body">
+      <p>A user has exited the game. Click below to return to lobby.</p>
+         <button type="button" class="btn btn-default" onclick="location.href = '/'">Exit</button>
       </div>
       <div class="modal-footer">
       </div>

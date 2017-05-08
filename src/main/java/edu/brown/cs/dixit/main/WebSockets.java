@@ -57,7 +57,8 @@ public class WebSockets {
     END_OF_ROUND,
     LOAD,
     RESTART,
-    UPDATE_LOBBY
+    UPDATE_LOBBY,
+    EXIT
   }
 
   public static void connectDB() throws ClassNotFoundException, SQLException {
@@ -403,7 +404,8 @@ public class WebSockets {
   	  			this.saveMessage(Integer.toString(currGame.getId()), username, body, time);
   	  			this.getMessage(currGame);  
   				
-  			}	
+  			}
+  			break;
   			
   		case RESTART:
   			if(currGame!=null){
@@ -415,6 +417,24 @@ public class WebSockets {
   	              updateStatus(currGame);
   	  		    }
   			}
+  			break;
+		
+  		case EXIT:
+  			JsonObject leaveIntent = new JsonObject();
+  			leaveIntent.addProperty("type", MESSAGE_TYPE.EXIT.ordinal());
+  			
+  			System.out.println("num_players: " + String.valueOf(currGame.getNumPlayers()));
+//				System.out.println(session);
+  			
+  			for (GamePlayer player: currGame.getPlayers()) {
+  				Session indiv_session = gt.getSession(player.playerId());
+  				
+  				if (indiv_session != session) {
+  					session.getRemote().sendString(leaveIntent.toString());
+  				}
+  			}
+  			break;
+		
   		}    
   }
  

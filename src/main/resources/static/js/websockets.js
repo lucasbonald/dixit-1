@@ -16,7 +16,8 @@ const MESSAGE_TYPE = {
   END_OF_ROUND: 14,
   LOAD:15,
   RESTART: 16,
-  UPDATE_LOBBY: 17
+  UPDATE_LOBBY: 17,
+  EXIT: 18
 };
 
 let conn;
@@ -36,7 +37,7 @@ const setup_update = () => {
     const payload = data.payload;
     console.log(data.type)
     console.log(data.payload);
-    const table = $(".table.table-hover tbody");
+    const table = $("#lobbyt tbody");
     switch (data.type) {
       default:
         console.log('Unknown message type!', data.type);
@@ -60,7 +61,7 @@ const setup_update = () => {
         table.html("");
         if(payload.gamearray != "none"){
           for(let game in payload.gamearray){
-            $("table.table-hover tbody").append("<tr><td class=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].name + "</td><td id=\"num_players\" class=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].player + "/" + payload.gamearray[game].capacity + "</td></tr>");
+            table.append("<tr><td class=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].name + "</td><td id=\"num_players\" class=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].player + "/" + payload.gamearray[game].capacity + "</td></tr>");
           }
         }
         break;
@@ -195,7 +196,15 @@ const setup_update = () => {
         	$(".chatList").append("<li> <span style=\"color: grey\">" + messages.username[i] + "</span> : " + messages.body[i]  + "</li>");
     	} 
     	$(".chatList").scrollTop($(".chatList")[0].scrollHeight);
-
+    	break;
+    	
+      case MESSAGE_TYPE.EXIT:
+        console.log("leave rcvd");
+          $("#exit-message").modal({
+            backdrop: 'static', 
+            keyboard: false
+          });
+          break;
     }
 
   };
