@@ -46,7 +46,7 @@ const setup_update = () => {
         let updatenum = payload.players
         let cols = document.getElementById('lobbyt').getElementsByTagName('td'), colslen = cols.length, i = 1;
         while(i < colslen){
-          console.log("test");
+          cols[i].innerHTML = updatenum + "/" + cols[i].innerHTML.split("/")[1];
           i+=2
         }
         break;
