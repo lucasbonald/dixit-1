@@ -133,7 +133,7 @@ function sendRestartIntent() {
 }
 
 function newRound(details) {
-  $(".results-overlay").removeClass("hidden");
+  $(".results-overlay").addClass("hidden");
   let newHand = details.hand;
   let oldHand = $(".hand").html();
   
