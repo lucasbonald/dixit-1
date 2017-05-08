@@ -25,8 +25,8 @@ let myId = -1;
 
 //set up socket connection and define types
 const setup_update = () => {
-  conn = new WebSocket("ws://localhost:4567/connect");
-  //conn = new WebSocket("ws://104.196.191.156/connect");  
+  //conn = new WebSocket("ws://localhost:4567/connect");
+  conn = new WebSocket("ws://104.196.191.156/connect");  
 	conn.onerror = err => {
     	console.log('Connection error:', err);
   };
@@ -41,11 +41,17 @@ const setup_update = () => {
         console.log('Unknown message type!', data.type);
         break;
       case MESSAGE_TYPE.UPDATE_LOBBY:
-        let cols = document.getElementById('lobbyt').getElementsByTagName('td'), colslen = cols.length, i = 1;
+        let updateid = payload.id
+        let updatenum = payload.players
+        let cols = document.getElementById('lobbyt').getElementsByTagName('td'), $
         while(i < colslen){
-          console.log();
-          console.log(cols[i].text);
-          i+=2
+          let id = cols[i].id;
+          if(id == updateid){
+                let capacity = cols[i].innerHTML.split("/")[1];
+                cols[i].innerHTML = updatenum + "/" + capacity;
+                console.log("updated?");
+          }
+          i+=2;
         }
         break;
       case MESSAGE_TYPE.MULTI_TAB:
