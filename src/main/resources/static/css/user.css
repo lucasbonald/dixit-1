@@ -166,8 +166,9 @@ hr {
 }
 
 .statuselement-header {
-  font-size: 2vw;
-  margin-bottom: 10px;
+  font-size: 3vw;
+  font-weight: 800;
+  margin-top: 12%;
 }
 
 #user-name {

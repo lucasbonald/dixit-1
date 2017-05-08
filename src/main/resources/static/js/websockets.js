@@ -26,8 +26,8 @@ let myId = -1;
 
 //set up socket connection and define types
 const setup_update = () => {
-  conn = new WebSocket("ws://localhost:4567/connect");
-  //conn = new WebSocket("ws://104.196.191.156/connect");  
+  //conn = new WebSocket("ws://localhost:4567/connect");
+  conn = new WebSocket("ws://104.196.191.156/connect");  
 	conn.onerror = err => {
     	console.log('Connection error:', err);
   };
@@ -47,7 +47,9 @@ const setup_update = () => {
         let updatenum = payload.players
         let cols = document.getElementById('lobbyt').getElementsByTagName('td'), colslen = cols.length, i = 1;
         while(i < colslen){
-          cols[i].innerHTML = updatenum + "/" + cols[i].innerHTML.split("/")[1];
+          if (updateid == cols[i].id){
+            cols[i].innerHTML = updatenum + "/" + cols[i].innerHTML.split("/")[1];
+          }
           i+=2
         }
         break;
