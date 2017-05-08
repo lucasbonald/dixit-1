@@ -109,10 +109,6 @@ public class Referee {
     
     //need to check if the game ended
     System.out.println(scoreBoard.values().toString());
-    for (String id: scoreBoard.keySet()) {
-      System.out.println("scoreboard point:" + scoreBoard.get(id));
-    }
-    System.out.println("dfdfd");
     for (String key: result.keySet()) {
       System.out.println("scoreBoard:" +scoreBoard.get(key));
       System.out.println("result" + result.get(key));
@@ -196,5 +192,8 @@ public class Referee {
   public String getWinner() {
     return gameWon;
   }
- 
+  
+  public void setWinner(String id) {
+    gameWon = id;
+  }
 }

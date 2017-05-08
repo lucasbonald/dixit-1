@@ -348,7 +348,7 @@ public class WebSockets {
   	                JsonObject winner = new JsonObject();
   	                String winnerId = currRef.getWinner();
   	                winner.addProperty("winner_id", winnerId);
-  	                
+  	                currRef.setWinner("");
   	                if (winnerId.equals("")) {
   	                  winner.addProperty("winner_name", "");
   	                } else {
