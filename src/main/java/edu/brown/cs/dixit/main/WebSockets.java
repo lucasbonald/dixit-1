@@ -78,6 +78,14 @@ public class WebSockets {
       
   }
   
+  public static void clearDB(int id) throws ClassNotFoundException, SQLException {
+    PreparedStatement prep;
+    prep = conn.prepareStatement("DELETE FROM messages where game = ?");
+    prep.setInt(1, id);
+    prep.executeUpdate();
+    prep.close();
+  }
+  
   private void saveMessage(String game, String username, String body, Integer time) throws SQLException {
 	  PreparedStatement prep;
       prep = conn.prepareStatement("INSERT INTO messages (game, username, body, time) VALUES (?, ?, ?, ?);");
@@ -135,7 +143,7 @@ public class WebSockets {
   	}
 
   @OnWebSocketClose
-  public void closed(Session session, int statusCode, String reason) {
+  public void closed(Session session, int statusCode, String reason) throws ClassNotFoundException, SQLException {
 	//don't we have to remove session in the hashmap as well?
     System.out.println("session closed");
 		boolean removed = false;
@@ -158,7 +166,7 @@ public class WebSockets {
   }
 
   @OnWebSocketMessage
-  public void message(Session session, String message) throws IOException, SQLException {
+  public void message(Session session, String message) throws IOException, SQLException, ClassNotFoundException {
 	JsonObject received = GSON.fromJson(message, JsonObject.class);
   	JsonObject payload = received.getAsJsonObject("payload");
   	MESSAGE_TYPE messageType = MESSAGE_TYPE.values()[received.get("type").getAsInt()];
@@ -585,7 +593,7 @@ public class WebSockets {
 		}
   }
   
-private boolean checkGame(String userid){
+private boolean checkGame(String userid) throws ClassNotFoundException, SQLException {
 	  boolean removed = false;
 	  for(int gameKey:gt.getAllGame().keySet()){
 		  DixitGame game = gt.getGame(gameKey);
@@ -594,6 +602,7 @@ private boolean checkGame(String userid){
 				  game.removePlayer(player);
 				  if(game.getNumPlayers()==0){
 					  removed = true;
+					  clearDB(game.getId());
 					  System.out.println("gt remove game!!!");
 					  gt.getAllGame().remove(game.getId());
 				  }
