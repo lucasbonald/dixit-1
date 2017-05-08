@@ -46,13 +46,8 @@ const setup_update = () => {
         let updatenum = payload.players
         let cols = document.getElementById('lobbyt').getElementsByTagName('td'), $
         while(i < colslen){
-          let id = cols[i].id;
-          if(id == updateid){
-                let capacity = cols[i].innerHTML.split("/")[1];
-                cols[i].innerHTML = updatenum + "/" + capacity;
-                console.log("updated?");
-          }
-          i+=2;
+          console.log("test");
+          i+=2
         }
         break;
       case MESSAGE_TYPE.MULTI_TAB:

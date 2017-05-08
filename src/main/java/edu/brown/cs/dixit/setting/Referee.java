@@ -108,6 +108,11 @@ public class Referee {
     chosen = new HashMap<String, Integer>();
     
     //need to check if the game ended
+    System.out.println(scoreBoard.values().toString());
+    for (String id: scoreBoard.keySet()) {
+      System.out.println("scoreboard point:" + scoreBoard.get(id));
+    }
+   
     for (String key: result.keySet()) {
       System.out.println("scoreBoard:" +scoreBoard.get(key));
       System.out.println("result" + result.get(key));
@@ -118,12 +123,9 @@ public class Referee {
         for (String id: scoreBoard.keySet()) {
           scoreBoard.put(id, 0);
         }
-        break;
+      break;
       }
     }
-
-    //need to check if all the card is used and manually finish the game
-    
     return result;
   }
  
