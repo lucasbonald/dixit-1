@@ -60,10 +60,10 @@ public class DixitGame {
 	}
 	
 	public void removePlayer(GamePlayer player){
-		players.remove(player.getId());
+		players.remove(player.playerId());
 		referee.getTurn().removePlayers(player);
-		referee.removeBoard(player.getId());
-		playerStatus.remove(player.getId());
+		referee.removeBoard(player.playerId());
+		playerStatus.remove(player.playerId());
 	}
 	
 	public GamePlayer getPlayer(String id) {

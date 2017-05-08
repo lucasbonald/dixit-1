@@ -490,8 +490,6 @@ public class WebSockets {
 	  jsonCookie.add("cookies", GSON.toJsonTree(cookies));
 	  json.add("payload", jsonCookie);
 	  try {
-		  //System.out.println("cookies?");
-		  //System.out.print(json);
 		  s.getRemote().sendString(json.toString());
 		} catch (IOException | WebSocketException e) {
 			System.out.println("Found IOException while sending cookie");
@@ -508,7 +506,6 @@ public class WebSockets {
 			List<String> statuses = new ArrayList<>();
 
 			for (GamePlayer user : game.getPlayers()) {
-				  // need toString override method
 				playerIds.add(user.playerId());
 				statuses.add(game.getStatus(user.playerId()));
 			}
@@ -577,7 +574,7 @@ private boolean checkGame(String userid){
 	  for(int gameKey:gt.getAllGame().keySet()){
 		  DixitGame game = gt.getGame(gameKey);
 		  for(GamePlayer player:game.getPlayers()){
-			  if(player.getId().equals(userid)){
+			  if(player.playerId().equals(userid)){
 				  game.removePlayer(player);
 				  if(game.getNumPlayers()==0){
 					  removed = true;

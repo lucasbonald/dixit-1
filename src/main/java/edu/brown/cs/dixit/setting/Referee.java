@@ -108,7 +108,6 @@ public class Referee {
     chosen = new HashMap<String, Integer>();
     
     //need to check if the game ended
-    
     for (String key: result.keySet()) {
       System.out.println("scoreBoard:" +scoreBoard.get(key));
       System.out.println("result" + result.get(key));
@@ -116,7 +115,9 @@ public class Referee {
       scoreBoard.put(key, newScore);
       if (newScore >= victoryPoint) {
         gameWon = key;
-        scoreBoard = new HashMap<String, Integer>();
+        for (String id: scoreBoard.keySet()) {
+          scoreBoard.put(id, 0);
+        }
         break;
       }
     }
