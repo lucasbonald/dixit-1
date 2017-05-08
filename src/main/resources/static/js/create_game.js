@@ -1,5 +1,7 @@
 let prevSelected;
 let currSelected;
+let currPlayer;
+let capacity;
 let gameCount = 1;
 let newGameId = 1;
 let username;
@@ -55,10 +57,12 @@ $(document).ready(function(){
       currSelected = $(event.target);
       currSelected.parent().toggleClass('selected-row');
       console.log(currSelected.attr("id"));
+      
       if (prevSelected != undefined) {
         prevSelected.parent().toggleClass('selected-row');
       }
       prevSelected = currSelected;
+
     });
     
     $("#join-form").on("submit", function(event) {
@@ -68,19 +72,30 @@ $(document).ready(function(){
         $(".join-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Please select an available lobby.</p>");
       } else {
         console.log(currSelected.attr('id'));
-        
-        window.location = window.location.href + "play";
-        const joinMessage = {
+        console.log(currSelected);
+        let id = currSelected.attr('id');
+        //let avail = document.get
+        let avail = currSelected.text().split("/");
+        console.log(avail)
+        console.log(avail[0], avail[1]);
+        if(avail[1] == null){
+            $(".join-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Click the Lobby again or refresh.</p>")
+        }else{
+            if(avail[0] >= avail[1]){
+              $(".join-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Lobby is full! Select other lobby.</p>")
+            }else{
+              window.location = window.location.href + "play";
+              const joinMessage = {
                 type: MESSAGE_TYPE.JOIN,
                 payload: {
                   user_name: $(".username").val(),
                   game_id: currSelected.attr('id')  
                 }
               }
-        conn.send(JSON.stringify(joinMessage));
-
+            conn.send(JSON.stringify(joinMessage));
+          }
+        }
       }
-      
     });
       
 });
