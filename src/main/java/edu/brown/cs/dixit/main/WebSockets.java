@@ -56,7 +56,8 @@ public class WebSockets {
     CHAT_MSG,
     END_OF_ROUND,
     LOAD,
-    RESTART
+    RESTART,
+    UPDATE_LOBBY
   }
 
   public static void connectDB() throws ClassNotFoundException, SQLException {
@@ -228,8 +229,7 @@ public class WebSockets {
   			DixitGame join = gt.getGame(gameId);
   			GamePlayer joiner = createNewUser(session, join, user);
   			join.addStatus(joiner.playerId(), "Waiting");
-  			
-  			
+  			updateLobby(gameId, join.getNumPlayers());
   			break;		
   			
   		case ST_SUBMIT:
@@ -624,6 +624,23 @@ private boolean checkGame(String userid){
 				}
 		}
 	}
+  
+  private void updateLobby(int gameId, int numPlayers){
+	JsonObject updateLMessage = new JsonObject();
+	updateLMessage.addProperty("type", MESSAGE_TYPE.UPDATE_LOBBY.ordinal());
+	JsonObject updateLPayload = new JsonObject();
+	updateLPayload.addProperty("id", gameId);
+	updateLPayload.addProperty("players", numPlayers);
+	updateLMessage.add("payload", updateLPayload);
+	for(Session indivSession: allSessions){
+		try {
+			indivSession.getRemote().sendString(updateLMessage.toString());
+		} catch (WebSocketException | IOException e) {
+			// TODO Auto-generated catch block
+			allSessions.remove(indivSession);
+		}
+	}
+  }
   private void allJoined(Collection<GamePlayer> users, DixitGame currGame) {
     JsonObject players = new JsonObject();
     int playerCount = 0;

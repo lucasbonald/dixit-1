@@ -15,7 +15,8 @@ const MESSAGE_TYPE = {
   CHAT_MSG: 13,
   END_OF_ROUND: 14,
   LOAD:15,
-  RESTART: 16
+  RESTART: 16,
+  UPDATE_LOBBY: 17
 };
 
 let conn;
@@ -26,6 +27,7 @@ let myId = -1;
 const setup_update = () => {
   conn = new WebSocket("ws://localhost:4567/connect");
 //  conn = new WebSocket("ws://104.196.191.156/connect");  
+  
 	conn.onerror = err => {
     	console.log('Connection error:', err);
   };
@@ -38,6 +40,14 @@ const setup_update = () => {
     switch (data.type) {
       default:
         console.log('Unknown message type!', data.type);
+        break;
+      case MESSAGE_TYPE.UPDATE_LOBBY:
+        let cols = document.getElementById('lobbyt').getElementsByTagName('td'), colslen = cols.length, i = 1;
+        while(i < colslen){
+          console.log();
+          console.log(cols[i].text);
+          i+=2
+        }
         break;
       case MESSAGE_TYPE.MULTI_TAB:
         alert('multi tab opened! Only one tab is allowed');
