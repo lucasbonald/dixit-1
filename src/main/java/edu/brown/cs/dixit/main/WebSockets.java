@@ -422,13 +422,9 @@ public class WebSockets {
   		case EXIT:
   			JsonObject leaveIntent = new JsonObject();
   			leaveIntent.addProperty("type", MESSAGE_TYPE.EXIT.ordinal());
-  			
-  			System.out.println("num_players: " + String.valueOf(currGame.getNumPlayers()));
-//				System.out.println(session);
-  			
+  			System.out.println("num_players: " + String.valueOf(currGame.getNumPlayers()));  			
   			for (GamePlayer player: currGame.getPlayers()) {
   				Session indiv_session = gt.getSession(player.playerId());
-  				
   				if (indiv_session != session) {
   					session.getRemote().sendString(leaveIntent.toString());
   				}
