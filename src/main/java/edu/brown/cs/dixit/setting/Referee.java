@@ -112,7 +112,7 @@ public class Referee {
     for (String id: scoreBoard.keySet()) {
       System.out.println("scoreboard point:" + scoreBoard.get(id));
     }
-   
+    System.out.println("dfdfd");
     for (String key: result.keySet()) {
       System.out.println("scoreBoard:" +scoreBoard.get(key));
       System.out.println("result" + result.get(key));
