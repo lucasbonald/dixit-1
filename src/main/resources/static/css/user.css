@@ -529,8 +529,12 @@ td {
 	background-color: #f5e4e4;
 }
 
+.modal-content {
+  font-size:2vw;
+}
+
 .modal-title {
-	font-size: 2.3vw;
+	font-size: 3vw;
 	font-weight: 600;
 }
 
