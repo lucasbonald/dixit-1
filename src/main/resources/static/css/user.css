@@ -18,7 +18,7 @@ hr {
 }
 
 #board .promptField-container {
-  height: 10%;
+  height: 7%;
 }
 
 #promptField {
@@ -27,20 +27,20 @@ hr {
   border-radius: 6px;
   background-color: white;
   width: 70%;
-  height: 80%;
+  height: 100%;
   font-size: 1.2vw;
   margin: 0 auto;
   padding: 1% 2%;
 }
 
 #board .prompt {
-  height: 10%;
+  height: 7%;
   text-align: center;
-  font-size: 4.2vw;
+  font-size: 3.5vw;
 }
 
 #board .picked-cards-container {
-  height: 60%;
+  height: 50%;
 }
 
 .picked-cards {
@@ -59,7 +59,7 @@ hr {
   margin-left: 1%;
   margin-right: 1%;
   width: 25%;
-	height: 60%;
+	height: 100%;
 	position: relative;
   background-size: cover; 
   background-repeat: no-repeat;
@@ -104,9 +104,11 @@ hr {
 #player-submit {
   display: block;
   margin: 0 auto;
-  height: 80%;
+  height: 100%;
   width: 40%;
   background-color: #e64b4b;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 
@@ -154,6 +156,7 @@ hr {
 
 .row {
 	width: 100%;
+  position:relative;
 }
 
 .statuselement {
@@ -392,6 +395,9 @@ html, body, .wrapper, .row, .screen, .board {
   margin-left:10px;
   color:red;
   font-weight:bold;
+  position:absolute;
+  right: 70px;
+  top: 43px;
 }
 
 #player-feed {
@@ -482,13 +488,22 @@ td {
   left: 0; 
   background-color: white;
   opacity: 0.8;
-  text-align: center;
-  display:block;
+  display:flex;
+  flex-direction:column;
+  align-items: center;
+  justify-content: center;
 }
 
 #results-message {
-  vertical-align: middle;
-  opacity:1.0;  
+  opacity:1.0; 
+  font-size: 4vw;
+}
+
+#play-again-button {
+  height: 10%;
+  width: 25%;
+  font-size: 3vw;
+  color: white;
 }
 
 .mag {
@@ -496,21 +511,21 @@ td {
 	width: 25vw;
 }
 
-.modal-body {
+#picture-zoom .modal-body {
 	height: 40vw;
 	background-color: white;
 	padding: 8%;
 }
 
 
-.modal-dialog {
+#picture-zoom .modal-dialog {
 	width: 30vw;
 	margin:auto;
 	text-align: center;
 	
 }
 
-.modal-content {
+#picture-zoom .modal-content {
 	background-color: #f5e4e4;
 }
 
@@ -521,13 +536,14 @@ td {
 
 .modal-header {
 	background-color: transparent;
+  font-weight: bold;
 }
 
-.modal-footer {
+#picture-zoom .modal-footer {
 	padding: 1.8vw;
 }
 
-#myModal {
+#picture-zoom {
 	margin-top: 3%;
 }
 

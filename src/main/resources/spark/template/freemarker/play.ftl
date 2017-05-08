@@ -30,24 +30,6 @@
 			
 			<div class="hand-container" style="text-align: center">
 				<div class="hand">
-					<div class="card hand-card" id="card0" draggable = "true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal">
-						<div class="image" style="background-color:white;"></div>
-					</div>
-					<div class="card hand-card" id="card1" draggable = "true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal">
-						<div class="image" style="background-color:white;"></div>
-					</div>
-					<div class="card hand-card" id="card2" draggable = "true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal">
-						<div class="image" style="background-color:white;"></div>				
-					</div>
-					<div class="card hand-card" id="card3" draggable = "true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal">
-						<div class="image" style="background-color:white;"></div>				
-					</div>
-					<div class="card hand-card" id="card4" draggable = "true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal">
-						<div class="image" style="background-color:white;"></div>				
-					</div>
-					<div class="card hand-card" id="card5" draggable = "true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal">
-						<div class="image" style="background-color:white;"></div>
-					</div>
 				</div>
 			</div>
 		</div>
@@ -108,15 +90,14 @@
 		    </div>
 		</div>
 	</div>
-	<div class="results-overlay hidden">
-		<span id="results-message"></span>
+	<div class="results-overlay">
+		<span id="results-message">Please wait for the other players to arrive.</span>
 		<button type="button" class="btn btn-primary hidden" id="play-again-button">Play again</button>
 	</div>
 </div>
 
-<div id="myModal" class="modal fade" role="dialog">
+<div id="picture-zoom" class="modal fade" role="dialog">
   <div class="modal-dialog">
-
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -127,7 +108,20 @@
       <div class="modal-footer">
       </div>
     </div>
+  </div>
+</div>
 
+<div id="wait-leave" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title"></div>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
   </div>
 </div>
 

@@ -7,7 +7,8 @@ $(document).ready(function(){
     
     const cardInfo = getCardInfo($(this));
     let myId = getElementFromCookies("userid");
-      $(".modal-body").append("<div class = \"image bigimg mag\" id=\"" + cardInfo.id + "\" style = \"background-image: url(" + cardInfo.url + "); background-size: cover; background-repeat: no-repeat;\"></div>")
+      $("#picture-zoom").find(".modal-body").html("<div class = \"image bigimg mag\" id=\"" + cardInfo.id + "\" style = \"background-image: url(" + cardInfo.url + "); background-size: cover; background-repeat: no-repeat;\"></div>");
+      $("#picture-zoom").modal("show");
   });
   
   //submitting chatform when submitted
@@ -76,6 +77,9 @@ $(document).ready(function(){
   });
   
    $("#play-again-button").click(function(event) {
+     $("#wait-leave").find(".modal-title").html("Play again");
+     $("#wait-leave").find(".modal-body").html("Please wait for the rest of the room to be ready to start again.");
+     $("#wait-leave").modal("show");
      sendRestartIntent();
    });
   
@@ -111,7 +115,7 @@ function drop(event) {
     let myId = getElementFromCookies("userid");
     console.log("drop event id + url " + id + url);
     if ((currState == "Storytelling" && myId == storyteller) || (currState == "Guessing" && myId != storyteller)) {
-      $(".picked-cards").html("<div class=\"card\"><div class = \"image bigimg\" id=\"" + id + "\" style = \"background-image: url(" + url + "); background-size: cover; background-repeat: no-repeat;\"></div></div>") ;
+      $(".picked-cards").html("<div class=\"card\"><div class = \"image bigimg\" id=\"" + id + "\" style = \"background-image: url(" + url + "); background-size: cover; background-repeat: no-repeat;\" ondrop =\"drop(event)\" ondragover=\"allowDrop(event)\"></div></div>") ;
     }
 }
 

@@ -49,13 +49,13 @@ const setup_update = () => {
         $("table.table-hover tbody").html("");
         if(payload.gamearray != "none"){
           for(let game in payload.gamearray){
-            $("table.table-hover tbody").append("<tr><td id=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].name + "</td><td class=\"num_players\" id=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].player + "/" + payload.gamearray[game].capacity + "</td></tr>");
+            $("table.table-hover tbody").append("<tr><td class=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].name + "</td><td id=\"num_players\" class=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].player + "/" + payload.gamearray[game].capacity + "</td></tr>");
           }
         }
         break;
       case MESSAGE_TYPE.NEW_GAME:
         const table = $("table.table-hover tbody");
-        table.append("<tr><td id=\"" + payload.game_id + "\">" + payload.lobby_name + "</td><td class=\"num_players\" id=\"" + payload.game_id + "\">" + payload.num_players + "/" + payload.capacity + "</td></tr>");
+        table.append("<tr><td class=\"" + payload.game_id + "\">" + payload.lobby_name + "</td><td id=\"num_players\" class=\"" + payload.game_id + "\">" + payload.num_players + "/" + payload.capacity + "</td></tr>");
         break;
       case MESSAGE_TYPE.CONNECT:
         let currurl = window.location.toString();
@@ -67,23 +67,20 @@ const setup_update = () => {
         }
         conn.send(JSON.stringify(urlMessage));
         break;
+        
       case MESSAGE_TYPE.JOIN:
         window.location = window.location.href + "play";
+        $("#wait-leave").find(".modal-title").html("Waiting for players");
+         $("#wait-leave").find(".modal-body").append("Please wait for the other players to arrive.");
+         $("#wait-leave").modal("show");
         break;
       
       case MESSAGE_TYPE.ALL_JOINED:
-        const hand = payload.hand;
-        console.log('------')
-        console.log(hand);
-        // change the img of each hand-card div
-        for (card of Object.keys(hand)) {
-          let cardInfo = hand[card].split(":");
-          let url = cardInfo[3];
-          let cardId = cardInfo[1];
-          let $card = $("#card" + card);
-          $card.empty();
-          $card.append("<div class = \"image\" id=\"" + cardId + "\" style = \"background-image: url(" + url + ");\"></div>" );
-        }
+        
+        prepareBoard();
+        
+        console.log(payload.hand);
+        initHand(payload.hand);
 
         const players = payload.players;
         $("#scoreboard-body").empty();
