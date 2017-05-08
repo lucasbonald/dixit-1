@@ -38,7 +38,6 @@ public class WebSockets {
   private static final GameTracker gt = new GameTracker();
   private static final Queue<Session> allSessions = new ConcurrentLinkedQueue<>();
   private Referee currRef;
-  private String userId;
   private static Connection conn = null;
   private static enum MESSAGE_TYPE {
     CONNECT,
@@ -394,10 +393,13 @@ public class WebSockets {
   			break;
   			
   		case CHAT_MSG:
+  			System.out.print("this far?");
   			if(currGame!=null){
+  				System.out.println("chat_msg");
   				String body = payload.get("body").getAsString();
   	  			Integer time = payload.get("time").getAsInt();
   	  			String username = this.getUsername(session);
+  	  			System.out.printf("%s, %d, %s \n", body, time, username);
   	  			this.saveMessage(Integer.toString(currGame.getId()), username, body, time);
   	  			this.getMessage(currGame);  
   				
@@ -428,33 +430,29 @@ public class WebSockets {
   
  private int getRoomId(Session s) {
 	 List<HttpCookie> cookies = s.getUpgradeRequest().getCookies();
-	  for (HttpCookie crumb: cookies) {
-	  	  if (crumb.getName().equals("gameid")) {
-	  		  return Integer.parseInt(crumb.getValue());
-	  	  } 
-	  }
-	  return -1;
+	 if(cookies!=null){
+		 for (HttpCookie crumb: cookies) {
+		  	  if (crumb.getName().equals("gameid")) {
+		  		  return Integer.parseInt(crumb.getValue());
+		  	  } 
+		  }
+	}
+	return -1;
  }
  
  private String getUsername(Session s) {
-	 List<HttpCookie> cookies = s.getUpgradeRequest().getCookies(); 
+	 String userId = getUserId(s);
+	 int gameId = getRoomId(s);
+	 DixitGame currGame = gt.getGame(gameId);
+	 System.out.println("this eneteered");
 	 String username = "no player found";
-	  for (HttpCookie crumb: cookies) {
-		  DixitGame currGame = null;
-	  	  if (crumb.getName().equals("gameid")) {
-	  	      currGame = gt.getGame(Integer.parseInt(crumb.getValue()));
-	  	  }
-	  	  if (crumb.getName().equals("userid")) {
-	            userId = crumb.getValue();
-	            if(currGame!=null){
-	            	username = currGame.getPlayer(userId).playerName();
-	            }
-	      }
-	  	}
+	 System.out.println("cookie is");
+	 if(currGame!=null){
+		 System.out.print("game is not null!");
+		 username = currGame.getPlayer(userId).playerName();
+      }
 	  return username;
-	 
-
- }
+}
  
  
  private String randomId(){
@@ -533,7 +531,7 @@ public class WebSockets {
 		  	      currGame = gt.getGame(Integer.parseInt(crumb.getValue()));
 		  	  }
 		  	  if (crumb.getName().equals("userid")) {
-		            userId = crumb.getValue();
+		            String userId = crumb.getValue();
 		            //System.out.printf("session added to %s %d \n", userId, session.hashCode());
 		            gt.addSession(userId, session);
 		      }
@@ -627,10 +625,7 @@ private boolean checkGame(String userid){
 		}
 	}
   private void allJoined(Collection<GamePlayer> users, DixitGame currGame) {
-    System.out.println("all joined called!!!!!!!");
-    
     JsonObject players = new JsonObject();
-    
     int playerCount = 0;
     for (GamePlayer user_temp : users) {
         currGame.addStatus(user_temp.playerId(), "Waiting");
