@@ -45,6 +45,7 @@
 	            </div>
 	            <div id="stopwatch">
 	              <span id="stopwatchvalue"></span>
+                <span id="countdown-message" style="font-size:1vw;color:red;"></span>
 	            </div>
 	            <div id="status-indicator">
 	              <span id="status-indicator-text"></span>

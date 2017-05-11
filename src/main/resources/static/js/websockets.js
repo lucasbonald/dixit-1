@@ -1,7 +1,8 @@
+/* websockets.js
+ * This file outlines the actions taken by the front-end when a message is received via the websocket.
+ */
+const MESSAGE_TYPE = {
 
-/*
-Defines message types, as enums with corresponding ordinal numbers
-*/const MESSAGE_TYPE = {
   CONNECT: 0,
   CREATE: 1,
   JOIN: 2,
@@ -36,44 +37,16 @@ const setup_update = () => {
     	console.log('Connection error:', err);
   };
 
+  // defines the actions taken by the front-end upon receipt of a specific message from the back end
   conn.onmessage = msg => {
     const data = JSON.parse(msg.data);
     const payload = data.payload;
-    console.log(data.type)
-    console.log(data.payload);
     const table = $("#lobbyt tbody");
     switch (data.type) {
       default:
         console.log('Unknown message type!', data.type);
         break;
-      case MESSAGE_TYPE.UPDATE_LOBBY:
-        let updateid = payload.id
-        let updatenum = payload.players
-        let cols = document.getElementById('lobbyt').getElementsByTagName('td'), colslen = cols.length, i = 1;
-        while(i < colslen){
-          if (updateid == cols[i].id){
-            cols[i].innerHTML = updatenum + "/" + cols[i].innerHTML.split("/")[1];
-          }
-          i+=2
-        }
-        break;
-      case MESSAGE_TYPE.MULTI_TAB:
-        alert('multi tab opened! Only one tab is allowed');
-      case "set_uid":
-        updateCookie(payload.cookies[0].name, payload.cookies[0].value)
-        updateCookie(payload.cookies[1].name, payload.cookies[1].value)
-        break;
-      case MESSAGE_TYPE.LOAD:
-        table.html("");
-        if(payload.gamearray != "none"){
-          for(let game in payload.gamearray){
-            table.append("<tr><td class=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].name + "</td><td id=\"num_players\" class=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].player + "/" + payload.gamearray[game].capacity + "</td></tr>");
-          }
-        }
-        break;
-      case MESSAGE_TYPE.NEW_GAME:
-        table.append("<tr><td class=\"" + payload.game_id + "\">" + payload.lobby_name + "</td><td id=\"num_players\" class=\"" + payload.game_id + "\">" + payload.num_players + "/" + payload.capacity + "</td></tr>");
-        break;
+      
       case MESSAGE_TYPE.CONNECT:
         let currurl = window.location.toString();
         const urlMessage = {
@@ -85,27 +58,60 @@ const setup_update = () => {
         conn.send(JSON.stringify(urlMessage));
         break;
         
-      case MESSAGE_TYPE.JOIN:
-        window.location = window.location.href + "play";
-        $("#wait-leave").find(".modal-title").html("Waiting for players");
-         $("#wait-leave").find(".modal-body").append("Please wait for the other players to arrive.");
-         $("#wait-leave").modal("show");
+      // update the lobby's occupancy when a player joins 
+      case MESSAGE_TYPE.UPDATE_LOBBY:
+        let updateid = payload.id;
+        let updatenum = payload.players;
+        let cols = document.getElementById('lobbyt').getElementsByTagName('td'), colslen = cols.length, i = 1;
+        while (i < colslen) {
+          cols[i].innerHTML = updatenum + "/" + cols[i].innerHTML.split("/")[1];
+          i+=2;
+        }
+        break;
+        
+      case MESSAGE_TYPE.MULTI_TAB:
+        alert('multi tab opened! Only one tab is allowed');
+      
+      // store the user ID and game ID in the browser's cookies
+      case "set_uid":
+        updateCookie(payload.cookies[0].name, payload.cookies[0].value)
+        updateCookie(payload.cookies[1].name, payload.cookies[1].value)
         break;
       
+      // retrieve created games from memory
+      case MESSAGE_TYPE.LOAD:
+        table.html("");
+        if(payload.gamearray != "none"){
+          for(let game in payload.gamearray){
+            table.append("<tr><td class=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].name + "</td><td id=\"num_players\" class=\"" + payload.gamearray[game].id + "\">" + payload.gamearray[game].player + "/" + payload.gamearray[game].capacity + "</td></tr>");
+          }
+        }
+        break;
+        
+      // appends a new game to the lobby at the login page
+      case MESSAGE_TYPE.NEW_GAME:
+        table.append("<tr><td class=\"" + payload.game_id + "\">" + payload.lobby_name + "</td><td id=\"num_players\" class=\"" + payload.game_id + "\">" + payload.num_players + "/" + payload.capacity + "</td></tr>");
+        break;
+      
+      // redirects the player's screen to the game page once the player creates/joins a game
+      case MESSAGE_TYPE.JOIN:
+        window.location = window.location.href + "play";
+        break;
+      
+      // initializes the UI interface for both the storyteller and the guessers, once all players have joined
       case MESSAGE_TYPE.ALL_JOINED:
         
+        // initialize the board and personal hands
         prepareBoard();
-        
-        console.log(payload.hand);
         initHand(payload.hand);
-
+        
+        // initiailize the information in the sidebar
         const players = payload.players;
         $("#scoreboard-body").empty();
         for (player of Object.keys(players)) {
           let player_name = players[player].user_name;
           let player_id = players[player].user_id;
           $("#scoreboard-body").append("<tr><td>" + player_name + "</td><td id=\"" + player_id + "status\"></td><td id=\"" + player_id + "points\">0</td></tr>");
-          
           myId = getElementFromCookies("userid");
           if (myId == player_id) {
             $("#user-name").html(player_name);
@@ -113,8 +119,6 @@ const setup_update = () => {
         }
         
         setStoryTeller(payload.storyteller);
-
-        // dialog box for each player's screen to see if their ready
         setStatus("Storytelling");
         
         myId = getElementFromCookies("userid");
@@ -126,6 +130,7 @@ const setup_update = () => {
         
         break;
         
+      // displays the storyteller's prompt
       case MESSAGE_TYPE.ST_SUBMIT:
         let prompt = payload.prompt;
         let cardId = payload.card_id;
@@ -134,11 +139,12 @@ const setup_update = () => {
         setStatus("Guessing");
         myId = getElementFromCookies("userid");
         if (myId != storyteller) {
-          console.log("timer starting!")
           startTimer(15);  
         }
         break;
-        
+      
+      // updates the statuses of the players displayed on the sidebar according to those outlined by the
+      // status message
       case MESSAGE_TYPE.STATUS:
     	  let statusMap = {};
     	  let statuses = JSON.parse(data.payload.statuses);
@@ -150,62 +156,53 @@ const setup_update = () => {
         updateStatus(statusMap);
         break;
     	
+      // displays all the guessed cards' once all of them have been received
       case MESSAGE_TYPE.ALL_GUESSES:
-        console.log("all guesses received");
         setStatus("Voting");
-    	  const answerCardId = payload.answer;
-        const answerCardUrl = "../img/img" + answerCardId + ".jpg";
-        //const guessedCardId = payload.guessed;
-        //const guessedCardUrl = "../img/img" + guessedCardId + ".jpg";
-          $(".picked-cards").html("<div class=\"card\"><div class = \"image bigimg\" id=\"" + answerCardId + "\" style = \"background-image: url(" + answerCardUrl + "); background-size: cover; background-repeat: no-repeat;\"></div><div class=\"voters\"></div></div>").hide().show('slow', 'swing');
-        let guessedCards = payload.guessed;
-        for (card in Object.keys(guessedCards)) {
-          let cardId = guessedCards[card];
-          $(".picked-cards").append("<div class=\"card\"><div class = \"image bigimg\" id=\"" + cardId + "\" style = \"background-image: url(" + "../img/img"+cardId+".jpg"+ "); background-size: cover; background-repeat: no-repeat;\"></div><div class=\"voters\"></div></div>").hide().show('slow', 'swing');
-        }
+        displaySelectedCards(payload);
+    	  
 
         myId = getElementFromCookies("userid");
         if (myId != storyteller) {
-          console.log("timer starting!")
           startTimer(30);  
         }
         
         break;
       
+      // appends the voters name to the voted card
       case MESSAGE_TYPE.VOTE:
         let imgId = payload.card_id;
         let votedCardDiv = $("#" + imgId).parent().find(".voters");
         votedCardDiv.append("<span class=\"voter\">" + payload.user_name + "</span>");
         break;
-
+      
+      // updates all scores for the game, and concludes the game if someone wins
       case MESSAGE_TYPE.RESULTS:
         updatePoints(payload.points);
-        
-        console.log(payload.winner);
         if (payload.winner.winner_id != "") {
-          console.log ("we have a winner");
           displayWinner(payload.winner);
         } else {
-          console.log ("no winner");
           displayPoints(payload.points);
           setTimeout(function() { newRound(payload); }, 5000);
         }
         
-        console.log(payload.hand);
     	  break;
       
+      // updates the chat room with the most recently sent chat
       case MESSAGE_TYPE.CHAT_UPDATE:
-    	let messages = JSON.parse(payload.messages);
-    	let length = messages.username.length;
-    	$(".chatList").empty();
-    	for (let i = 0; i < length ; i ++ ) {
-        	$(".chatList").append("<li> <span style=\"color: grey\">" + messages.username[i].toString() + "</span> : " + messages.body[i].toString() + "</li>");
-    	} 
-    	$(".chatList").scrollTop($(".chatList")[0].scrollHeight);
-    	break;
-    	
+
+        let messages = JSON.parse(payload.messages);
+        let length = messages.username.length;
+        $(".chatList").empty();
+        for (let i = 0; i < length ; i ++ ) {
+            $(".chatList").append("<li> <span style=\"color: grey\">" + messages.username[i] + "</span> : " + messages.body[i]  + "</li>");
+        } 
+        $(".chatList").scrollTop($(".chatList")[0].scrollHeight);
+        break;
+        
+    	// notifies the player that someone in their lobby has left the game
+
       case MESSAGE_TYPE.EXIT:
-        console.log("leave rcvd");
           $("#exit-message").modal({
             backdrop: 'static', 
             keyboard: false
@@ -216,8 +213,11 @@ const setup_update = () => {
   };
 }
 
-
-
+/*
+ * This function sets the unique user-id of the user and stores it in his/her browser's cookies
+ * so that it is retained on redirect of the apge.
+ * @params object containing game and user ID info, data
+ */
 function setuserid(data){
   for(let i=0;i<data.cookies.length; i++){
     if(data.cookies[i].name == "userid"){
@@ -232,7 +232,10 @@ function setuserid(data){
   }
 }
 
-
+/*
+ * This function helps update users' exiting cookies, to contain information about the user ID and game ID.
+ * @params name of the cookie, cookiename and value of the cookie, cookievalue
+ */
 function updateCookie(cookiename, cookievalue){
     let cookies = document.cookie.split(";");
 
@@ -246,6 +249,10 @@ function updateCookie(cookiename, cookievalue){
     }
     setCookie(cookiename, cookievalue);
 }
+
+/*
+ * This function removes all cookies from storage.
+ */
 function deleteAllCookies() {
     let cookies = document.cookie.split(";");
     for (let i = 0; i < cookies.length; i++) {
@@ -279,10 +286,10 @@ function sendQuery(){
 }
 
 /*
-sets a Cookie of with a (name, value) pair and saves it into the document
-@params : cookiename and cookie value
-@return : none
-*/function getElementFromCookies(element) {
+ * This is a helper function for getting an element from the browser's cookies.
+ * @params string detailing the name of the desired cookie, element
+ */
+function getElementFromCookies(element) {
   let cookies = document.cookie.split(";");
   for (let i = 0; i < cookies.length; i++) {
     let eqPos = cookies[i].indexOf("=");
@@ -294,8 +301,7 @@ sets a Cookie of with a (name, value) pair and saves it into the document
   }
 }
 
-/*
-sets a Cookie of with a (name, value) pair and saves it into the document
+/*sets a Cookie of with a (name, value) pair and saves it into the document
 @params : cookiename and cookie value
 @return : none
 */

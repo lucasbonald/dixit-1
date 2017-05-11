@@ -22,6 +22,7 @@ public class Card {
     this.imgLink = imgLink; 
     }
 
+
   
   /*
    * Getter for id.
@@ -47,4 +48,5 @@ public class Card {
   public String toString() {
     return "id:" + id + ":url:" + imgLink;    
   }
+
 }

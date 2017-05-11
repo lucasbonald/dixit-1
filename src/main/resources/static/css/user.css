@@ -416,7 +416,6 @@ html, body, .wrapper, .row, .screen, .board {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  
 }
 
 #player-feed #user-name {
@@ -428,7 +427,6 @@ html, body, .wrapper, .row, .screen, .board {
   height: 14%;
   font-size: 3.5vw;
 }
-
 
 #player-feed #status-indicator {
   height: 9%;
@@ -446,22 +444,6 @@ html, body, .wrapper, .row, .screen, .board {
 p {
   margin: 0;
 }
-
-/*
-.player-feed li * {
-  height: 100%;
-}
-*/
-
-/*
-#player-feed {
-  width: 90%;
-  font-size:1.2vw;
-  margin-left:auto;
-  margin-right:auto;
-  font-weight:normal;
-}
-*/
 
 #scoreboard {
   width: 90%;

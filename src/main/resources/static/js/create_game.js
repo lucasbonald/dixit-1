@@ -1,3 +1,7 @@
+/* create_game.js
+ * This file outlines the actions taken by the front-end when a game is being created/joined.
+ */
+
 let prevSelected;
 let currSelected;
 let currPlayer;
@@ -8,7 +12,7 @@ let username;
 
 $(document).ready(function(){
     
-    // user enters a username
+    // user enters a username to enter the lobby
     $("#username-form").on("submit", function(event) {
       event.preventDefault();
       if($(".username").val() != "") {
@@ -18,14 +22,17 @@ $(document).ready(function(){
       }
       sendLoad();
     });
-  
+    
+    // on creation of a game, a message is sent to the back end to initialize the relevant objects
     $("#create-form").on("submit", function(event) {
-      
       event.preventDefault();
       $(".create-error-message").empty();
+      
+      // check that user has provided a lobby name
       if($(".lobby-name").val() == "") {
         $(".create-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Please provide a lobby name.</p>")
       } else {
+        // initialize the JSON object containing all the game details
         let gameInit = {
           type: MESSAGE_TYPE.CREATE,
           payload: {
@@ -42,22 +49,18 @@ $(document).ready(function(){
             }
           }
         }
+        
         // send new game information to backend
         conn.send(JSON.stringify(gameInit));
         newGameId++;
-
-        // display new available game to allow joining
-        //window.location = window.location.href + "storytelling";
       }
       
     });
-
+    
+    // on selection of a game from the displayed list of available games
     $('#lobbyt tbody').on('click', function() {
-      console.log($(event.target).parent().find("#num_players").html());
-      
       currPlayer = $(event.target).parent().find("#num_players").html().split("/")[0];
       capacity = $(event.target).parent().find("#num_players").html().split("/")[1];
-            
       currSelected = $(event.target);
       currSelected.parent().toggleClass('selected-row');
       if (prevSelected != undefined) {
@@ -67,16 +70,19 @@ $(document).ready(function(){
 
     });
     
+    // when an intention to join the selected game is committed
     $("#join-form").on("submit", function(event) {
       event.preventDefault();
       $(".join-error-message").empty();
+      
+      // check that the user has selected a lobby before he/she pressed Join
       if(currSelected == undefined ) {
         $(".join-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Please select an available lobby.</p>");
       } else {
-        //let avail = document.get
-        if(currPlayer >= capacity){
-              $(".join-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Lobby is full! Select other lobby.</p>")
-            }else{
+        // check if the players has attempted to join a full lobby
+        if (currPlayer >= capacity){
+              $(".join-error-message").append("<p style=\"color:red;margin-top:30px;margin-left:30px;\">Lobby is full! Please select another lobby.</p>")
+            } else {
               window.location = window.location.href + "play";
               const joinMessage = {
                 type: MESSAGE_TYPE.JOIN,
