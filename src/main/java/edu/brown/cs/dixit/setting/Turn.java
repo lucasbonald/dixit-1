@@ -3,6 +3,11 @@ package edu.brown.cs.dixit.setting;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Models a turn in the game, with the number of players, current turn, players
+ * @author jongjekim
+ *
+ */
 public class Turn {
   
   private final int numPlayer;

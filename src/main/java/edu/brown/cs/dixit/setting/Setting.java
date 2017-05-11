@@ -1,5 +1,11 @@
 package edu.brown.cs.dixit.setting;
 
+/** 
+ * Abstract class modelling setting, with final static values for parameters of the game.
+ * Defines the integers.
+ * @author jongjekim
+ *
+ */
 public abstract class Setting {
   
   public final static int NUM_DEFAULT_PLAYERS = 4;

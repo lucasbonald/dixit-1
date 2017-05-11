@@ -1,4 +1,7 @@
-const MESSAGE_TYPE = {
+
+/*
+Defines message types, as enums with corresponding ordinal numbers
+*/const MESSAGE_TYPE = {
   CONNECT: 0,
   CREATE: 1,
   JOIN: 2,
@@ -20,14 +23,15 @@ const MESSAGE_TYPE = {
   EXIT: 18
 };
 
+//declares 
 let conn;
 let storyteller = -1;
 let myId = -1;
 
 //set up socket connection and define types
 const setup_update = () => {
-  //conn = new WebSocket("ws://localhost:4567/connect");
-  conn = new WebSocket("ws://104.196.191.156/connect");  
+  conn = new WebSocket("ws://localhost:4567/connect");
+  //conn = new WebSocket("ws://104.196.191.156/connect");  
 	conn.onerror = err => {
     	console.log('Connection error:', err);
   };
@@ -195,7 +199,7 @@ const setup_update = () => {
     	let length = messages.username.length;
     	$(".chatList").empty();
     	for (let i = 0; i < length ; i ++ ) {
-        	$(".chatList").append("<li> <span style=\"color: grey\">" + messages.username[i] + "</span> : " + messages.body[i]  + "</li>");
+        	$(".chatList").append("<li> <span style=\"color: grey\">" + messages.username[i].toString() + "</span> : " + messages.body[i].toString() + "</li>");
     	} 
     	$(".chatList").scrollTop($(".chatList")[0].scrollHeight);
     	break;
@@ -274,7 +278,11 @@ function sendQuery(){
   conn.send(JSON.stringify(queryMessage));
 }
 
-function getElementFromCookies(element) {
+/*
+sets a Cookie of with a (name, value) pair and saves it into the document
+@params : cookiename and cookie value
+@return : none
+*/function getElementFromCookies(element) {
   let cookies = document.cookie.split(";");
   for (let i = 0; i < cookies.length; i++) {
     let eqPos = cookies[i].indexOf("=");
@@ -286,11 +294,23 @@ function getElementFromCookies(element) {
   }
 }
 
+/*
+sets a Cookie of with a (name, value) pair and saves it into the document
+@params : cookiename and cookie value
+@return : none
+*/
 function setCookie(cookiename, cookievalue){
   const newcookie = cookiename + "="+cookievalue;
   document.cookie = newcookie;
 }
 
+/*
+returns true if the caller of the function is a storyteller, by checking the corresponding cookie
+@params : none
+@return : boolean indicating whether user is storyteller
+*/
 function isStoryteller() {
   return getElementFromCookies("userid") == storyteller;
 }
+
+
