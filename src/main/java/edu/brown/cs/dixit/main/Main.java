@@ -32,11 +32,22 @@ import spark.template.freemarker.FreeMarkerEngine;
 
 import edu.brown.cs.dixit.setting.*;
 
+/**
+ * Main class of the application, to run the game.
+ * @author jongjekim
+ *
+ */
 public class Main {
 
   private static final int PORT_NUM = 4567;
   private static final Gson GSON = new Gson();
 
+  /** 
+   * Main method to be called.
+   * @param args arguments
+   * @throws ClassNotFoundException class not found exception
+   * @throws SQLException exception coming form sql query
+   */
   public static void main(String[] args) throws ClassNotFoundException, SQLException {
     new Main(args).run();
   }
@@ -47,6 +58,7 @@ public class Main {
     this.args = args;
   }
   
+
   private void run() throws ClassNotFoundException, SQLException {
     OptionParser parser = new OptionParser();
     parser.accepts("gui");
@@ -73,6 +85,11 @@ public class Main {
 
   }
   
+  /**
+   * Handler rendering login.
+   * @author jongjekim
+   *
+   */
   private static class LogInHandler implements TemplateViewRoute {
       @Override
       public ModelAndView handle(Request req, Response res) {
@@ -83,6 +100,11 @@ public class Main {
       
   }
   
+  /**
+   * Handler for the storyteller page.
+   * @author jongjekim
+   *
+   */
   private static class StoryHandler implements TemplateViewRoute {
       @Override
       public ModelAndView handle(Request req, Response res) {
@@ -90,7 +112,13 @@ public class Main {
           return new ModelAndView(variables, "storytelling.ftl");
       }
 }
-
+  
+  
+  /**
+   * Handler for the play.ftl that brings up the play page for both storyteller and guessers.
+   * @author jongjekim
+   *
+   */
   private static class PlayHandler implements TemplateViewRoute {
       @Override
       public ModelAndView handle(Request req, Response res) {
@@ -99,6 +127,11 @@ public class Main {
       }
 }
 
+  /**
+   * Handler for the getter page.
+   * @author jongjekim
+   *
+   */
   private static class GuessHandler implements TemplateViewRoute {
       @Override
       public ModelAndView handle(Request req, Response res) {
@@ -107,6 +140,11 @@ public class Main {
       }
 }
 
+  /**
+   * Handler for the ending page.
+   * @author jongjekim
+   *
+   */
   private static class EndHandler implements TemplateViewRoute {
       @Override
       public ModelAndView handle(Request req, Response res) {
@@ -115,6 +153,11 @@ public class Main {
       }
 }
   
+  /**
+   * Handler for the waiting page.
+   * @author jongjekim
+   *
+   */
   private static class WaitHandler implements TemplateViewRoute {
       @Override
       public ModelAndView handle(Request req, Response res) {
@@ -122,6 +165,10 @@ public class Main {
           return new ModelAndView(variables, "waiting.ftl");
       }
 }
+  /**
+   * Freemarkerengine.
+   * @return new freemarker engine.
+   */
 
   private static FreeMarkerEngine createEngine() {
     Configuration config = new Configuration();
