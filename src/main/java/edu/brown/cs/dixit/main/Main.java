@@ -77,11 +77,8 @@ public class Main {
     Spark.webSocket("/connect", WebSockets.class);
     WebSockets.connectDB();
     Spark.get("/", new LogInHandler(), freeMarker);   
-    Spark.get("/storytelling",new StoryHandler(), freeMarker);   
     Spark.get("/play",new PlayHandler(), freeMarker);   
-    Spark.get("/guessing",new GuessHandler(), freeMarker);   
-    Spark.get("/end",new EndHandler(), freeMarker);   
-    Spark.get("/waiting",new WaitHandler(), freeMarker);   
+
 
   }
   
@@ -99,20 +96,7 @@ public class Main {
      
       
   }
-  
-  /**
-   * Handler for the storyteller page.
-   * @author jongjekim
-   *
-   */
-  private static class StoryHandler implements TemplateViewRoute {
-      @Override
-      public ModelAndView handle(Request req, Response res) {
-          Map<String, Object> variables = ImmutableMap.of("title", "Dixit Online", "imageLink", "../img/img1.png", "board", "whatever");
-          return new ModelAndView(variables, "storytelling.ftl");
-      }
-}
-  
+
   
   /**
    * Handler for the play.ftl that brings up the play page for both storyteller and guessers.
@@ -127,44 +111,6 @@ public class Main {
       }
 }
 
-  /**
-   * Handler for the getter page.
-   * @author jongjekim
-   *
-   */
-  private static class GuessHandler implements TemplateViewRoute {
-      @Override
-      public ModelAndView handle(Request req, Response res) {
-          Map<String, Object> variables = ImmutableMap.of("title", "Dixit Online", "imageLink", "../img/img1.png", "board", "whatever");
-          return new ModelAndView(variables, "guessing.ftl");
-      }
-}
-
-  /**
-   * Handler for the ending page.
-   * @author jongjekim
-   *
-   */
-  private static class EndHandler implements TemplateViewRoute {
-      @Override
-      public ModelAndView handle(Request req, Response res) {
-          Map<String, Object> variables = ImmutableMap.of("title", "Dixit Online", "imageLink", "../img/img1.png", "board", "whatever");
-          return new ModelAndView(variables, "end.ftl");
-      }
-}
-  
-  /**
-   * Handler for the waiting page.
-   * @author jongjekim
-   *
-   */
-  private static class WaitHandler implements TemplateViewRoute {
-      @Override
-      public ModelAndView handle(Request req, Response res) {
-          Map<String, Object> variables = ImmutableMap.of("title", "Dixit Online", "imageLink", "../img/img1.png", "board", "whatever");
-          return new ModelAndView(variables, "waiting.ftl");
-      }
-}
   /**
    * Freemarkerengine.
    * @return new freemarker engine.

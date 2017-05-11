@@ -78,12 +78,14 @@ public class WebSockets {
    */
   public static void clearDB(int id) throws ClassNotFoundException,
           SQLException {
-    PreparedStatement prep;
-    prep = conn.prepareStatement("DELETE FROM messages where game = ?");
-    prep.setInt(1, id);
-    prep.executeUpdate();
-    prep.close();
-  }
+	  if(conn!=null){
+		  PreparedStatement prep;
+		  prep = conn.prepareStatement("DELETE FROM messages where game = ?");
+		  prep.setInt(1, id);
+		  prep.executeUpdate();
+		  prep.close();
+		}
+    }
 
   /**
    * save chatroom messages to the DB.
@@ -748,7 +750,6 @@ public class WebSockets {
           game.removePlayer(player);
           if (game.getNumPlayers() == 0) {
             removed = true;
-            System.out.println("hi?");
             clearDB(game.getId());
             System.out.println("gt remove game!!!");
             gt.getAllGame().remove(game.getId());

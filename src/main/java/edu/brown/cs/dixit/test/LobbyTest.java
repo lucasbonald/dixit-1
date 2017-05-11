@@ -32,7 +32,6 @@ public class LobbyTest {
   @Test
   public void testRemove() throws ClassNotFoundException, SQLException {
     // TODO: Test not null:
-    System.out.println("entered?");
     GameTracker gt = new GameTracker();
     WebSockets ws = new WebSockets();
     int gameid = gt.createGameID();
@@ -43,6 +42,8 @@ public class LobbyTest {
     DixitGame popped = gt.getGame(gameid);
     assertFalse(ws.checkGame("testid"));
     assertTrue(popped.getNumPlayers() == 1);
+    assertTrue(ws.checkGame("test2id"));
+    assertEquals(gt.getGame(gameid), null);
   }
 
   @Test
