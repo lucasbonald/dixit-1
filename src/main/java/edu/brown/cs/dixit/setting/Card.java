@@ -4,17 +4,10 @@ public class Card {
 
   private final int id;
   private final String imgLink;
-//  private boolean isFaceDown;
-//  private boolean isSelected;
-//  private boolean isAnswer;
-//  private Player belongWhom;
- 
+
   public Card(int id, String imgLink) {
     this.id = id;
     this.imgLink = imgLink;
-//    this.isFaceDown = true;
-//    this.isSelected = false;
-//    this.belongWhom = null;
   }
 
   public int getId() {
@@ -24,27 +17,10 @@ public class Card {
   public String getImgLink() {
     return imgLink;
   }
-  
+
   @Override
   public String toString() {
-    return "id:" + id + ":url:" + imgLink;    
-  }
-  
-  /*
-  public boolean isFaceDown() {
-    return isFaceDown;
+    return "id:" + id + ":url:" + imgLink;
   }
 
-  public boolean isSelected() {
-    return isSelected;
-  }
-
-  public boolean isAnswer() {
-    return isAnswer;
-  }
-
-  public Player getBelongWhom() {
-    return belongWhom;
-  }
-  */
 }
